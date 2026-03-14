@@ -1,0 +1,18 @@
+# User-specific build configuration
+local.props
+
+
+*.import
+# Build outputs
+bin/
+obj/
+*.dll
+*.pck
+
+# Godot generated files
+pack/.godot/
+
+local.props
+
+
+.vs

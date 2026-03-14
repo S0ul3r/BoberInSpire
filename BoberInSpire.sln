@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "STS2Mods", "STS2Mods", "{5576BD13-498D-D671-0EBA-AF4295AD9D0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleMod", "STS2Mods\sts2_example_mod\ExampleMod.csproj", "{625742CF-8840-6F1B-8A3D-1700DCD040A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{625742CF-8840-6F1B-8A3D-1700DCD040A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{625742CF-8840-6F1B-8A3D-1700DCD040A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{625742CF-8840-6F1B-8A3D-1700DCD040A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{625742CF-8840-6F1B-8A3D-1700DCD040A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{625742CF-8840-6F1B-8A3D-1700DCD040A3} = {5576BD13-498D-D671-0EBA-AF4295AD9D0A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {71CD05B9-6C43-4117-8FF1-2B0671232DF6}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,2306 @@
+[
+  {
+    "id": "AKABEKO",
+    "name": "Akabeko",
+    "description": "At the start of each combat, gain [blue]8[/blue] [gold]Vigor[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Get +8 Vigor"
+  },
+  {
+    "id": "ALCHEMICAL_COFFER",
+    "name": "Alchemical Coffer",
+    "description": "Upon pickup, gain [blue]4[/blue] potion slots filled with random potions.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "AMETHYST_AUBERGINE",
+    "name": "Amethyst Aubergine",
+    "description": "Enemies drop [blue]10[/blue] additional [gold]Gold[/gold].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "+10 additional Gold"
+  },
+  {
+    "id": "ANCHOR",
+    "name": "Anchor",
+    "description": "Start each combat with [blue]10[/blue] [gold]Block[/gold].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "+10 Block"
+  },
+  {
+    "id": "ARCANE_SCROLL",
+    "name": "Arcane Scroll",
+    "description": "Upon pickup, obtain a random [gold]Rare Card[/gold] to add to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "ARCHAIC_TOOTH",
+    "name": "Archaic Tooth",
+    "description": "Upon pickup, [gold]Transform[/gold] a starter card with an ancient version.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "ART_OF_WAR",
+    "name": "Art of War",
+    "description": "If you do not play any Attacks during your turn, gain an additional [energy:1] next turn.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Gain energy if you didnt play attacks"
+  },
+  {
+    "id": "ASTROLABE",
+    "name": "Astrolabe",
+    "description": "Upon pickup, [gold]Transform[/gold] [blue]3[/blue] cards, then [gold]Upgrade[/gold] them.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BAG_OF_MARBLES",
+    "name": "Bag of Marbles",
+    "description": "At the start of each combat, apply [blue]1[/blue] [gold]Vulnerable[/gold] to ALL enemies.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "At start: Vulnerable to ALL enemies"
+  },
+  {
+    "id": "BAG_OF_PREPARATION",
+    "name": "Bag of Preparation",
+    "description": "At the start of each combat, draw [blue]2[/blue] additional cards.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "At start: draw 2 additional cards"
+  },
+  {
+    "id": "BEATING_REMNANT",
+    "name": "Beating Remnant",
+    "description": "You cannot lose more than [blue]20[/blue] HP in a single turn.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Can'tt lose more than 20 HP in 1 turn"
+  },
+  {
+    "id": "BEAUTIFUL_BRACELET",
+    "name": "Beautiful Bracelet",
+    "description": "Upon pickup, choose [blue]3[/blue] cards in your [gold]Deck[/gold]. [gold]Enchant[/gold] them with [purple]Swift[/purple] [blue]3[/blue].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BELLOWS",
+    "name": "Bellows",
+    "description": "The first [gold]Hand[/gold] you draw each combat is [gold]Upgraded[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Upgrade first hand"
+  },
+  {
+    "id": "BELT_BUCKLE",
+    "name": "Belt Buckle",
+    "description": "While you have no potions, you have [blue]2[/blue] additional [gold]Dexterity[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "When no pots, get 2 Dex"
+  },
+  {
+    "id": "BIG_HAT",
+    "name": "Big Hat",
+    "description": "At the start of each combat, add [blue]2[/blue] random [gold]Ethereal[/gold] cards into your [gold]Hand[/gold].",
+    "rarity": "Rare",
+    "pool": "necrobinder",
+    "short_description": "Start: add 2 random Ethereal cards to hand"
+  },
+  {
+    "id": "BIG_MUSHROOM",
+    "name": "Big Mushroom",
+    "description": "Upon pickup, raise your Max HP by [blue]20[/blue]. At the start of each combat, draw [blue]2[/blue] fewer cards.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BIIIG_HUG",
+    "name": "Biiig Hug",
+    "description": "Upon pickup, remove [blue]4[/blue] cards from your [gold]Deck[/gold]. Whenever you shuffle your [gold]Draw Pile[/gold], add a [gold]Soot[/gold] into your [gold]Draw Pile[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BING_BONG",
+    "name": "Bing Bong",
+    "description": "Whenever you add a card to your [gold]Deck[/gold], add one additional copy.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BLACK_BLOOD",
+    "name": "Black Blood",
+    "description": "At the end of combat, heal [green]12[/green] HP.",
+    "rarity": "Starter",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BLACK_STAR",
+    "name": "Black Star",
+    "description": "[gold]Elites[/gold] drop an additional Relic when defeated.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BLESSED_ANTLER",
+    "name": "Blessed Antler",
+    "description": "Gain [energy:1] at the start of each turn. At the start of each combat, shuffle [blue]3[/blue] [gold]Dazed[/gold] into your [gold]Draw Pile[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "BLOOD_SOAKED_ROSE",
+    "name": "Blood-Soaked Rose",
+    "description": "Upon pickup, add [blue]1[/blue] [red]Enthralled[/red] to your [gold]Deck[/gold]. Gain [energy:1] at the start of each turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "BLOOD_VIAL",
+    "name": "Blood Vial",
+    "description": "At the start of each combat, heal [green]2[/green] HP.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Start: heal 2 HP"
+  },
+  {
+    "id": "BONE_FLUTE",
+    "name": "Bone Flute",
+    "description": "Whenever [gold]Osty[/gold] attacks, gain [blue]2[/blue] [gold]Block[/gold].",
+    "rarity": "Common",
+    "pool": "necrobinder",
+    "short_description": "Whenever Osty attacks, gain 2 Block"
+  },
+  {
+    "id": "BONE_TEA",
+    "name": "Bone Tea",
+    "description": "At the start of the next [blue]2[/blue] combats, [gold]Upgrade[/gold] your starting hand.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "At the start of the next 2 combats, Upgrad..."
+  },
+  {
+    "id": "BOOK_OF_FIVE_RINGS",
+    "name": "Book of Five Rings",
+    "description": "Every [blue]5[/blue] cards you add to your [gold]Deck[/gold], heal [green]15[/green] HP.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Every 5 cards you add to your Deck, heal 1..."
+  },
+  {
+    "id": "BOOK_REPAIR_KNIFE",
+    "name": "Book Repair Knife",
+    "description": "Whenever a non-Minion enemy dies to [gold]Doom[/gold], heal [green]3[/green] HP.",
+    "rarity": "Uncommon",
+    "pool": "necrobinder",
+    "short_description": "Whenever a non-Minion enemy dies to Doom, ..."
+  },
+  {
+    "id": "BOOKMARK",
+    "name": "Bookmark",
+    "description": "At the end of each turn, lower the cost of a random [gold]Retained[/gold] card by [blue]1[/blue] until played.",
+    "rarity": "Rare",
+    "pool": "necrobinder",
+    "short_description": "At the end of each turn, lower the cost of..."
+  },
+  {
+    "id": "BOOMING_CONCH",
+    "name": "Booming Conch",
+    "description": "At the start of [gold]Elite[/gold] combats, draw [blue]2[/blue] additional cards.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "At the start of Elite combats, draw 2 addi..."
+  },
+  {
+    "id": "BOUND_PHYLACTERY",
+    "name": "Bound Phylactery",
+    "description": "At the start of your turn, [gold]Summon[/gold] [blue]1[/blue].",
+    "rarity": "Starter",
+    "pool": "necrobinder",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "BOWLER_HAT",
+    "name": "Bowler Hat",
+    "description": "Gain [blue]20%[/blue] additional [gold]Gold[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "BREAD",
+    "name": "Bread",
+    "description": "At the start of your first turn, lose [energy:2]. At the start of all other turns, gain [energy:1].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "BRILLIANT_SCARF",
+    "name": "Brilliant Scarf",
+    "description": "The [blue]5th[/blue] card you play each turn is free.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "The 5th card you play each turn is free"
+  },
+  {
+    "id": "BRIMSTONE",
+    "name": "Brimstone",
+    "description": "At the start of your turn, gain [blue][SelfStrength][/blue] [gold]Strength[/gold] and ALL enemies gain [blue][EnemyStrength][/blue] [gold]Strength[/gold].",
+    "rarity": "Shop",
+    "pool": "ironclad",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "BRONZE_SCALES",
+    "name": "Bronze Scales",
+    "description": "Start each combat with [blue]3[/blue] [gold]Thorns[/gold].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "+3 Thorns"
+  },
+  {
+    "id": "BURNING_BLOOD",
+    "name": "Burning Blood",
+    "description": "At the end of combat, heal [green]6[/green] HP.",
+    "rarity": "Starter",
+    "pool": "ironclad",
+    "short_description": ""
+  },
+  {
+    "id": "BURNING_STICKS",
+    "name": "Burning Sticks",
+    "description": "The first time each combat you [gold]Exhaust[/gold] a Skill, add a copy of it into your [gold]Hand[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "The first time each combat you Exhaust a S..."
+  },
+  {
+    "id": "BYRDPIP",
+    "name": "Byrdpip",
+    "description": "Upon pickup, gain the card [gold]Byrd Swoop[/gold]. A [gold]Byrdpip[/gold] will accompany you in battles.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "CALLING_BELL",
+    "name": "Calling Bell",
+    "description": "Upon pickup, obtain a unique [red]Curse[/red] and [blue]3[/blue] [gold]Relics[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "CANDELABRA",
+    "name": "Candelabra",
+    "description": "At the start of your [blue]2nd[/blue] turn, gain [energy:2].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Turn 2: +Energy"
+  },
+  {
+    "id": "CAPTAINS_WHEEL",
+    "name": "Captain's Wheel",
+    "description": "At the start of your [blue]3rd[/blue] turn, gain [blue]18[/blue] [gold]Block[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Turn 3: +18 Block"
+  },
+  {
+    "id": "CAULDRON",
+    "name": "Cauldron",
+    "description": "Upon pickup, brews [blue]5[/blue] random potions.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "CENTENNIAL_PUZZLE",
+    "name": "Centennial Puzzle",
+    "description": "The first time you lose HP each combat, draw [blue]3[/blue] cards.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "The first time you lose HP each combat, dr..."
+  },
+  {
+    "id": "CHANDELIER",
+    "name": "Chandelier",
+    "description": "At the start of your [blue]3rd[/blue] turn, gain [energy:3].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Turn 3: +3 Energy"
+  },
+  {
+    "id": "CHARONS_ASHES",
+    "name": "Charon's Ashes",
+    "description": "Whenever you [gold]Exhaust[/gold] a card, deal [blue]3[/blue] damage to ALL enemies.",
+    "rarity": "Rare",
+    "pool": "ironclad",
+    "short_description": "On Exhaust: effect"
+  },
+  {
+    "id": "CHEMICAL_X",
+    "name": "Chemical X",
+    "description": "The effects of your cost [blue]X[/blue] cards are increased by [blue]2[/blue].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "The effects of your cost X cards are incre..."
+  },
+  {
+    "id": "CHOICES_PARADOX",
+    "name": "Choices Paradox",
+    "description": "At the start of each combat, add [blue]1[/blue] of [blue]5[/blue] random cards into your [gold]Hand[/gold]. Add [gold]Retain[/gold] to the chosen card.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "CHOSEN_CHEESE",
+    "name": "The Chosen Cheese",
+    "description": "At the end of combat, gain [blue]1[/blue] Max HP.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "CIRCLET",
+    "name": "Circlet",
+    "description": "It's a circlet.",
+    "rarity": "None",
+    "pool": "shared",
+    "short_description": "It's a circlet"
+  },
+  {
+    "id": "CLAWS",
+    "name": "Claws",
+    "description": "Upon pickup, [gold]Transform[/gold] up to [blue]6[/blue] cards into [gold]Maul[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "CLOAK_CLASP",
+    "name": "Cloak Clasp",
+    "description": "At the end of your turn, gain [blue]1[/blue] [gold]Block[/gold] for each card in your [gold]Hand[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "At the end of your turn, gain 1 Block for ..."
+  },
+  {
+    "id": "CRACKED_CORE",
+    "name": "Cracked Core",
+    "description": "At the start of each combat, [gold]Channel[/gold] [blue]1[/blue] [gold]Lightning[/gold].",
+    "rarity": "Starter",
+    "pool": "defect",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "CROSSBOW",
+    "name": "Crossbow",
+    "description": "At the start of your turn, add a random [gold]Attack[/gold] into your [gold]Hand[/gold]. It costs [blue]0[/blue][energy:1] this turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "CURSED_PEARL",
+    "name": "Cursed Pearl",
+    "description": "Upon pickup, receive [red]Greed[/red]. Gain [blue]333[/blue] [gold]Gold[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "DARKSTONE_PERIAPT",
+    "name": "Darkstone Periapt",
+    "description": "Whenever you obtain a [red]Curse[/red], raise your Max HP by [blue]6[/blue].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Whenever you obtain a Curse, raise your Ma..."
+  },
+  {
+    "id": "DATA_DISK",
+    "name": "Data Disk",
+    "description": "Start each combat with [blue]1[/blue] [gold]Focus[/gold].",
+    "rarity": "Common",
+    "pool": "defect",
+    "short_description": "+1 Focus"
+  },
+  {
+    "id": "DAUGHTER_OF_THE_WIND",
+    "name": "Daughter of the Wind",
+    "description": "Whenever you play an Attack, gain [blue]1[/blue] [gold]Block[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "DELICATE_FROND",
+    "name": "Delicate Frond",
+    "description": "At the start of each combat, fill all empty potion slots with random potions.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "At the start of each combat, fill all empt..."
+  },
+  {
+    "id": "DEMON_TONGUE",
+    "name": "Demon Tongue",
+    "description": "The first time you lose HP on your turn, heal HP equal to the amount lost.",
+    "rarity": "Rare",
+    "pool": "ironclad",
+    "short_description": "The first time you lose HP on your turn, h..."
+  },
+  {
+    "id": "DIAMOND_DIADEM",
+    "name": "Diamond Diadem",
+    "description": "Whenever you play [blue]2[/blue] or fewer cards in a turn, take half damage from enemies.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "DINGY_RUG",
+    "name": "Dingy Rug",
+    "description": "Card rewards can now contain Colorless cards.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "DISTINGUISHED_CAPE",
+    "name": "Distinguished Cape",
+    "description": "Upon pickup, lose [red]9[/red] Max HP. Add [blue]3[/blue] [gold]Apparitions[/gold] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "DIVINE_DESTINY",
+    "name": "Divine Destiny",
+    "description": "At the start of each combat, gain [star:6].",
+    "rarity": "Starter",
+    "pool": "shared",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "DIVINE_RIGHT",
+    "name": "Divine Right",
+    "description": "At the start of each combat, gain [star:3].",
+    "rarity": "Starter",
+    "pool": "regent",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "DOLLYS_MIRROR",
+    "name": "Dolly's Mirror",
+    "description": "Upon pickup, obtain an additional copy of a card in your [gold]Deck[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "DRAGON_FRUIT",
+    "name": "Dragon Fruit",
+    "description": "Whenever you gain [gold]Gold[/gold], raise your Max HP by [blue]1[/blue].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "Whenever you gain Gold, raise your Max HP ..."
+  },
+  {
+    "id": "DREAM_CATCHER",
+    "name": "Dream Catcher",
+    "description": "Whenever you [gold]Rest[/gold], you may add a card to your [gold]Deck[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "DRIFTWOOD",
+    "name": "Driftwood",
+    "description": "You may reroll each card reward once.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "DUSTY_TOME",
+    "name": "Dusty Tome",
+    "description": "Upon pickup, obtain an [gold]Ancient Card[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "ECTOPLASM",
+    "name": "Ectoplasm",
+    "description": "You can no longer gain [gold]Gold[/gold]. Gain [energy:1] at the start of each turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "ELECTRIC_SHRYMP",
+    "name": "Electric Shrymp",
+    "description": "Upon pickup, [gold]Enchant[/gold] a Skill with [purple]Imbued[/purple].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "EMBER_TEA",
+    "name": "Ember Tea",
+    "description": "At the start of the next [blue]2[/blue] combats, gain [blue]2[/blue] [gold]Strength[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "At the start of the next 2 combats, gain 2..."
+  },
+  {
+    "id": "EMOTION_CHIP",
+    "name": "Emotion Chip",
+    "description": "If you lost HP during the previous turn, trigger the passive ability of all Orbs at the start of your turn.",
+    "rarity": "Rare",
+    "pool": "defect",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "EMPTY_CAGE",
+    "name": "Empty Cage",
+    "description": "Upon pickup, remove [blue]2[/blue] cards from your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "ETERNAL_FEATHER",
+    "name": "Eternal Feather",
+    "description": "For every [blue]5[/blue] cards in your [gold]Deck[/gold], heal [green]3[/green] HP whenever you enter a [gold]Rest Site[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "FAKE_ANCHOR",
+    "name": "Anchor???",
+    "description": "Start each combat with [blue]4[/blue] [gold]Block[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "+4 Block"
+  },
+  {
+    "id": "FAKE_BLOOD_VIAL",
+    "name": "Blood Vial???",
+    "description": "At the start of each combat, heal [green]1[/green] HP.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Start: heal 1 HP"
+  },
+  {
+    "id": "FAKE_HAPPY_FLOWER",
+    "name": "Happy Flower???",
+    "description": "Every [blue]5[/blue] turns, gain [energy:1].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Every 5 turns, gain 1 energy"
+  },
+  {
+    "id": "FAKE_LEES_WAFFLE",
+    "name": "Lee's Waffle???",
+    "description": "Upon pickup, heal [green]10%[/green] of your HP.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "FAKE_MANGO",
+    "name": "Mango???",
+    "description": "Upon pickup, raise your Max HP by [blue]3[/blue].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "FAKE_MERCHANTS_RUG",
+    "name": "The Merchant's Rug???",
+    "description": "Poor imitation. Does nothing.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "FAKE_ORICHALCUM",
+    "name": "Orichalcum???",
+    "description": "If you end your turn without [gold]Block[/gold], gain [blue]3[/blue] [gold]Block[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "If you end your turn without Block, gain 3..."
+  },
+  {
+    "id": "FAKE_SNECKO_EYE",
+    "name": "Snecko Eye???",
+    "description": "Start each combat [red]Confused[/red].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Start each combat Confused"
+  },
+  {
+    "id": "FAKE_STRIKE_DUMMY",
+    "name": "Strike Dummy???",
+    "description": "Cards containing “Strike” deal [blue]1[/blue] additional damage.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Cards containing “Strike” deal 1 additiona..."
+  },
+  {
+    "id": "FAKE_VENERABLE_TEA_SET",
+    "name": "Venerable Tea Set???",
+    "description": "Whenever you enter a [gold]Rest Site[/gold], start the next combat with an additional [energy:1].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Whenever you enter a Rest Site, start the ..."
+  },
+  {
+    "id": "FENCING_MANUAL",
+    "name": "Fencing Manual",
+    "description": "At the start of each combat, [gold]Forge[/gold] [blue]10[/blue].",
+    "rarity": "Common",
+    "pool": "regent",
+    "short_description": "Start: Forge"
+  },
+  {
+    "id": "FESTIVE_POPPER",
+    "name": "Festive Popper",
+    "description": "At the start of each combat, deal [blue]9[/blue] damage to ALL enemies.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Start: 9 dmg to ALL"
+  },
+  {
+    "id": "FIDDLE",
+    "name": "Fiddle",
+    "description": "At the start of each turn, draw [blue]2[/blue] additional cards. You may not draw cards during your turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "At the start of each turn, draw 2 addition..."
+  },
+  {
+    "id": "FORGOTTEN_SOUL",
+    "name": "Forgotten Soul",
+    "description": "Whenever you [gold]Exhaust[/gold] a card, deal [blue]1[/blue] damage to a random enemy.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "On Exhaust: effect"
+  },
+  {
+    "id": "FRAGRANT_MUSHROOM",
+    "name": "Fragrant Mushroom",
+    "description": "Upon pickup, lose [red]15[/red] HP and [gold]Upgrade[/gold] [blue]3[/blue] random cards.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "FRESNEL_LENS",
+    "name": "Fresnel Lens",
+    "description": "Whenever you add a card that gains [gold]Block[/gold] to your [gold]Deck[/gold], [gold]Enchant[/gold] it with [purple]Nimble[/purple] [blue]2[/blue].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Whenever you add a card that gains Block t..."
+  },
+  {
+    "id": "FROZEN_EGG",
+    "name": "Frozen Egg",
+    "description": "Whenever you add a Power into your [gold]Deck[/gold], [gold]Upgrade[/gold] it.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Whenever you add a Power into your Deck, U..."
+  },
+  {
+    "id": "FUNERARY_MASK",
+    "name": "Funerary Mask",
+    "description": "At the start of each combat, add [blue]3[/blue] [gold]Souls[/gold] into your [gold]Draw Pile[/gold].",
+    "rarity": "Uncommon",
+    "pool": "necrobinder",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "FUR_COAT",
+    "name": "Fur Coat",
+    "description": "Upon pickup, mark [blue]7[/blue] random combats. Enemies in those rooms have [blue]1[/blue] HP.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "GALACTIC_DUST",
+    "name": "Galactic Dust",
+    "description": "For every [blue]10[/blue] [star:1] spent, gain [blue]10[/blue] [gold]Block[/gold].",
+    "rarity": "Uncommon",
+    "pool": "regent",
+    "short_description": "For every 10  spent, gain 10 Block"
+  },
+  {
+    "id": "GAMBLING_CHIP",
+    "name": "Gambling Chip",
+    "description": "At the start of each combat, discard any number of cards then draw that many.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "At the start of each combat, discard any n..."
+  },
+  {
+    "id": "GAME_PIECE",
+    "name": "Game Piece",
+    "description": "Whenever you play a Power, draw [blue]1[/blue] card.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "GHOST_SEED",
+    "name": "Ghost Seed",
+    "description": "[gold]Strikes[/gold] and [gold]Defends[/gold] gain [gold]Ethereal[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "Strikes and Defends gain Ethereal"
+  },
+  {
+    "id": "GIRYA",
+    "name": "Girya",
+    "description": "You can now gain [gold]Strength[/gold] at [gold]Rest Sites[/gold]. ([blue]3[/blue] times max)",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "GLASS_EYE",
+    "name": "Glass Eye",
+    "description": "Upon pickup, obtain [blue]2[/blue] [gold]Common[/gold] cards, [blue]2[/blue] [gold]Uncommon[/gold] cards, and [blue]1[/blue] [gold]Rare[/gold] card.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "GLITTER",
+    "name": "Glitter",
+    "description": "[gold]Enchant[/gold] all card rewards with [purple]Glam[/purple].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "GNARLED_HAMMER",
+    "name": "Gnarled Hammer",
+    "description": "Upon pickup, [gold]Enchant[/gold] up to [blue]3[/blue] Attacks with [purple]Sharp[/purple] [blue]3[/blue].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "GOLD_PLATED_CABLES",
+    "name": "Gold-Plated Cables",
+    "description": "Your rightmost Orb triggers its passive an additional time.",
+    "rarity": "Uncommon",
+    "pool": "defect",
+    "short_description": "Your rightmost Orb triggers its passive an..."
+  },
+  {
+    "id": "GOLDEN_COMPASS",
+    "name": "Golden Compass",
+    "description": "Upon pickup, replace the [gold]Act[/gold] [blue]2[/blue] Map with a single special path.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "GOLDEN_PEARL",
+    "name": "Golden Pearl",
+    "description": "Upon pickup, gain [blue]150[/blue] [gold]Gold[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "GORGET",
+    "name": "Gorget",
+    "description": "At the start of each combat, gain [blue]4[/blue] [gold]Plating[/gold].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "GREMLIN_HORN",
+    "name": "Gremlin Horn",
+    "description": "Whenever an enemy dies, gain [energy:1] and draw [blue]1[/blue] card.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Enemy dies: effect"
+  },
+  {
+    "id": "HAND_DRILL",
+    "name": "Hand Drill",
+    "description": "Whenever you break an enemy's [gold]Block[/gold], apply [blue]2[/blue] [gold]Vulnerable[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Whenever you break an enemy's Block, apply..."
+  },
+  {
+    "id": "HAPPY_FLOWER",
+    "name": "Happy Flower",
+    "description": "Every [blue]3[/blue] turns, gain [energy:1].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Every 3 turns, gain 1 energy"
+  },
+  {
+    "id": "HELICAL_DART",
+    "name": "Helical Dart",
+    "description": "Whenever you play a [gold]Shiv[/gold], gain [blue]1[/blue] [gold]Dexterity[/gold] this turn.",
+    "rarity": "Rare",
+    "pool": "silent",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "HISTORY_COURSE",
+    "name": "History Course",
+    "description": "At the start of your turn, play a copy of your last played Attack or Skill.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "HORN_CLEAT",
+    "name": "Horn Cleat",
+    "description": "At the start of your [blue]2nd[/blue] turn, gain [blue]14[/blue] [gold]Block[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Turn 2: +Energy"
+  },
+  {
+    "id": "ICE_CREAM",
+    "name": "Ice Cream",
+    "description": "Energy is now conserved between turns.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Energy conserved"
+  },
+  {
+    "id": "INFUSED_CORE",
+    "name": "Infused Core",
+    "description": "At the start of each combat, [gold]Channel[/gold] [blue]3[/blue] [gold]Lightning[/gold].",
+    "rarity": "Starter",
+    "pool": "shared",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "INTIMIDATING_HELMET",
+    "name": "Intimidating Helmet",
+    "description": "Whenever you play a card that costs [energy:2] or more, gain [blue]4[/blue] [gold]Block[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "IRON_CLUB",
+    "name": "Iron Club",
+    "description": "Every [blue]4[/blue] cards you play, draw [blue]1[/blue] card.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Every 4 cards you play, draw 1 card"
+  },
+  {
+    "id": "IVORY_TILE",
+    "name": "Ivory Tile",
+    "description": "Whenever you play a card that costs [energy:3] or more, gain [energy:1].",
+    "rarity": "Rare",
+    "pool": "necrobinder",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "JEWELED_MASK",
+    "name": "Jeweled Mask",
+    "description": "At the start of combat put a random Power from your [gold]Draw Pile[/gold] into your [gold]Hand[/gold], it's free to play.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "At the start of combat put a random Power ..."
+  },
+  {
+    "id": "JEWELRY_BOX",
+    "name": "Jewelry Box",
+    "description": "Upon pickup, add [blue]1[/blue] [gold]Apotheosis[/gold] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "JOSS_PAPER",
+    "name": "Joss Paper",
+    "description": "Every [blue]5[/blue] times you [gold]Exhaust[/gold] a card, draw [blue]1[/blue] card.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Every 5 times you Exhaust a card, draw 1 c..."
+  },
+  {
+    "id": "JUZU_BRACELET",
+    "name": "Juzu Bracelet",
+    "description": "Regular enemy combats are no longer encountered in [gold]?[/gold] rooms.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Regular enemy combats are no longer encoun..."
+  },
+  {
+    "id": "KIFUDA",
+    "name": "Kifuda",
+    "description": "Upon pickup, [gold]Enchant[/gold] up to [blue]3[/blue] cards with [purple]Adroit[/purple].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "KUNAI",
+    "name": "Kunai",
+    "description": "Every time you play [blue]3[/blue] Attacks in a single turn, gain [blue]1[/blue] [gold]Dexterity[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Every time you play 3 Attacks in a single ..."
+  },
+  {
+    "id": "KUSARIGAMA",
+    "name": "Kusarigama",
+    "description": "Every time you play [blue]3[/blue] Attacks in a single turn, deal [blue]6[/blue] damage to a random enemy.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Every time you play 3 Attacks in a single ..."
+  },
+  {
+    "id": "LANTERN",
+    "name": "Lantern",
+    "description": "Start each combat with an additional [energy:1].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Start each combat with an additional 1 ene..."
+  },
+  {
+    "id": "LARGE_CAPSULE",
+    "name": "Large Capsule",
+    "description": "Upon pickup, obtain [blue]2[/blue] random [gold]Relics[/gold]. Add an additional [gold]Strike[/gold] and [gold]Defend[/gold] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LASTING_CANDY",
+    "name": "Lasting Candy",
+    "description": "Every other combat, your card rewards gain an additional Power.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LAVA_LAMP",
+    "name": "Lava Lamp",
+    "description": "At the end of combat, [gold]Upgrade[/gold] all card rewards if you took no damage.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LAVA_ROCK",
+    "name": "Lava Rock",
+    "description": "The Act 1 Boss drops [blue]2[/blue] [gold]Relics[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LEAD_PAPERWEIGHT",
+    "name": "Lead Paperweight",
+    "description": "Upon pickup, choose [blue]1[/blue] of [blue]2[/blue] Colorless cards to add to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LEAFY_POULTICE",
+    "name": "Leafy Poultice",
+    "description": "Upon pickup, [gold]Transform[/gold] [blue]1[/blue] of your [gold]Strikes[/gold] and [blue]1[/blue] of your [gold]Defends[/gold] and lose [blue]10[/blue] Max HP.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LEES_WAFFLE",
+    "name": "Lee's Waffle",
+    "description": "Upon pickup, raise your Max HP by [blue]7[/blue] and heal all of your HP.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LETTER_OPENER",
+    "name": "Letter Opener",
+    "description": "Every time you play [blue]3[/blue] Skills in a single turn, deal [blue]5[/blue] damage to ALL enemies.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Every time you play 3 Skills in a single t..."
+  },
+  {
+    "id": "LIZARD_TAIL",
+    "name": "Lizard Tail",
+    "description": "When you would die, heal to [green]50%[/green] of your Max HP instead (works once).",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "On death: heal 50%"
+  },
+  {
+    "id": "LOOMING_FRUIT",
+    "name": "Looming Fruit",
+    "description": "Upon pickup, raise your Max HP by [blue]31[/blue].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LORDS_PARASOL",
+    "name": "Lord's Parasol",
+    "description": "When you encounter the [gold]Merchant[/gold], immediately obtain EVERYTHING he sells.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LOST_COFFER",
+    "name": "Lost Coffer",
+    "description": "Upon pickup, gain [blue]1[/blue] card reward and procure [blue]1[/blue] random potion.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LOST_WISP",
+    "name": "Lost Wisp",
+    "description": "Whenever you play a [gold]Power[/gold], deal [blue]8[/blue] damage to ALL enemies.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "LUCKY_FYSH",
+    "name": "Lucky Fysh",
+    "description": "Whenever you add a card to your [gold]Deck[/gold], gain [blue]15[/blue] [gold]Gold[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "LUNAR_PASTRY",
+    "name": "Lunar Pastry",
+    "description": "At the end of your turn, gain [star:1].",
+    "rarity": "Rare",
+    "pool": "regent",
+    "short_description": "At the end of your turn, gain"
+  },
+  {
+    "id": "MANGO",
+    "name": "Mango",
+    "description": "Upon pickup, raise your Max HP by [blue]14[/blue].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "MASSIVE_SCROLL",
+    "name": "Massive Scroll",
+    "description": "Upon pickup, choose [blue]1[/blue] of [blue]3[/blue] [gold]Multiplayer Colorless Cards[/gold] to add to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "MAW_BANK",
+    "name": "Maw Bank",
+    "description": "Whenever you climb a floor, gain [blue]12[/blue] [gold]Gold[/gold]. No longer works when you spend any [gold]Gold[/gold] at the shop.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "MEAL_TICKET",
+    "name": "Meal Ticket",
+    "description": "Whenever you enter a shop room, heal [green]15[/green] HP.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "MEAT_CLEAVER",
+    "name": "Meat Cleaver",
+    "description": "You may [gold]Cook[/gold] at Rest Sites.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "MEAT_ON_THE_BONE",
+    "name": "Meat on the Bone",
+    "description": "If your HP is at or below [blue]50%[/blue] at the end of combat, heal [green]12[/green] HP.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "If your HP is at or below 50% at the end o..."
+  },
+  {
+    "id": "MEMBERSHIP_CARD",
+    "name": "Membership Card",
+    "description": "[blue]50%[/blue] discount on all products!",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "50% discount on all products!"
+  },
+  {
+    "id": "MERCURY_HOURGLASS",
+    "name": "Mercury Hourglass",
+    "description": "At the start of your turn, deal [blue]3[/blue] damage to ALL enemies.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Turn start: deal dmg"
+  },
+  {
+    "id": "METRONOME",
+    "name": "Metronome",
+    "description": "The first time you [gold]Channel[/gold] [blue]7[/blue] [gold]Orbs[/gold] each combat, deal [blue]30[/blue] damage to ALL enemies.",
+    "rarity": "Rare",
+    "pool": "defect",
+    "short_description": "The first time you Channel 7 Orbs each com..."
+  },
+  {
+    "id": "MINI_REGENT",
+    "name": "Mini Regent",
+    "description": "The first time you spend [star:1] each turn, gain [blue]1[/blue] [gold]Strength[/gold].",
+    "rarity": "Rare",
+    "pool": "regent",
+    "short_description": "The first time you spend  each turn, gain ..."
+  },
+  {
+    "id": "MINIATURE_CANNON",
+    "name": "Miniature Cannon",
+    "description": "[gold]Upgraded[/gold] Attacks deal [blue]3[/blue] additional damage.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Upgraded Attacks +dmg"
+  },
+  {
+    "id": "MINIATURE_TENT",
+    "name": "Miniature Tent",
+    "description": "You may choose any number of options at [gold]Rest Sites[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "MOLTEN_EGG",
+    "name": "Molten Egg",
+    "description": "Whenever you add an Attack card to your [gold]Deck[/gold], [gold]Upgrade[/gold] it.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Whenever you add an Attack card to your De..."
+  },
+  {
+    "id": "MR_STRUGGLES",
+    "name": "Mr. Struggles",
+    "description": "At the start of your turn, deal damage equal to the turn number to ALL enemies.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Turn start: deal dmg"
+  },
+  {
+    "id": "MUMMIFIED_HAND",
+    "name": "Mummified Hand",
+    "description": "Whenever you play a Power, a random card in your [gold]Hand[/gold] is free to play that turn.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "On play: effect"
+  },
+  {
+    "id": "MUSIC_BOX",
+    "name": "Music Box",
+    "description": "Create an [gold]Ethereal[/gold] copy of the first Attack you play each turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Create an Ethereal copy of the first Attac..."
+  },
+  {
+    "id": "MYSTIC_LIGHTER",
+    "name": "Mystic Lighter",
+    "description": "[gold]Enchanted[/gold] Attacks deal [blue]9[/blue] additional damage.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "Enchanted Attacks deal 9 additional damage..."
+  },
+  {
+    "id": "NEOWS_TORMENT",
+    "name": "Neow's Torment",
+    "description": "Upon pickup, add [blue]1[/blue] [gold]Neow's Fury[/gold] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "NEW_LEAF",
+    "name": "New Leaf",
+    "description": "Upon pickup, [gold]Transform[/gold] [blue]1[/blue] card.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "NINJA_SCROLL",
+    "name": "Ninja Scroll",
+    "description": "At the start of each combat, add [blue]3[/blue] [gold]Shivs[/gold] into your [gold]Hand[/gold].",
+    "rarity": "Shop",
+    "pool": "silent",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "NUNCHAKU",
+    "name": "Nunchaku",
+    "description": "Every time you play [blue]10[/blue] Attacks, gain [energy:1].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Every time you play 10 Attacks, gain 1 ene..."
+  },
+  {
+    "id": "NUTRITIOUS_OYSTER",
+    "name": "Nutritious Oyster",
+    "description": "Upon pickup, raise your Max HP by [blue]11[/blue].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "NUTRITIOUS_SOUP",
+    "name": "Nutritious Soup",
+    "description": "Upon pickup, [gold]Enchant[/gold] all [gold]Strikes[/gold] in your [gold]Deck[/gold] with [purple]Tezcatara's Ember[/purple].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "ODDLY_SMOOTH_STONE",
+    "name": "Oddly Smooth Stone",
+    "description": "Start each combat with [blue]1[/blue] [gold]Dexterity[/gold].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "+1 DEX"
+  },
+  {
+    "id": "OLD_COIN",
+    "name": "Old Coin",
+    "description": "Upon pickup, gain [blue]300[/blue] [gold]Gold[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "ORANGE_DOUGH",
+    "name": "Orange Dough",
+    "description": "At the start of each combat, add [blue]2[/blue] random Colorless cards into your [gold]Hand[/gold].",
+    "rarity": "Rare",
+    "pool": "regent",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "ORICHALCUM",
+    "name": "Orichalcum",
+    "description": "If you end your turn without [gold]Block[/gold], gain [blue]6[/blue] [gold]Block[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "If you end your turn without Block, gain 6..."
+  },
+  {
+    "id": "ORNAMENTAL_FAN",
+    "name": "Ornamental Fan",
+    "description": "Every time you play [blue]3[/blue] Attacks in a single turn, gain [blue]4[/blue] [gold]Block[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Every time you play 3 Attacks in a single ..."
+  },
+  {
+    "id": "ORRERY",
+    "name": "Orrery",
+    "description": "Upon pickup, gain [blue]5[/blue] card rewards.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PAELS_BLOOD",
+    "name": "Pael's Blood",
+    "description": "At the start of your turn, draw [blue]1[/blue] additional card.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: draw 1"
+  },
+  {
+    "id": "PAELS_CLAW",
+    "name": "Pael's Claw",
+    "description": "Upon pickup, [gold]Enchant[/gold] all [gold]Defends[/gold] with [purple][EnchantmentName][/purple].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PAELS_EYE",
+    "name": "Pael's Eye",
+    "description": "The first time each combat you end your turn without playing cards, [gold]Exhaust[/gold] your [gold]Hand[/gold], and take an extra turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "The first time each combat you end your tu..."
+  },
+  {
+    "id": "PAELS_FLESH",
+    "name": "Pael's Flesh",
+    "description": "Gain an additional [energy:1] at the start of your [blue]3rd[/blue] turn, and every turn after that.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn 3: +? Energy"
+  },
+  {
+    "id": "PAELS_GROWTH",
+    "name": "Pael's Growth",
+    "description": "Upon pickup, [gold]Enchant[/gold] a card with [purple][EnchantmentName][/purple].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PAELS_HORN",
+    "name": "Pael's Horn",
+    "description": "Upon pickup, add [blue]2[/blue] [gold]Relax[/gold] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PAELS_LEGION",
+    "name": "Pael's Legion",
+    "description": "Doubles [gold]Block[/gold] gained from a card, then goes to sleep for [blue]2[/blue] turns.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Doubles Block gained from a card, then goe..."
+  },
+  {
+    "id": "PAELS_TEARS",
+    "name": "Pael's Tears",
+    "description": "If you end your turn with unspent [energy:1], gain an additional [energy:2] next turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "If you end your turn with unspent 1 energy..."
+  },
+  {
+    "id": "PAELS_TOOTH",
+    "name": "Pael's Tooth",
+    "description": "Upon pickup, remove [blue]5[/blue] cards from your [gold]Deck[/gold]. After each combat, randomly add [blue]1[/blue] back [gold]Upgraded[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PAELS_WING",
+    "name": "Pael's Wing",
+    "description": "You may sacrifice card rewards to Pael. Every [blue]2[/blue] sacrifices, obtain a [gold]Relic[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PANDORAS_BOX",
+    "name": "Pandora's Box",
+    "description": "[gold]Transform[/gold] ALL [gold]Strikes[/gold] and [gold]Defends[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Transform ALL Strikes and Defends"
+  },
+  {
+    "id": "PANTOGRAPH",
+    "name": "Pantograph",
+    "description": "At the start of each [gold]Boss[/gold] combat, heal [green]25[/green] HP.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "At the start of each Boss combat, heal 25 ..."
+  },
+  {
+    "id": "PAPER_KRANE",
+    "name": "Paper Krane",
+    "description": "Enemies with [gold]Weak[/gold] deal [blue]40%[/blue] less damage to you rather than [blue]25%[/blue].",
+    "rarity": "Rare",
+    "pool": "silent",
+    "short_description": "Enemies with Weak deal 40% less damage to ..."
+  },
+  {
+    "id": "PAPER_PHROG",
+    "name": "Paper Phrog",
+    "description": "Enemies with [gold]Vulnerable[/gold] take [blue]75%[/blue] more damage rather than [blue]50%[/blue].",
+    "rarity": "Uncommon",
+    "pool": "ironclad",
+    "short_description": "Enemies with Vulnerable take 75% more dama..."
+  },
+  {
+    "id": "PARRYING_SHIELD",
+    "name": "Parrying Shield",
+    "description": "If you end a turn with at least [blue]10[/blue] [gold]Block[/gold], deal [blue]6[/blue] damage to a random enemy.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "If you end a turn with at least 10 Block, ..."
+  },
+  {
+    "id": "PEAR",
+    "name": "Pear",
+    "description": "Upon pickup, raise your Max HP by [blue]10[/blue].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PEN_NIB",
+    "name": "Pen Nib",
+    "description": "Every [blue]10th[/blue] Attack you play deals double damage.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Every 10th Attack: 2x dmg"
+  },
+  {
+    "id": "PENDULUM",
+    "name": "Pendulum",
+    "description": "Whenever you shuffle your [gold]Draw Pile[/gold], draw a card.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "On shuffle: draw"
+  },
+  {
+    "id": "PERMAFROST",
+    "name": "Permafrost",
+    "description": "The first time you play a Power each combat, gain [blue]6[/blue] [gold]Block[/gold].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "The first time you play a Power each comba..."
+  },
+  {
+    "id": "PETRIFIED_TOAD",
+    "name": "Petrified Toad",
+    "description": "At the start of each combat, procure a [gold]Potion-Shaped Rock[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "At the start of each combat, procure a Pot..."
+  },
+  {
+    "id": "PHILOSOPHERS_STONE",
+    "name": "Philosopher's Stone",
+    "description": "Gain [energy:1] at the start of each turn. ALL enemies start combat with [blue]1[/blue] [gold]Strength[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "PHYLACTERY_UNBOUND",
+    "name": "Phylactery Unbound",
+    "description": "At the start of each combat, [gold]Summon[/gold] [blue]5[/blue]. At the start of your turn, [gold]Summon[/gold] [blue]2[/blue].",
+    "rarity": "Starter",
+    "pool": "shared",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "PLANISPHERE",
+    "name": "Planisphere",
+    "description": "Whenever you enter a [gold]?[/gold] room, heal [green]4[/green] HP.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "POCKETWATCH",
+    "name": "Pocketwatch",
+    "description": "Whenever you play [blue]3[/blue] or fewer cards during your turn, draw [blue]3[/blue] additional cards at the start of your next turn.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "POLLINOUS_CORE",
+    "name": "Pollinous Core",
+    "description": "Every [blue]4[/blue] turns, draw [blue]2[/blue] additional cards.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Every 4 turns, draw 2 additional cards"
+  },
+  {
+    "id": "POMANDER",
+    "name": "Pomander",
+    "description": "Upon pickup, [gold]Upgrade[/gold] a card.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "POTION_BELT",
+    "name": "Potion Belt",
+    "description": "Upon pickup, gain [blue]2[/blue] potion slots.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "POWER_CELL",
+    "name": "Power Cell",
+    "description": "At the start of each combat, add [blue]2[/blue] zero-cost cards from your [gold]Draw Pile[/gold] into your [gold]Hand[/gold].",
+    "rarity": "Rare",
+    "pool": "defect",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "PRAYER_WHEEL",
+    "name": "Prayer Wheel",
+    "description": "Normal enemies drop an additional card reward.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PRECARIOUS_SHEARS",
+    "name": "Precarious Shears",
+    "description": "Upon pickup, remove [blue]2[/blue] cards from your [gold]Deck[/gold] and take [red]13[/red] damage.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PRECISE_SCISSORS",
+    "name": "Precise Scissors",
+    "description": "Upon pickup, remove [blue]1[/blue] card from your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PRESERVED_FOG",
+    "name": "Preserved Fog",
+    "description": "Upon pickup, remove [blue]5[/blue] cards from your [gold]Deck[/gold]. Add [red]Folly[/red] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "PRISMATIC_GEM",
+    "name": "Prismatic Gem",
+    "description": "Gain [energy:1] at the start of each turn. Card rewards now contain cards from other colors.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "PUMPKIN_CANDLE",
+    "name": "Pumpkin Candle",
+    "description": "Gain [energy:1] at the start of each turn. Extinguishes at the start of [gold]Act[/gold] [blue]3[/blue].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "PUNCH_DAGGER",
+    "name": "Punch Dagger",
+    "description": "Upon pickup, [gold]Enchant[/gold] an Attack with [purple]Momentum[/purple] [blue]5[/blue].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "RADIANT_PEARL",
+    "name": "Radiant Pearl",
+    "description": "At the start of each combat, add [blue]1[/blue] [gold]Luminesce[/gold] into your [gold]Hand[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "RAINBOW_RING",
+    "name": "Rainbow Ring",
+    "description": "The first time you play an Attack, Skill, and Power each turn, gain [blue]1[/blue] [gold]Strength[/gold] and [blue]1[/blue] [gold]Dexterity[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "The first time you play an Attack, Skill, ..."
+  },
+  {
+    "id": "RAZOR_TOOTH",
+    "name": "Razor Tooth",
+    "description": "Every time you play an Attack or Skill, [gold]Upgrade[/gold] it for the remainder of combat.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Every time you play an Attack or Skill, Up..."
+  },
+  {
+    "id": "RED_MASK",
+    "name": "Red Mask",
+    "description": "At the start of each combat, apply [blue]1[/blue] [gold]Weak[/gold] to ALL enemies.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Start: Vulnerable to ALL"
+  },
+  {
+    "id": "RED_SKULL",
+    "name": "Red Skull",
+    "description": "While your HP is at or below [blue]50%[/blue], you have [blue]3[/blue] additional [gold]Strength[/gold].",
+    "rarity": "Common",
+    "pool": "ironclad",
+    "short_description": "While your HP is at or below 50%, you have..."
+  },
+  {
+    "id": "REGAL_PILLOW",
+    "name": "Regal Pillow",
+    "description": "Whenever you [gold]Rest[/gold], heal an additional [blue]15[/blue] HP.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "REGALITE",
+    "name": "Regalite",
+    "description": "Whenever you create a Colorless card, gain [blue]2[/blue] [gold]Block[/gold].",
+    "rarity": "Uncommon",
+    "pool": "regent",
+    "short_description": "Whenever you create a Colorless card, gain..."
+  },
+  {
+    "id": "REPTILE_TRINKET",
+    "name": "Reptile Trinket",
+    "description": "Whenever you use a potion, gain [blue]3[/blue] [gold]Strength[/gold] this turn.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Use potion: +STR"
+  },
+  {
+    "id": "RING_OF_THE_DRAKE",
+    "name": "Ring of the Drake",
+    "description": "At the start of your first [blue]3[/blue] turns, draw [blue]2[/blue] additional cards.",
+    "rarity": "Starter",
+    "pool": "shared",
+    "short_description": "At the start of your first 3 turns, draw 2..."
+  },
+  {
+    "id": "RING_OF_THE_SNAKE",
+    "name": "Ring of the Snake",
+    "description": "At the start of each combat, draw [blue]2[/blue] additional cards.",
+    "rarity": "Starter",
+    "pool": "silent",
+    "short_description": "Start: draw 2 cards"
+  },
+  {
+    "id": "RINGING_TRIANGLE",
+    "name": "Ringing Triangle",
+    "description": "[gold]Retain[/gold] your [gold]Hand[/gold] on the first turn of combat.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "Retain hand turn 1"
+  },
+  {
+    "id": "RIPPLE_BASIN",
+    "name": "Ripple Basin",
+    "description": "If you did not play any Attacks during your turn, gain [blue]4[/blue] [gold]Block[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "If you did not play any Attacks during you..."
+  },
+  {
+    "id": "ROYAL_POISON",
+    "name": "Royal Poison",
+    "description": "At the start of each combat, lose [blue]4[/blue] HP.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "At the start of each combat, lose 4 HP"
+  },
+  {
+    "id": "ROYAL_STAMP",
+    "name": "Royal Stamp",
+    "description": "Upon pickup, choose an Attack or Skill in your [gold]Deck[/gold] to [gold]Enchant[/gold] with [purple][Enchantment][/purple].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "RUINED_HELMET",
+    "name": "Ruined Helmet",
+    "description": "The first time you gain [gold]Strength[/gold] each combat, double the amount gained.",
+    "rarity": "Rare",
+    "pool": "ironclad",
+    "short_description": "The first time you gain Strength each comb..."
+  },
+  {
+    "id": "RUNIC_CAPACITOR",
+    "name": "Runic Capacitor",
+    "description": "Start each combat with [blue]3[/blue] additional [gold]Orb Slots[/gold].",
+    "rarity": "Shop",
+    "pool": "defect",
+    "short_description": "Start each combat with 3 additional Orb Sl..."
+  },
+  {
+    "id": "RUNIC_PYRAMID",
+    "name": "Runic Pyramid",
+    "description": "At the end of your turn, you no longer discard your [gold]Hand[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Retain hand"
+  },
+  {
+    "id": "SAI",
+    "name": "Sai",
+    "description": "At the start of your turn, gain [blue]7[/blue] [gold]Block[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "SAND_CASTLE",
+    "name": "Sand Castle",
+    "description": "Upon pickup, [gold]Upgrade[/gold] [blue]6[/blue] random cards.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "SCREAMING_FLAGON",
+    "name": "Screaming Flagon",
+    "description": "If you end your turn with no cards in your [gold]Hand[/gold], deal [blue]20[/blue] damage to ALL enemies.",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "End turn empty hand: dmg"
+  },
+  {
+    "id": "SCROLL_BOXES",
+    "name": "Scroll Boxes",
+    "description": "Upon pickup, lose all [gold]Gold[/gold] and choose [blue]1[/blue] of [blue]2[/blue] packs of cards to add to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "SEA_GLASS",
+    "name": "Sea Glass",
+    "description": "See [blue]15[/blue] cards from another character. Choose any number of them to add to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "See 15 cards from another character"
+  },
+  {
+    "id": "SEAL_OF_GOLD",
+    "name": "Seal of Gold",
+    "description": "At the start of your turn, spend [blue]5[/blue] [gold]Gold[/gold] to gain [energy:1].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "SELF_FORMING_CLAY",
+    "name": "Self-Forming Clay",
+    "description": "Whenever you lose HP in combat, gain [blue]3[/blue] [gold]Block[/gold] next turn.",
+    "rarity": "Uncommon",
+    "pool": "ironclad",
+    "short_description": "Whenever you lose HP in combat, gain 3 Blo..."
+  },
+  {
+    "id": "SERE_TALON",
+    "name": "Sere Talon",
+    "description": "Upon pickup, add [blue]2[/blue] random [red]Curses[/red] and [blue]3[/blue] [purple]Wishes[/purple] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "SHOVEL",
+    "name": "Shovel",
+    "description": "You can now dig at [gold]Rest Sites[/gold] to obtain a random [gold]Relic[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "SHURIKEN",
+    "name": "Shuriken",
+    "description": "Every time you play [blue]3[/blue] Attacks in a single turn, gain [blue]1[/blue] [gold]Strength[/gold].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Every time you play 3 Attacks in a single ..."
+  },
+  {
+    "id": "SIGNET_RING",
+    "name": "Signet Ring",
+    "description": "Upon pickup, gain [blue]999[/blue] [gold]Gold[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "SILVER_CRUCIBLE",
+    "name": "Silver Crucible",
+    "description": "The first [blue]3[/blue] card rewards you see are [gold]Upgraded[/gold]. The first Treasure Chest you open is [red]empty[/red].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "SLING_OF_COURAGE",
+    "name": "Sling of Courage",
+    "description": "Start each [gold]Elite[/gold] combat with [blue]2[/blue] [gold]Strength[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "Start each Elite combat with 2 Strength"
+  },
+  {
+    "id": "SMALL_CAPSULE",
+    "name": "Small Capsule",
+    "description": "Upon pickup, obtain a random [gold]Relic[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "SNECKO_EYE",
+    "name": "Snecko Eye",
+    "description": "At the start of your turn, draw [blue]2[/blue] additional cards. Start each combat [red]Confused[/red].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: draw 2"
+  },
+  {
+    "id": "SNECKO_SKULL",
+    "name": "Snecko Skull",
+    "description": "Whenever you apply [gold]Poison[/gold], apply an additional [blue]1[/blue] [gold]Poison[/gold].",
+    "rarity": "Common",
+    "pool": "silent",
+    "short_description": "Whenever you apply Poison, apply an additi..."
+  },
+  {
+    "id": "SOZU",
+    "name": "Sozu",
+    "description": "Gain [energy:1] at the start of each turn. You can no longer obtain potions.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "SPARKLING_ROUGE",
+    "name": "Sparkling Rouge",
+    "description": "At the start of your [blue]3rd[/blue] turn, gain [blue]1[/blue] [gold]Strength[/gold] and [blue]1[/blue] [gold]Dexterity[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "SPIKED_GAUNTLETS",
+    "name": "Spiked Gauntlets",
+    "description": "Gain [energy:1] at the start of each turn. Powers cost [blue]1[/blue] more [energy:1].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "STONE_CALENDAR",
+    "name": "Stone Calendar",
+    "description": "At the end of turn [blue]7[/blue], deal [blue]52[/blue] damage to ALL enemies.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "At the end of turn 7, deal 52 damage to AL..."
+  },
+  {
+    "id": "STONE_CRACKER",
+    "name": "Stone Cracker",
+    "description": "At the start of [gold]Boss[/gold] combats, [gold]Upgrade[/gold] [blue]3[/blue] random cards in your [gold]Draw Pile[/gold] for the rest of combat.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "At the start of Boss combats, Upgrade 3 ra..."
+  },
+  {
+    "id": "STONE_HUMIDIFIER",
+    "name": "Stone Humidifier",
+    "description": "Whenever you [gold]Rest[/gold] at a [gold]Rest Site[/gold], raise your Max HP by [blue]5[/blue].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "STORYBOOK",
+    "name": "Storybook",
+    "description": "Upon pickup, add [blue]1[/blue] [gold]Brightest Flame[/gold] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "STRAWBERRY",
+    "name": "Strawberry",
+    "description": "Upon pickup, raise your Max HP by [blue]7[/blue].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "STRIKE_DUMMY",
+    "name": "Strike Dummy",
+    "description": "Cards containing “Strike” deal [blue]3[/blue] additional damage.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Cards containing “Strike” deal 3 additiona..."
+  },
+  {
+    "id": "STURDY_CLAMP",
+    "name": "Sturdy Clamp",
+    "description": "Up to [blue]10[/blue] [gold]Block[/gold] persists across turns.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Block persists"
+  },
+  {
+    "id": "SWORD_OF_JADE",
+    "name": "Sword of Jade",
+    "description": "Start each combat with [blue]3[/blue] [gold]Strength[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "+3 STR"
+  },
+  {
+    "id": "SWORD_OF_STONE",
+    "name": "Sword of Stone",
+    "description": "Transforms into a powerful [gold]Relic[/gold] after defeating [blue]5[/blue] [gold]Elites[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Transforms into a powerful Relic after def..."
+  },
+  {
+    "id": "SYMBIOTIC_VIRUS",
+    "name": "Symbiotic Virus",
+    "description": "At the start of each combat, [gold]Channel[/gold] [blue]1[/blue] [gold]Dark[/gold].",
+    "rarity": "Uncommon",
+    "pool": "defect",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "TANXS_WHISTLE",
+    "name": "Tanx's Whistle",
+    "description": "Upon pickup, add [blue]1[/blue] [gold]Whistle[/gold] to your [gold]Deck[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "TEA_OF_DISCOURTESY",
+    "name": "Tea of Discourtesy",
+    "description": "At the start of the next combat, shuffle [blue]2[/blue] [gold]Dazed[/gold] into your [gold]Draw Pile[/gold].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "At the start of the next combat, shuffle 2..."
+  },
+  {
+    "id": "THE_ABACUS",
+    "name": "The Abacus",
+    "description": "Whenever you shuffle your [gold]Draw Pile[/gold], gain [blue]6[/blue] [gold]Block[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "Whenever you shuffle your Draw Pile, gain ..."
+  },
+  {
+    "id": "THE_BOOT",
+    "name": "The Boot",
+    "description": "Whenever you would deal [blue]4[/blue] or less unblocked attack damage, increase it to [blue]5[/blue].",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Whenever you would deal 4 or less unblocke..."
+  },
+  {
+    "id": "THE_COURIER",
+    "name": "The Courier",
+    "description": "The merchant no longer runs out of cards, relics, or potions and his prices are reduced by [blue]20%[/blue].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "The merchant no longer runs out of cards, ..."
+  },
+  {
+    "id": "THROWING_AXE",
+    "name": "Throwing Axe",
+    "description": "The first card you play each combat is played an extra time.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "First card played twice"
+  },
+  {
+    "id": "TINGSHA",
+    "name": "Tingsha",
+    "description": "Whenever you discard a card during your turn, deal [blue]3[/blue] damage to a random enemy for each card discarded.",
+    "rarity": "Uncommon",
+    "pool": "silent",
+    "short_description": "On discard: effect"
+  },
+  {
+    "id": "TINY_MAILBOX",
+    "name": "Tiny Mailbox",
+    "description": "Whenever you [gold]Rest[/gold], procure a random potion.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "TOASTY_MITTENS",
+    "name": "Toasty Mittens",
+    "description": "At the start of your turn, [gold]Exhaust[/gold] the top card of your [gold]Draw Pile[/gold] and gain [blue]1[/blue] [gold]Strength[/gold].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start effect"
+  },
+  {
+    "id": "TOOLBOX",
+    "name": "Toolbox",
+    "description": "At the start of each combat, choose [blue]1[/blue] of [blue]3[/blue] random Colorless cards and add the chosen card into your [gold]Hand[/gold].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": "At the start of each combat, choose 1 of 3..."
+  },
+  {
+    "id": "TOUCH_OF_OROBAS",
+    "name": "Touch of Orobas",
+    "description": "Upon pickup, replace your starter [gold]Relic[/gold] with an [gold]Ancient[/gold] version.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "TOUGH_BANDAGES",
+    "name": "Tough Bandages",
+    "description": "Whenever you discard a card during your turn, gain [blue]3[/blue] [gold]Block[/gold].",
+    "rarity": "Rare",
+    "pool": "silent",
+    "short_description": "On discard: effect"
+  },
+  {
+    "id": "TOXIC_EGG",
+    "name": "Toxic Egg",
+    "description": "Whenever you add a Skill into your [gold]Deck[/gold], [gold]Upgrade[/gold] it.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Whenever you add a Skill into your Deck, U..."
+  },
+  {
+    "id": "TOY_BOX",
+    "name": "Toy Box",
+    "description": "Upon pickup, obtain [blue]4[/blue] [gold]Wax Relics[/gold]. Every [blue]3[/blue] combats, your left-most [gold]Wax Relic[/gold] will melt away.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "TRI_BOOMERANG",
+    "name": "Tri-Boomerang",
+    "description": "Choose [blue]3[/blue] Attacks in your [gold]Deck[/gold]. [gold]Enchant[/gold] them with [purple]Instinct[/purple].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Choose 3 Attacks in your Deck"
+  },
+  {
+    "id": "TUNGSTEN_ROD",
+    "name": "Tungsten Rod",
+    "description": "Whenever you would lose HP, lose [blue]1[/blue] less.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Lose 1 less HP"
+  },
+  {
+    "id": "TUNING_FORK",
+    "name": "Tuning Fork",
+    "description": "Every time you play [blue]10[/blue] Skills, gain [blue]7[/blue] [gold]Block[/gold].",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "Every time you play 10 Skills, gain 7 Bloc..."
+  },
+  {
+    "id": "TWISTED_FUNNEL",
+    "name": "Twisted Funnel",
+    "description": "At the start of each combat, apply [blue]4[/blue] [gold]Poison[/gold] to ALL enemies.",
+    "rarity": "Uncommon",
+    "pool": "silent",
+    "short_description": "Start: Vulnerable to ALL"
+  },
+  {
+    "id": "UNCEASING_TOP",
+    "name": "Unceasing Top",
+    "description": "Whenever you have no cards in [gold]Hand[/gold] during your turn, draw a card.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Whenever you have no cards in Hand during ..."
+  },
+  {
+    "id": "UNDYING_SIGIL",
+    "name": "Undying Sigil",
+    "description": "Enemies with at least as much [gold]Doom[/gold] as HP deal [blue]50%[/blue] less damage.",
+    "rarity": "Shop",
+    "pool": "necrobinder",
+    "short_description": "Enemies with at least as much Doom as HP d..."
+  },
+  {
+    "id": "UNSETTLING_LAMP",
+    "name": "Unsettling Lamp",
+    "description": "Each combat, the first time you play a card that [gold]Debuffs[/gold] an enemy, double its effect.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Each combat, the first time you play a car..."
+  },
+  {
+    "id": "VAJRA",
+    "name": "Vajra",
+    "description": "Start each combat with [blue]1[/blue] [gold]Strength[/gold].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "+1 STR"
+  },
+  {
+    "id": "VAMBRACE",
+    "name": "Vambrace",
+    "description": "The first time you gain [gold]Block[/gold] from a card each combat, double the amount gained.",
+    "rarity": "Uncommon",
+    "pool": "shared",
+    "short_description": "The first time you gain Block from a card ..."
+  },
+  {
+    "id": "VELVET_CHOKER",
+    "name": "Velvet Choker",
+    "description": "Gain [energy:1] at the start of each turn. You cannot play more than [blue]6[/blue] cards per turn.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "VENERABLE_TEA_SET",
+    "name": "Venerable Tea Set",
+    "description": "Whenever you enter a [gold]Rest Site[/gold], start the next combat with an additional [energy:2].",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": "Whenever you enter a Rest Site, start the ..."
+  },
+  {
+    "id": "VERY_HOT_COCOA",
+    "name": "Very Hot Cocoa",
+    "description": "Start each combat with an additional [blue][energy:4][/blue].",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Start each combat with an additional 4 ene..."
+  },
+  {
+    "id": "VEXING_PUZZLEBOX",
+    "name": "Vexing Puzzlebox",
+    "description": "At the start of each combat, add a random card into your [gold]Hand[/gold]. It costs [blue]0[/blue][energy:1].",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Combat start effect"
+  },
+  {
+    "id": "VITRUVIAN_MINION",
+    "name": "Vitruvian Minion",
+    "description": "Cards containing “Minion” deal double damage and gain double [gold]Block[/gold].",
+    "rarity": "Shop",
+    "pool": "regent",
+    "short_description": "Every 10th Attack: 2x dmg"
+  },
+  {
+    "id": "WAR_HAMMER",
+    "name": "War Hammer",
+    "description": "Whenever you kill an [gold]Elite[/gold], [gold]Upgrade[/gold] [blue]4[/blue] random cards.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Whenever you kill an Elite, Upgrade 4 rand..."
+  },
+  {
+    "id": "WAR_PAINT",
+    "name": "War Paint",
+    "description": "Upon pickup, [gold]Upgrade[/gold] [blue]2[/blue] random Skills.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "WHETSTONE",
+    "name": "Whetstone",
+    "description": "Upon pickup, [gold]Upgrade[/gold] [blue]2[/blue] random Attacks.",
+    "rarity": "Common",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "WHISPERING_EARRING",
+    "name": "Whispering Earring",
+    "description": "Gain [energy:1] at the start of each turn. [red]Vakuu plays your first turn for you.[/red]",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": "Turn start: +Energy"
+  },
+  {
+    "id": "WHITE_BEAST_STATUE",
+    "name": "White Beast Statue",
+    "description": "Potions always appear in combat rewards.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": "Potions always appear in combat rewards"
+  },
+  {
+    "id": "WHITE_STAR",
+    "name": "White Star",
+    "description": "[gold]Elites[/gold] drop an additional [gold]Rare[/gold] card reward.",
+    "rarity": "Rare",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "WING_CHARM",
+    "name": "Wing Charm",
+    "description": "A random card in each card reward is [gold]Enchanted[/gold] with [purple]Swift[/purple] [blue]1[/blue].",
+    "rarity": "Shop",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "WONGO_CUSTOMER_APPRECIATION_BADGE",
+    "name": "Wongo Customer Appreciation Badge",
+    "description": "Does nothing.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": ""
+  },
+  {
+    "id": "WONGOS_MYSTERY_TICKET",
+    "name": "Wongo's Mystery Ticket",
+    "description": "Receive [blue]3[/blue] random [gold]Relics[/gold] after [blue]5[/blue] combats.",
+    "rarity": "Event",
+    "pool": "shared",
+    "short_description": "Receive 3 random Relics after 5 combats"
+  },
+  {
+    "id": "YUMMY_COOKIE",
+    "name": "Yummy Cookie",
+    "description": "Upon pickup, [gold]Upgrade[/gold] [blue]4[/blue] cards.",
+    "rarity": "Ancient",
+    "pool": "shared",
+    "short_description": ""
+  }
+]

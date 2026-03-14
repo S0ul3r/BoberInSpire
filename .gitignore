@@ -1,0 +1,46 @@
+# ── Tools (external binaries, not part of project) ──
+Godot_v4.5.1-stable_mono_win64/
+GUMM/
+
+# ── Obsolete GDScript mod (replaced by C# mod) ──
+godot_mod/
+
+# ── C# build artifacts ──
+STS2Mods/sts2_example_mod/bin/
+STS2Mods/sts2_example_mod/obj/
+STS2Mods/sts2_example_mod/pack/.godot/
+STS2Mods/sts2_example_mod/pack/project.godot
+STS2Mods/sts2_example_mod/pack/mod_manifest.json
+STS2Mods/sts2_example_mod/pack/export_presets.cfg
+STS2Mods/sts2_example_mod/local.props
+*.dll
+*.pck
+*.user
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+# ── IDE ──
+.cursor/
+.vs/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstats
+
+# ── OS ──
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ── Promptfoo cache ──
+.promptfoo/
