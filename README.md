@@ -14,6 +14,13 @@ A custom C# mod exports the current combat / merchant state to JSON, and a Pytho
 
 ---
 
+### Data source & acknowledgments
+
+Card and relic data used by the overlay comes from **[Spire Codex](https://spire-codex.com/)**, the Slay the Spire 2 database and API built from decompiled game data. Many thanks to the Spire Codex project for making this data available.
+
+- **Website:** [https://spire-codex.com/](https://spire-codex.com/)
+- **Repository:** [https://github.com/ptrlrd/spire-codex](https://github.com/ptrlrd/spire-codex)
+
 ## Requirements
 
 - **Slay the Spire 2** (Steam, default path used in the mod):
@@ -160,34 +167,3 @@ Once running:
     - The overlay becomes more transparent.
     - Mouse clicks go “through” the window to the game.
   - Press F9 again to return to interactive mode.
-
----
-
-## Project structure
-
-| Path | Description |
-|------|-------------|
-| `STS2Mods/sts2_example_mod/` | C# mod (Harmony patches, combat export). Build output goes to `bin/` and (via PostBuild) to the game `mods/BoberInSpire/`. |
-| `python_app/` | Python overlay (Tkinter UI, file watcher, combat engine, card/relic data loaders). |
-| `data/` | JSON codex data (cards, relics) used by the overlay. |
-| `build.bat` | Builds the mod (Release) and populates `dist/BoberInSpire/` for the installer. |
-| `installer.iss` | Inno Setup script; run `iscc installer.iss` after `build.bat` to create the installer. |
-
-The obsolete GDScript mod (`godot_mod/`) has been removed; the project uses only the C# mod above.
-
-### Data source & acknowledgments
-
-Card and relic data used by the overlay comes from **[Spire Codex](https://spire-codex.com/)**, the Slay the Spire 2 database and API built from decompiled game data. Many thanks to the Spire Codex project for making this data available.
-
-- **Website:** [https://spire-codex.com/](https://spire-codex.com/)
-- **Repository:** [https://github.com/ptrlrd/spire-codex](https://github.com/ptrlrd/spire-codex)
-
-### GitHub Release
-
-To publish a release:
-
-1. Run `build.bat`, then `iscc installer.iss`. The installer is **`dist\BoberInSpire_Setup_1.0.0.exe`**.
-2. On GitHub: **Releases** → **Create a new release** → choose or create a tag (e.g. `v1.0.0`).
-3. Under *Assets*, click *Attach binaries* and upload `dist\BoberInSpire_Setup_1.0.0.exe`.
-
-The `dist/` folder is in `.gitignore`, so the `.exe` is not committed; it is only attached to the release.
