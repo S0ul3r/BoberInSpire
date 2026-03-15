@@ -197,7 +197,7 @@
     "description": "At the start of the next [blue]2[/blue] combats, [gold]Upgrade[/gold] your starting hand.",
     "rarity": "Event",
     "pool": "shared",
-    "short_description": "At the start of the next 2 combats, Upgrad..."
+    "short_description": ""
   },
   {
     "id": "BOOK_OF_FIVE_RINGS",
@@ -573,7 +573,7 @@
     "description": "At the start of the next [blue]2[/blue] combats, gain [blue]2[/blue] [gold]Strength[/gold].",
     "rarity": "Event",
     "pool": "shared",
-    "short_description": "At the start of the next 2 combats, gain 2..."
+    "short_description": ""
   },
   {
     "id": "EMOTION_CHIP",
@@ -677,7 +677,7 @@
     "description": "Whenever you enter a [gold]Rest Site[/gold], start the next combat with an additional [energy:1].",
     "rarity": "Event",
     "pool": "shared",
-    "short_description": "Whenever you enter a Rest Site, start the ..."
+    "short_description": "After resting, get +1 energy"
   },
   {
     "id": "FENCING_MANUAL",
@@ -997,7 +997,7 @@
     "description": "Start each combat with an additional [energy:1].",
     "rarity": "Common",
     "pool": "shared",
-    "short_description": "Start each combat with an additional 1 ene..."
+    "short_description": "+1 energy each combat"
   },
   {
     "id": "LARGE_CAPSULE",
@@ -1173,7 +1173,7 @@
     "description": "[blue]50%[/blue] discount on all products!",
     "rarity": "Shop",
     "pool": "shared",
-    "short_description": "50% discount on all products!"
+    "short_description": "50% off in shop!"
   },
   {
     "id": "MERCURY_HOURGLASS",
@@ -1413,7 +1413,7 @@
     "description": "If you end your turn with unspent [energy:1], gain an additional [energy:2] next turn.",
     "rarity": "Ancient",
     "pool": "shared",
-    "short_description": "If you end your turn with unspent 1 energy..."
+    "short_description": "If you end with 1 energy, get +2 energy next turn"
   },
   {
     "id": "PAELS_TOOTH",
@@ -1501,7 +1501,7 @@
     "description": "The first time you play a Power each combat, gain [blue]6[/blue] [gold]Block[/gold].",
     "rarity": "Common",
     "pool": "shared",
-    "short_description": "The first time you play a Power each comba..."
+    "short_description": "First skill: +6 Block"
   },
   {
     "id": "PETRIFIED_TOAD",
@@ -2013,7 +2013,7 @@
     "description": "At the start of the next combat, shuffle [blue]2[/blue] [gold]Dazed[/gold] into your [gold]Draw Pile[/gold].",
     "rarity": "Event",
     "pool": "shared",
-    "short_description": "At the start of the next combat, shuffle 2..."
+    "short_description": ""
   },
   {
     "id": "THE_ABACUS",
@@ -2069,7 +2069,7 @@
     "description": "At the start of your turn, [gold]Exhaust[/gold] the top card of your [gold]Draw Pile[/gold] and gain [blue]1[/blue] [gold]Strength[/gold].",
     "rarity": "Ancient",
     "pool": "shared",
-    "short_description": "Turn start effect"
+    "short_description": "Discard top card: +1 STR"
   },
   {
     "id": "TOOLBOX",
@@ -2093,7 +2093,7 @@
     "description": "Whenever you discard a card during your turn, gain [blue]3[/blue] [gold]Block[/gold].",
     "rarity": "Rare",
     "pool": "silent",
-    "short_description": "On discard: effect"
+    "short_description": "On discard: +3 Block"
   },
   {
     "id": "TOXIC_EGG",
@@ -2197,7 +2197,7 @@
     "description": "Whenever you enter a [gold]Rest Site[/gold], start the next combat with an additional [energy:2].",
     "rarity": "Common",
     "pool": "shared",
-    "short_description": "Whenever you enter a Rest Site, start the ..."
+    "short_description": "After resting, get +2 energy"
   },
   {
     "id": "VERY_HOT_COCOA",

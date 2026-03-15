@@ -42,6 +42,13 @@ class CardEffects:
     innate: bool = False
     has_sly: bool = False
     causes_discard: int = 0
+    adds_random_attack: int = 0
+    # "Next X you play costs 0" / "Skills cost 0" (Corruption) – applied after playing this card
+    next_skill_cost_zero: bool = False
+    next_attack_cost_zero: bool = False
+    next_power_cost_zero: bool = False
+    next_ethereal_cost_zero: bool = False
+    all_skills_cost_zero: bool = False
 
 
 DISCARD_ALL_HAND = 10
@@ -189,5 +196,33 @@ def parse_card_effects(card_name: str, card_type: str = "", description: str = "
             effects.causes_discard = int(m.group(1))
         elif re.search(r"discard\s+1\s+card", desc_lower, re.I):
             effects.causes_discard = 1
+
+    # Add random Attack(s) into your Hand when you play this card (Infernal Blade, Splash).
+    # Excludes: Powers (e.g. "Whenever you play an Attack, add..."), and "Add N into Draw Pile" (Metamorphosis).
+    is_power = (card_type or "").lower() == "power"
+    if not is_power:
+        if re.search(r"add\s+a\s+random\s+attack\s+into\s+your\s+hand", desc_lower, re.I):
+            effects.adds_random_attack = 1
+        else:
+            m = re.search(r"add\s+(\d+)\s+random\s+attacks?\s+into\s+your\s+hand", desc_lower, re.I)
+            if m:
+                effects.adds_random_attack = int(m.group(1))
+            elif re.search(r"choose\s+1\s+of\s+\d+\s+random\s+attacks?.*(?:into\s+your\s+hand|to\s+add\s+into\s+your\s+hand)", desc_lower, re.I):
+                effects.adds_random_attack = 1
+
+    # "Next X you play costs 0 [energy:1]" / "costs 0" – cost reduction for next card of type
+    if re.search(r"next\s+skill\s+you\s+play\s+costs\s+0", desc_lower, re.I):
+        effects.next_skill_cost_zero = True
+    if re.search(r"next\s+attack\s+you\s+play\s+costs\s+0", desc_lower, re.I):
+        effects.next_attack_cost_zero = True
+    if re.search(r"next\s+power\s+you\s+play\s+costs\s+0", desc_lower, re.I):
+        effects.next_power_cost_zero = True
+    if re.search(r"next\s+(?:\[gold\]\s*)?ethereal(?:\s*\[/gold\])?\s+card\s+you\s+play\s+costs\s+0", desc_lower, re.I):
+        effects.next_ethereal_cost_zero = True
+    if re.search(r"next\s+.*?ethereal.*?costs\s+0", desc_lower, re.I):
+        effects.next_ethereal_cost_zero = True
+    # "Skills cost 0" (Corruption – all skills this turn after playing)
+    if re.search(r"skills\s+cost\s+0", desc_lower, re.I):
+        effects.all_skills_cost_zero = True
 
     return effects

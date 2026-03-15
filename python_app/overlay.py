@@ -15,9 +15,9 @@ except ImportError:
 
 from .combat_engine import (
     calculate_incoming_damage,
-    compute_strategy,
     summarize_hand,
 )
+from .strategy import compute_strategy
 from .models import GameState, MerchantRelic, Relic
 from .relic_db import (
     get_short_description_only,
@@ -383,12 +383,14 @@ class CombatOverlay:
         ).pack(fill="x", pady=(4, 1))
 
         for ei, enemy in zip(incoming.per_enemy, state.enemies):
-            # Build debuff badges
+            # Build debuff/buff badges
             badges = ""
             if enemy.weak_turns > 0:
                 badges += " [Weak]"
             if enemy.vulnerable_turns > 0:
                 badges += " [Vuln]"
+            if enemy.strength != 0:
+                badges += f" [STR{enemy.strength:+d}]"
 
             # Build intent display
             if ei.total_damage > 0:
@@ -461,6 +463,9 @@ class CombatOverlay:
         if strat.is_safe:
             safety = f"  \u2714 SAFE  (block surplus: +{strat.block_surplus})"
             safety_color = SAFE_COLOR
+        elif strat.prioritize_kill and strat.any_lethal:
+            safety = "  \u2694 KILL POSSIBLE  \u2014 attack first, then block if needed"
+            safety_color = LETHAL_COLOR
         elif strat.block_needed > 0 and strat.total_block_gain < strat.block_needed:
             deficit = strat.block_needed - strat.total_block_gain
             safety = f"  \u26A0 DANGER  (need {deficit} more block!)"
@@ -496,6 +501,10 @@ class CombatOverlay:
                 icon = "\u26E8"
                 val = f"+{cs.value} blk"
                 color = BLOCK_COLOR
+            elif cs.role == "add_attack":
+                icon = "\u2694"
+                val = "random atk (play first)"
+                color = LETHAL_COLOR
             else:
                 icon = "\u2694"
                 val = f"{cs.value} dmg"

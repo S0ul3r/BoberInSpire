@@ -14,6 +14,8 @@ class ParseError(Exception):
 
 
 def _parse_card(raw: dict[str, Any]) -> Card:
+    """Parse a card from the mod JSON. damage/block/energy_cost/hits come from the game
+    (DynamicVars and current cost) and should reflect upgrades, Strength, relics like Tezcatara's Ember."""
     name = raw["name"]
     desc = raw.get("description", "")
     if not desc:
@@ -38,6 +40,7 @@ def _parse_enemy(raw: dict[str, Any]) -> Enemy:
         max_hp=raw.get("max_hp", raw["hp"]),
         vulnerable_turns=raw.get("vulnerable_turns", 0),
         weak_turns=raw.get("weak_turns", 0),
+        strength=raw.get("strength", 0),
         poison=raw.get("poison", 0),
         intended_move=raw.get("intended_move", "unknown"),
         intended_damage=raw.get("intended_damage", 0),
@@ -73,6 +76,7 @@ def _parse_player(raw: dict[str, Any]) -> PlayerState:
         hp=raw.get("hp", 80),
         max_hp=raw.get("max_hp", 80),
         block=raw.get("block", 0),
+        plating=raw.get("plating", 0),
     )
 
 

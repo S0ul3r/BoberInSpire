@@ -32,6 +32,7 @@ class Enemy:
     max_hp: int = 0
     vulnerable_turns: int = 0
     weak_turns: int = 0
+    strength: int = 0  # can be negative (e.g. "decreases attack damage by 5")
     poison: int = 0
     intended_move: str = "unknown"
     intended_damage: int = 0
@@ -81,6 +82,7 @@ class PlayerState:
     hp: int = 80
     max_hp: int = 80
     block: int = 0
+    plating: int = 0  # Block gained at end of turn (reduces block_needed for strategy)
 
 
 @dataclass

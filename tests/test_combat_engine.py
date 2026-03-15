@@ -6,9 +6,9 @@ from python_app.combat_engine import (
     calculate_turn_damage,
     calculate_all_enemies,
     calculate_incoming_damage,
-    compute_strategy,
     summarize_hand,
 )
+from python_app.strategy import compute_strategy
 from python_app.models import Card, Enemy, GameState, PlayerState, Relic
 
 

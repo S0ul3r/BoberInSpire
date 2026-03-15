@@ -174,7 +174,7 @@ public static class CombatExporter
         {
             foreach (var card in hand)
             {
-                try { handCards.Add(BuildCard(card)); }
+                try { handCards.Add(BuildCard(card, combat, player)); }
                 catch (Exception ex) { Log.Error($"[BoberInSpire] BuildCard skip {card?.GetType().Name}: {ex.Message}"); }
             }
         }
@@ -208,25 +208,132 @@ public static class CombatExporter
             hp = c?.CurrentHp ?? 0,
             max_hp = c?.MaxHp ?? 0,
             block = c?.Block ?? 0,
+            plating = PowerAmount(c, "PlatingPower"),
         };
     }
 
     private static int DynInt(DynamicVarSet vars, string key) =>
         vars.TryGetValue(key, out var v) ? v.IntValue : 0;
 
-    private static SnapshotCard BuildCard(CardModel card)
+    /// <summary>
+    /// Get the card model from a hand item. Hand may contain CardModel directly or a wrapper (e.g. CardInHand) with Model/CardModel property.
+    /// </summary>
+    private static CardModel? GetCardModel(object handItem)
     {
-        var vars = card.DynamicVars;
-        var description = TryGetCardDescription(card);
+        if (handItem is CardModel cm)
+            return cm;
+        try
+        {
+            var t = handItem.GetType();
+            foreach (var propName in new[] { "Model", "CardModel", "Card" })
+            {
+                var p = t.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
+                if (p?.GetValue(handItem) is CardModel m)
+                    return m;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"[BoberInSpire] GetCardModel: {ex.Message}");
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Get current energy cost: first from the hand item (card instance often has Cost/CurrentCost), then from CardModel.
+    /// So we respect Tezcatara's Ember and other in-combat cost modifiers.
+    /// </summary>
+    private static int GetCurrentEnergyCost(object handItem, CardModel? model, CombatState? combat, Player? player)
+    {
+        try
+        {
+            var t = handItem.GetType();
+            foreach (var propName in new[] { "Cost", "CurrentCost", "EnergyCost" })
+            {
+                var p = t.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
+                if (p == null) continue;
+                var val = p.GetValue(handItem);
+                if (val is int i)
+                    return i;
+                if (val != null)
+                {
+                    var vt = val.GetType();
+                    var vp = vt.GetProperty("Value", BindingFlags.Public | BindingFlags.Instance)
+                        ?? vt.GetProperty("Current", BindingFlags.Public | BindingFlags.Instance)
+                        ?? vt.GetProperty("Canonical", BindingFlags.Public | BindingFlags.Instance);
+                    if (vp?.GetValue(val) is int j)
+                        return j;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"[BoberInSpire] GetCurrentEnergyCost(handItem): {ex.Message}");
+        }
+
+        if (model != null)
+        {
+            var canonical = model.EnergyCost?.Canonical ?? 0;
+            try
+            {
+                var ec = model.EnergyCost;
+                if (ec != null)
+                {
+                    var et = ec.GetType();
+                    foreach (var prop in new[] { "Value", "Current", "Effective", "IntValue" })
+                    {
+                        var ep = et.GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
+                        if (ep != null && ep.PropertyType == typeof(int) && ep.GetValue(ec) is int k)
+                            return k;
+                    }
+                }
+                foreach (var methodName in new[] { "GetEnergyCost", "GetCost", "GetCurrentCost" })
+                {
+                    var m = model.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance,
+                        null, new[] { typeof(CombatState) }, null);
+                    if (m != null && combat != null && m.Invoke(model, new object[] { combat }) is int k)
+                        return k;
+                    m = model.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance,
+                        null, new[] { typeof(Player) }, null);
+                    if (m != null && player != null && m.Invoke(model, new object[] { player }) is int costPlayer)
+                        return costPlayer;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[BoberInSpire] GetCurrentEnergyCost(model): {ex.Message}");
+            }
+            return canonical;
+        }
+
+        return 0;
+    }
+
+    private static SnapshotCard BuildCard(object handItem, CombatState? combat, Player? player)
+    {
+        var model = GetCardModel(handItem);
+        if (model == null)
+        {
+            Log.Error("[BoberInSpire] BuildCard: could not get CardModel from hand item");
+            return new SnapshotCard
+            {
+                name = "?", damage = 0, block = 0, hits = 1, energy_cost = 0,
+                card_type = "skill", id = "?", description = "",
+            };
+        }
+
+        var vars = model.DynamicVars;
+        var description = TryGetCardDescription(model);
+        var energyCost = GetCurrentEnergyCost(handItem, model, combat, player);
         return new SnapshotCard
         {
-            name        = card.Title ?? card.GetType().Name,
+            name        = model.Title ?? model.GetType().Name,
             damage      = DynInt(vars, "Damage"),
             block       = DynInt(vars, "Block"),
             hits        = Math.Max(DynInt(vars, "Repeat"), 1),
-            energy_cost = card.EnergyCost?.Canonical ?? 0,
-            card_type   = card.Type.ToString().ToLowerInvariant(),
-            id          = card.GetType().Name,
+            energy_cost = energyCost,
+            card_type   = model.Type.ToString().ToLowerInvariant(),
+            id          = model.GetType().Name,
             description = description ?? "",
         };
     }
@@ -251,8 +358,9 @@ public static class CombatExporter
         var totalDmg = 0;
         var maxHits = 1;
 
-        // Read enemy debuffs that affect their damage output
+        // Read enemy debuffs/buffs that affect their damage output
         var weakPower = PowerAmount(enemy, "WeakPower");
+        var strengthPower = PowerAmount(enemy, "StrengthPower"); // can be negative (e.g. "decreases attack damage by 5")
 
         if (intents != null)
         {
@@ -266,6 +374,9 @@ public static class CombatExporter
                     var dmg = 0;
                     try { if (atk.DamageCalc != null) dmg = (int)Math.Floor(atk.DamageCalc()); }
                     catch { }
+
+                    // Apply Strength first (enemy can have negative Strength = reduced attack damage)
+                    dmg = Math.Max(0, dmg + strengthPower);
 
                     // Apply Weak: reduces attacker's damage by 25% (floor per hit, like STS1)
                     if (weakPower > 0)
@@ -286,6 +397,7 @@ public static class CombatExporter
             block = enemy.Block,
             vulnerable_turns = PowerAmount(enemy, "VulnerablePower"),
             weak_turns = weakPower,
+            strength = strengthPower,
             poison = PowerAmount(enemy, "PoisonPower"),
             intended_move = intentName,
             intended_damage = totalDmg,
@@ -356,6 +468,7 @@ public static class CombatExporter
         public required int hp { get; init; }
         public required int max_hp { get; init; }
         public required int block { get; init; }
+        public int plating { get; init; }
     }
 
     internal sealed class SnapshotCard
@@ -378,6 +491,7 @@ public static class CombatExporter
         public required int block { get; init; }
         public required int vulnerable_turns { get; init; }
         public required int weak_turns { get; init; }
+        public int strength { get; init; }
         public int poison { get; init; }
         public required string intended_move { get; init; }
         public required int intended_damage { get; init; }
