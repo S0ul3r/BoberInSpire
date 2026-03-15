@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import json
-import re
 from pathlib import Path
 from typing import Any
+
+from .utils import strip_bbcode
 
 _DB: dict[str, dict[str, Any]] = {}
 
@@ -31,10 +32,6 @@ RARITY_COLORS = {
 }
 
 
-def _strip_bbcode(text: str) -> str:
-    return re.sub(r"\[/?[a-z]+(?::\d+)?\]", "", text)
-
-
 def load_relic_db(path: Path | None = None) -> dict[str, dict[str, Any]]:
     global _DB
     if _DB:
@@ -52,7 +49,7 @@ def load_relic_db(path: Path | None = None) -> dict[str, dict[str, Any]]:
         _DB[name_lower] = {
             "id": entry.get("id", ""),
             "name": entry["name"],
-            "description": _strip_bbcode(entry.get("description", "")),
+            "description": strip_bbcode(entry.get("description", "")),
             "short_description": entry.get("short_description", ""),
             "rarity": entry.get("rarity", "").lower(),
             "pool": entry.get("pool", ""),
@@ -84,6 +81,15 @@ def get_short_description(name: str) -> str:
     info = lookup_relic(name)
     if info:
         return info.get("short_description", "") or info["description"][:50]
+    return ""
+
+
+def get_short_description_only(name: str) -> str:
+    """Return only the short_description field; no fallback to full description.
+    Use for RELIC BONUSES so relics with empty short_description are excluded."""
+    info = lookup_relic(name)
+    if info:
+        return (info.get("short_description") or "").strip()
     return ""
 
 

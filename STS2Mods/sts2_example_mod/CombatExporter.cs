@@ -204,6 +204,7 @@ public static class CombatExporter
             dexterity = PowerAmount(c, "DexterityPower"),
             vigor = PowerAmount(c, "VigorPower"),
             weak_turns = PowerAmount(c, "WeakPower"),
+            frail_turns = PowerAmount(c, "FrailPower"),
             hp = c?.CurrentHp ?? 0,
             max_hp = c?.MaxHp ?? 0,
             block = c?.Block ?? 0,
@@ -216,6 +217,7 @@ public static class CombatExporter
     private static SnapshotCard BuildCard(CardModel card)
     {
         var vars = card.DynamicVars;
+        var description = TryGetCardDescription(card);
         return new SnapshotCard
         {
             name        = card.Title ?? card.GetType().Name,
@@ -225,7 +227,20 @@ public static class CombatExporter
             energy_cost = card.EnergyCost?.Canonical ?? 0,
             card_type   = card.Type.ToString().ToLowerInvariant(),
             id          = card.GetType().Name,
+            description = description ?? "",
         };
+    }
+
+    private static string? TryGetCardDescription(CardModel card)
+    {
+        try
+        {
+            var desc = card.GetType().GetProperty("Description")?.GetValue(card)
+                ?? card.GetType().GetProperty("Body")?.GetValue(card)
+                ?? card.GetType().GetProperty("BodyText")?.GetValue(card);
+            return desc != null ? LocStr(desc) : null;
+        }
+        catch { return null; }
     }
 
     private static SnapshotEnemy BuildEnemy(Creature enemy)
@@ -271,6 +286,7 @@ public static class CombatExporter
             block = enemy.Block,
             vulnerable_turns = PowerAmount(enemy, "VulnerablePower"),
             weak_turns = weakPower,
+            poison = PowerAmount(enemy, "PoisonPower"),
             intended_move = intentName,
             intended_damage = totalDmg,
             intended_hits = maxHits,
@@ -336,6 +352,7 @@ public static class CombatExporter
         public required int dexterity { get; init; }
         public required int vigor { get; init; }
         public required int weak_turns { get; init; }
+        public int frail_turns { get; init; }
         public required int hp { get; init; }
         public required int max_hp { get; init; }
         public required int block { get; init; }
@@ -350,6 +367,7 @@ public static class CombatExporter
         public required int block { get; init; }
         public required int hits { get; init; }
         public required string id { get; init; }
+        public string description { get; init; } = "";
     }
 
     internal sealed class SnapshotEnemy
@@ -360,6 +378,7 @@ public static class CombatExporter
         public required int block { get; init; }
         public required int vulnerable_turns { get; init; }
         public required int weak_turns { get; init; }
+        public int poison { get; init; }
         public required string intended_move { get; init; }
         public required int intended_damage { get; init; }
         public required int intended_hits { get; init; }

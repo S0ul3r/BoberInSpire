@@ -92,6 +92,11 @@ class TestComputeCardBlock:
         card = Card(name="Strike", damage=6, energy_cost=1)
         assert compute_card_block(card, dexterity=5) == 0
 
+    def test_frail_reduces_block(self):
+        card = Card(name="Defend", damage=0, energy_cost=1, card_type="skill", block=8)
+        assert compute_card_block(card, dexterity=0, is_frail=False) == 8
+        assert compute_card_block(card, dexterity=0, is_frail=True) == 6
+
 
 class TestCalculateTurnDamage:
     def test_plays_cards_in_order(self):
@@ -279,6 +284,51 @@ class TestStrategy:
         state = _make_state(hand=hand, enemies=enemies, energy=2, block=8)
         strat = compute_strategy(state)
         assert strat.block_needed == 2
+
+    def test_draw_cards_played_first(self):
+        """Draw cards are prioritized early to open more options."""
+        hand = [
+            Card(name="Acrobatics", damage=0, energy_cost=1, card_type="skill", description="Draw 3 cards"),
+            Card(name="Strike", damage=6, energy_cost=1),
+        ]
+        state = _make_state(hand=hand, enemies=[Enemy(name="A", hp=30)], energy=2)
+        strat = compute_strategy(state)
+        roles = [c.role for c in strat.suggested_cards]
+        assert "draw" in roles
+        assert roles.index("draw") < roles.index("attack") if "attack" in roles else True
+
+    def test_debuff_before_attacks(self):
+        """Vulnerable/Weak cards played before attacks."""
+        hand = [
+            Card(name="Bash", damage=8, energy_cost=2, description="Apply 2 Vulnerable"),
+            Card(name="Strike", damage=6, energy_cost=1),
+        ]
+        state = _make_state(hand=hand, enemies=[Enemy(name="A", hp=30)], energy=3)
+        strat = compute_strategy(state)
+        roles = [c.role for c in strat.suggested_cards]
+        if "debuff" in roles and "attack" in roles:
+            assert roles.index("debuff") < roles.index("attack")
+
+    def test_poison_included_in_lethal(self):
+        """Poison damage is considered for lethal check."""
+        hand = [
+            Card(name="Poison Cloud", damage=0, energy_cost=1, card_type="skill", description="Apply 6 Poison to ALL enemies"),
+        ]
+        state = _make_state(hand=hand, enemies=[Enemy(name="A", hp=5)], energy=1)
+        strat = compute_strategy(state)
+        assert "A" in strat.any_lethal
+
+    def test_aoe_damage_to_all_enemies(self):
+        """AOE cards deal damage to each enemy."""
+        hand = [
+            Card(name="Cleave", damage=8, energy_cost=1, description="Deal 8 damage to ALL enemies"),
+        ]
+        enemies = [Enemy(name="A", hp=8), Enemy(name="B", hp=8)]
+        state = _make_state(hand=hand, enemies=enemies, energy=1)
+        strat = compute_strategy(state)
+        assert strat.total_damage == 16
+        assert "A" in strat.any_lethal
+        assert "B" in strat.any_lethal
 
 
 class TestIncomingDamageExtended:

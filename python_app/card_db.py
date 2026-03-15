@@ -1,18 +1,15 @@
 from __future__ import annotations
 
 import json
-import re
 from pathlib import Path
 from typing import Any
+
+from .utils import strip_bbcode
 
 _DB: dict[str, dict[str, Any]] = {}
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 CARD_FILE = DATA_DIR / "spire_codex_cards.json"
-
-
-def _strip_bbcode(text: str) -> str:
-    return re.sub(r"\[/?[a-z]+(?::\d+)?\]", "", text)
 
 
 def load_card_db(path: Path | None = None) -> dict[str, dict[str, Any]]:
@@ -32,7 +29,7 @@ def load_card_db(path: Path | None = None) -> dict[str, dict[str, Any]]:
         _DB[name_lower] = {
             "id": entry.get("id", ""),
             "name": entry["name"],
-            "description": _strip_bbcode(entry.get("description", "")),
+            "description": strip_bbcode(entry.get("description", "")),
             "type": entry.get("type", ""),
             "cost": entry.get("cost", ""),
             "rarity": entry.get("rarity", ""),

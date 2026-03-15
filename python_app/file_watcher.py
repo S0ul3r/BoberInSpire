@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Callable
 
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler, FileModifiedEvent
+from watchdog.events import FileSystemEventHandler
 
 from .data_parser import load_game_state, ParseError
 from .models import GameState

@@ -32,6 +32,7 @@ class Enemy:
     max_hp: int = 0
     vulnerable_turns: int = 0
     weak_turns: int = 0
+    poison: int = 0
     intended_move: str = "unknown"
     intended_damage: int = 0
     intended_hits: int = 1
@@ -76,6 +77,7 @@ class PlayerState:
     dexterity: int = 0
     vigor: int = 0
     weak_turns: int = 0
+    frail_turns: int = 0
     hp: int = 80
     max_hp: int = 80
     block: int = 0

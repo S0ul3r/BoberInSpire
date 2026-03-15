@@ -1,0 +1,122 @@
+{
+  "debuffs": {
+    "Vulnerable": {
+      "effect": "Receive 50% more damage from Attacks for X turns",
+      "stack_type": "Duration",
+      "damage_multiplier": 1.5,
+      "notes": "Odd Mushroom reduces to +25%. Paper Frog increases to +75%. Applied after Strength and Vigor, then final damage rounds down."
+    },
+    "Weak": {
+      "effect": "Attacks deal 25% less damage for X turns",
+      "stack_type": "Duration",
+      "damage_multiplier": 0.75,
+      "notes": "Paper Crane reduces to 40% less (i.e. 60% damage). Negated by Ginger."
+    },
+    "Frail": {
+      "effect": "Gain 25% less Block from cards for X turns",
+      "stack_type": "Duration",
+      "block_multiplier": 0.75,
+      "notes": "Negated by Turnip."
+    },
+    "Poison": {
+      "effect": "At the start of its turn, lose X HP, then reduce Poison by 1",
+      "stack_type": "Intensity and Duration",
+      "notes": "Catalyst multiplies poison. Snecko Skull adds 1 poison. Only 9999 can be applied in single instance."
+    },
+    "Strength_Down": {
+      "effect": "At the end of this turn, lose X Strength",
+      "stack_type": "Intensity",
+      "notes": "From Flex."
+    },
+    "Strength_Negative": {
+      "effect": "Decreases attack damage by X",
+      "stack_type": "Intensity",
+      "notes": "From Disarm, Piercing Wail, Malaise, Dark Shackles."
+    },
+    "Dexterity_Negative": {
+      "effect": "Decreases Block gained from cards by X",
+      "stack_type": "Intensity",
+      "notes": "From Wraith Form."
+    },
+    "Artifact": {
+      "effect": "Negates the next debuff received",
+      "stack_type": "Counter",
+      "notes": "Does not interact with existing debuffs."
+    },
+    "Lock-On": {
+      "effect": "Lightning and Dark Orbs deal 50% more damage to this enemy",
+      "stack_type": "Duration",
+      "notes": "From Bullseye."
+    }
+  },
+  "buffs": {
+    "Strength": {
+      "effect": "Increases (Decreases) attack damage by X",
+      "notes": "Flat bonus to attack damage."
+    },
+    "Dexterity": {
+      "effect": "Increases Block gained from cards by X",
+      "notes": "Flat bonus to block from block cards."
+    },
+    "Block_Next_Turn": {
+      "effect": "At the start of your next turn, gain X Block",
+      "notes": "Delayed block gain."
+    },
+    "Draw_Cards_Next_Turn": {
+      "effect": "At the start of your next turn, draw X additional cards",
+      "notes": "Delayed card draw."
+    },
+    "Energy_Next_Turn": {
+      "effect": "Gain X additional energy next turn",
+      "notes": "Delayed energy gain."
+    },
+    "Intangible": {
+      "effect": "Reduce all damage taken and HP loss to 1. Lasts for X turns",
+      "notes": "Extremely strong defensive buff."
+    },
+    "Plating": {
+      "effect": "At the end of your turn, gain X Block. Plating is reduced by 1 at the start of your turn",
+      "notes": "Recurring block each turn."
+    },
+    "Retain_Hand": {
+      "effect": "Retain your Hand for the next X turns",
+      "notes": "Cards stay in hand instead of discarding."
+    },
+    "Thorns": {
+      "effect": "When hit by an attack, deal X damage back",
+      "notes": "Retaliation damage to attackers."
+    },
+    "Vigor": {
+      "effect": "Your next Attack deals X additional damage",
+      "notes": "One-time damage bonus per stack, consumed on attack."
+    },
+    "Buffer": {
+      "effect": "Prevent the next X times you would lose HP",
+      "notes": "Negates HP loss instances (e.g. Intangible-like for one hit)."
+    }
+  },
+  "card_modifiers": {
+    "Sly": {
+      "effect": "When this card is discarded from your hand, it plays itself once",
+      "notes": "STS2 keyword. Often granted by Con Artist etc. Prioritize discard effects when you have Sly cards."
+    },
+    "Exhaust": {
+      "effect": "Removes a card from play for the rest of combat and places it in the Exhaust pile",
+      "notes": "Most cards Exhaust themselves on use; some cards can Exhaust others. Exhume (Ironclad) can bring back one Exhausted card."
+    },
+    "Ethereal": {
+      "effect": "Automatically Exhausted if in hand at the end of your turn",
+      "notes": "Must be played or discarded before turn end to avoid Exhaust."
+    },
+    "Innate": {
+      "effect": "Appears in the first hand of cards drawn during combat",
+      "notes": "Takes up one of the default draw slots. If Innate cards exceed first-hand draw count, all Innate cards still appear (effective free draw)."
+    }
+  },
+  "keywords": {
+    "Exhaust": "Removes a card from your deck for the rest of the current combat",
+    "Draw": "Put cards from Draw Pile into Hand",
+    "Discard": "Remove cards from Hand",
+    "Retain": "Card stays in Hand at end of turn"
+  }
+}

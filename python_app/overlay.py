@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import ctypes
 import platform
-import re
 import tkinter as tk
 from tkinter import font as tkfont
 from typing import Callable
+
+from .utils import strip_bbcode
 
 try:
     import keyboard as kb
@@ -19,8 +20,8 @@ from .combat_engine import (
 )
 from .models import GameState, MerchantRelic, Relic
 from .relic_db import (
-    enrich_relic_description,
     get_short_description,
+    get_short_description_only,
     rarity_color,
     rarity_sort_key,
     summarize_relic_bonuses,
@@ -46,11 +47,13 @@ NET_DANGER_BG = "#2e0808"
 ENEMY_SECTION_BG = "#280a0a"
 OVERLAY_ALPHA = 0.90
 WINDOW_WIDTH = 460
-REFRESH_MS = 250
-
-
-def _strip_bbcode(text: str) -> str:
-    return re.sub(r"\[/?[a-z]+(?::\d+)?\]", "", text)
+WINDOW_HEIGHT = 720
+MIN_WIDTH = 320
+MAX_WIDTH = 900
+MIN_HEIGHT = 400
+MAX_HEIGHT = 1200
+RESIZE_GRIP_SIZE = 14
+WARN_HP_THRESHOLD = 0.3
 
 
 GWL_EXSTYLE = -20
@@ -82,10 +85,11 @@ class CombatOverlay:
         self.root.attributes("-topmost", True)
         self.root.attributes("-alpha", OVERLAY_ALPHA)
         self.root.configure(bg=BG_COLOR)
-        self.root.geometry(f"{WINDOW_WIDTH}x720+50+50")
+        self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+50+50")
 
         self._ghost_mode = False
-        self._drag_data = {"x": 0, "y": 0}
+        self._drag_data: dict = {"x": 0, "y": 0}
+        self._resize_data: dict | None = None
         self._on_close = on_close
 
         self._build_fonts()
@@ -102,7 +106,10 @@ class CombatOverlay:
         self.font_btn = tkfont.Font(family="Segoe UI", size=9)
 
     def _build_widgets(self):
-        title_bar = tk.Frame(self.root, bg="#0d0d1a", cursor="fleur")
+        content = tk.Frame(self.root, bg=BG_COLOR)
+        content.pack(side="left", fill="both", expand=True)
+
+        title_bar = tk.Frame(content, bg="#0d0d1a", cursor="fleur")
         title_bar.pack(fill="x")
 
         title_bar.bind("<ButtonPress-1>", self._start_drag)
@@ -141,25 +148,31 @@ class CombatOverlay:
             except Exception:
                 self._hotkey_remove = None
 
-        self.info_frame = tk.Frame(self.root, bg=BG_COLOR)
+        self.info_frame = tk.Frame(content, bg=BG_COLOR)
         self.info_frame.pack(fill="x", padx=8)
 
-        canvas_frame = tk.Frame(self.root, bg=BG_COLOR)
+        canvas_frame = tk.Frame(content, bg=BG_COLOR)
         canvas_frame.pack(fill="both", expand=True, padx=4, pady=4)
 
         self.canvas = tk.Canvas(canvas_frame, bg=BG_COLOR, highlightthickness=0)
-        scrollbar = tk.Scrollbar(canvas_frame, orient="vertical", command=self.canvas.yview)
+        self._scrollbar = tk.Scrollbar(canvas_frame, orient="vertical", command=self.canvas.yview)
         self.scroll_frame = tk.Frame(self.canvas, bg=BG_COLOR)
 
-        self.scroll_frame.bind(
-            "<Configure>",
-            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")),
-        )
+        def _on_scroll_configure(_e):
+            self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+            self._update_scrollbar_visibility()
+
+        def _on_yscroll(first, last):
+            self._scrollbar.set(first, last)
+            self._update_scrollbar_visibility()
+
+        self.scroll_frame.bind("<Configure>", _on_scroll_configure)
         self.canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
-        self.canvas.configure(yscrollcommand=scrollbar.set)
+        self.canvas.configure(yscrollcommand=_on_yscroll)
 
         self.canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        # Scrollbar is shown only when content overflows (see _update_scrollbar_visibility)
+        self._scrollbar_visible = False
 
         self.canvas.bind_all(
             "<MouseWheel>",
@@ -167,7 +180,7 @@ class CombatOverlay:
         )
 
         self.status_label = tk.Label(
-            self.root,
+            content,
             text="Waiting for game state... (F9 = ghost mode)",
             font=self.font_small,
             fg="#888",
@@ -177,6 +190,52 @@ class CombatOverlay:
             pady=4,
         )
         self.status_label.pack(fill="x", side="bottom")
+
+        grip_container = tk.Frame(self.root, width=RESIZE_GRIP_SIZE, bg="#0d0d1a")
+        grip_container.pack(side="right", fill="y")
+        grip_container.pack_propagate(False)
+        # "size_nwse" is X11-only; on Windows use "sizing" for resize cursor
+        resize_cursor = "size_nwse" if platform.system() != "Windows" else "sizing"
+        resize_grip = tk.Frame(
+            grip_container,
+            width=RESIZE_GRIP_SIZE,
+            height=RESIZE_GRIP_SIZE,
+            bg="#1a1a2e",
+            cursor=resize_cursor,
+        )
+        resize_grip.pack(side="bottom")
+        resize_grip.pack_propagate(False)
+        resize_grip.bind("<ButtonPress-1>", self._start_resize)
+        resize_grip.bind("<B1-Motion>", self._on_resize)
+        resize_grip.bind("<ButtonRelease-1>", self._end_resize)
+        self._resize_grip = resize_grip
+
+    def _start_resize(self, event):
+        self._resize_data = {
+            "x_root": event.x_root,
+            "y_root": event.y_root,
+            "width": self.root.winfo_width(),
+            "height": self.root.winfo_height(),
+            "x": self.root.winfo_x(),
+            "y": self.root.winfo_y(),
+        }
+        self.root.bind("<B1-Motion>", self._on_resize)
+        self.root.bind("<ButtonRelease-1>", self._end_resize)
+
+    def _on_resize(self, event):
+        if not self._resize_data:
+            return
+        r = self._resize_data
+        dx = event.x_root - r["x_root"]
+        dy = event.y_root - r["y_root"]
+        w = max(MIN_WIDTH, min(MAX_WIDTH, r["width"] + dx))
+        h = max(MIN_HEIGHT, min(MAX_HEIGHT, r["height"] + dy))
+        self.root.geometry(f"{int(w)}x{int(h)}+{r['x']}+{r['y']}")
+
+    def _end_resize(self, event=None):
+        self._resize_data = None
+        self.root.unbind("<B1-Motion>")
+        self.root.unbind("<ButtonRelease-1>")
 
     def _start_drag(self, event):
         self._drag_data["x"] = event.x
@@ -236,6 +295,21 @@ class CombatOverlay:
         for w in self.info_frame.winfo_children():
             w.destroy()
 
+    def _update_scrollbar_visibility(self):
+        """Show scrollbar only when content overflows the canvas."""
+        self.canvas.update_idletasks()
+        try:
+            first, last = self.canvas.yview()
+            need_scrollbar = (last - first) < 0.999
+        except Exception:
+            need_scrollbar = False
+        if need_scrollbar and not self._scrollbar_visible:
+            self._scrollbar.pack(side="right", fill="y")
+            self._scrollbar_visible = True
+        elif not need_scrollbar and self._scrollbar_visible:
+            self._scrollbar.pack_forget()
+            self._scrollbar_visible = False
+
     def update_state(self, state: GameState):
         """Refresh the overlay with a new GameState."""
         self._clear_scroll_frame()
@@ -249,6 +323,7 @@ class CombatOverlay:
             self._render_merchant_relics(state.merchant_relics)
 
         self.status_label.config(text=f"Turn {state.turn}  |  Updated")
+        self.root.after(50, self._update_scrollbar_visibility)
 
     # ── Player info + NET damage banner ─────────────────────────
 
@@ -277,7 +352,7 @@ class CombatOverlay:
             elif incoming.net_damage == 0:
                 net_text = f"  \u2714  SAFE  \u2014  block covers all {incoming.total_incoming} dmg"
                 net_bg, net_fg = NET_SAFE_BG, SAFE_COLOR
-            elif incoming.net_damage < p.hp * 0.3:
+            elif incoming.net_damage < p.hp * WARN_HP_THRESHOLD:
                 net_text = f"  \u25bc  {incoming.net_damage} dmg incoming  \u2192  HP: {incoming.expected_hp}"
                 net_bg, net_fg = NET_WARN_BG, WARN_COLOR
             else:
@@ -467,9 +542,9 @@ class CombatOverlay:
 
         for relic in sorted_relics:
             color = rarity_color(relic.rarity)
-            short = _strip_bbcode(get_short_description(relic.name))
+            short = strip_bbcode(get_short_description(relic.name))
             if not short:
-                short = _strip_bbcode(relic.description)[:50] if relic.description else ""
+                short = strip_bbcode(relic.description)[:50] if relic.description else ""
 
             line = f"  {relic.name}"
             if short:
@@ -483,10 +558,10 @@ class CombatOverlay:
     def _render_relic_summary(self, state: GameState, sorted_relics: list[Relic]):
         relic_dicts = []
         for r in sorted_relics:
-            desc = _strip_bbcode(r.description) if r.description else ""
-            if not desc:
-                desc = enrich_relic_description(r.name)
-            relic_dicts.append({"name": r.name, "description": desc})
+            short = strip_bbcode(get_short_description_only(r.name))
+            if not short:
+                continue
+            relic_dicts.append({"name": r.name, "description": short})
 
         bonuses = summarize_relic_bonuses(relic_dicts)
         if not bonuses:
@@ -530,7 +605,7 @@ class CombatOverlay:
 
         for mr in sorted(merchant_relics, key=lambda r: rarity_sort_key(r.rarity)):
             color = rarity_color(mr.rarity)
-            short = _strip_bbcode(get_short_description(mr.name))
+            short = strip_bbcode(get_short_description(mr.name))
 
             line = f"  {mr.name}  \u2022 {mr.rarity.upper()}  \u2022 {mr.cost}g"
             if short:

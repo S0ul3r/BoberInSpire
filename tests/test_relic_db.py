@@ -8,6 +8,7 @@ import pytest
 import python_app.relic_db as _relic_db_module
 from python_app.relic_db import (
     get_short_description,
+    get_short_description_only,
     load_relic_db,
     lookup_relic,
     rarity_color,
@@ -115,6 +116,34 @@ class TestGetShortDescription:
         try:
             load_relic_db(path)
             assert get_short_description("Unknown Relic") == ""
+        finally:
+            path.unlink()
+
+
+class TestGetShortDescriptionOnly:
+    def test_returns_short_when_present(self):
+        _clear_relic_db()
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as f:
+            json.dump(SAMPLE_RELICS_JSON, f)
+            path = Path(f.name)
+        try:
+            load_relic_db(path)
+            assert get_short_description_only("Anchor") == "+10 Block"
+        finally:
+            path.unlink()
+
+    def test_returns_empty_when_short_missing_no_fallback(self):
+        _clear_relic_db()
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as f:
+            json.dump(SAMPLE_RELICS_JSON, f)
+            path = Path(f.name)
+        try:
+            load_relic_db(path)
+            assert get_short_description_only("Pure Gold") == ""
         finally:
             path.unlink()
 
