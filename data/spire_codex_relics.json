@@ -285,7 +285,7 @@
     "description": "At the end of combat, heal [green]6[/green] HP.",
     "rarity": "Starter",
     "pool": "ironclad",
-    "short_description": ""
+    "short_description": "Heal 6HP after combat"
   },
   {
     "id": "BURNING_STICKS",
@@ -1533,7 +1533,7 @@
     "description": "Whenever you enter a [gold]?[/gold] room, heal [green]4[/green] HP.",
     "rarity": "Uncommon",
     "pool": "shared",
-    "short_description": ""
+    "short_description": "Heal 4 HP when entering a ? room"
   },
   {
     "id": "POCKETWATCH",

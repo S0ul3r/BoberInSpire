@@ -20,11 +20,9 @@ from .combat_engine import (
 )
 from .models import GameState, MerchantRelic, Relic
 from .relic_db import (
-    get_short_description,
     get_short_description_only,
     rarity_color,
     rarity_sort_key,
-    summarize_relic_bonuses,
 )
 
 
@@ -101,7 +99,6 @@ class CombatOverlay:
         self.font_net = tkfont.Font(family="Segoe UI", size=13, weight="bold")
         self.font_body = tkfont.Font(family="Consolas", size=10)
         self.font_small = tkfont.Font(family="Consolas", size=9)
-        self.font_relic = tkfont.Font(family="Segoe UI", size=9)
         self.font_summary = tkfont.Font(family="Segoe UI", size=9, slant="italic")
         self.font_btn = tkfont.Font(family="Segoe UI", size=9)
 
@@ -532,66 +529,35 @@ class CombatOverlay:
             key=lambda r: rarity_sort_key(r.rarity),
         )
 
-        self._render_relic_summary(state, sorted_relics)
-
         tk.Label(
             self.scroll_frame, text=f"RELICS ({len(sorted_relics)})",
             font=self.font_header, fg=FG_COLOR, bg="#2a1a3e",
             anchor="w", padx=8, pady=3,
         ).pack(fill="x", pady=(6, 1))
 
+        with_short = []
+        without_short = []
         for relic in sorted_relics:
-            color = rarity_color(relic.rarity)
-            short = strip_bbcode(get_short_description(relic.name))
-            if not short:
-                short = strip_bbcode(relic.description)[:50] if relic.description else ""
-
-            line = f"  {relic.name}"
+            short = strip_bbcode(get_short_description_only(relic.name))
             if short:
-                line += f"  \u2022 {short}"
+                with_short.append((relic, short))
+            else:
+                without_short.append(relic)
 
+        for relic, short in with_short:
+            color = rarity_color(relic.rarity)
+            line = f"  {relic.name}  \u2022 {short}"
             tk.Label(
                 self.scroll_frame, text=line, font=self.font_small,
                 fg=color, bg=RELIC_BG, anchor="w", padx=4, pady=0,
             ).pack(fill="x", padx=4, pady=0)
 
-    def _render_relic_summary(self, state: GameState, sorted_relics: list[Relic]):
-        relic_dicts = []
-        for r in sorted_relics:
-            short = strip_bbcode(get_short_description_only(r.name))
-            if not short:
-                continue
-            relic_dicts.append({"name": r.name, "description": short})
-
-        bonuses = summarize_relic_bonuses(relic_dicts)
-        if not bonuses:
-            return
-
-        tk.Label(
-            self.scroll_frame, text="RELIC BONUSES", font=self.font_header,
-            fg=ENERGY_COLOR, bg=SUMMARY_BG, anchor="w", padx=8, pady=3,
-        ).pack(fill="x", pady=(8, 1))
-
-        cat_colors = {
-            "DMG:": ACCENT_COLOR,
-            "BLK:": BLOCK_COLOR,
-            "HEAL:": SAFE_COLOR,
-            "NRG:": ENERGY_COLOR,
-            "OTHER:": "#aaa",
-        }
-
-        for line in bonuses:
-            color = "#ccc"
-            for prefix, c in cat_colors.items():
-                if line.startswith(prefix):
-                    color = c
-                    break
-
+        if without_short:
+            names = ", ".join(r.name for r in without_short)
             tk.Label(
-                self.scroll_frame, text=f"  {line}", font=self.font_relic,
-                fg=color, bg=SUMMARY_BG, anchor="w", padx=6, pady=1,
-                wraplength=WINDOW_WIDTH - 20, justify="left",
-            ).pack(fill="x", padx=4)
+                self.scroll_frame, text=f"  Other: {names}", font=self.font_small,
+                fg="#888", bg=RELIC_BG, anchor="w", padx=4, pady=2,
+            ).pack(fill="x", padx=4, pady=0)
 
     # ── Merchant Relics ──────────────────────────────────────────
 
@@ -605,11 +571,11 @@ class CombatOverlay:
 
         for mr in sorted(merchant_relics, key=lambda r: rarity_sort_key(r.rarity)):
             color = rarity_color(mr.rarity)
-            short = strip_bbcode(get_short_description(mr.name))
+            short = strip_bbcode(get_short_description_only(mr.name))
 
             line = f"  {mr.name}  \u2022 {mr.rarity.upper()}  \u2022 {mr.cost}g"
             if short:
-                line += f"\n    {short}"
+                line += f"  \u2022 {short}"
 
             tk.Label(
                 self.scroll_frame, text=line, font=self.font_body,
