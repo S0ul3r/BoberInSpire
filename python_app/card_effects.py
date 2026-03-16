@@ -35,6 +35,8 @@ class CardEffects:
     grants_draw_next_turn: int = 0
     grants_energy_next_turn: int = 0
     grants_retain_hand: bool = False
+    # Heuristic: extra damage based on attacks this turn (e.g. Conflagration)
+    bonus_per_attack_this_turn: int = 0
     # Card modifiers
     exhausts_self: bool = False
     exhausts_other: bool = False
@@ -209,6 +211,15 @@ def parse_card_effects(card_name: str, card_type: str = "", description: str = "
                 effects.adds_random_attack = int(m.group(1))
             elif re.search(r"choose\s+1\s+of\s+\d+\s+random\s+attacks?.*(?:into\s+your\s+hand|to\s+add\s+into\s+your\s+hand)", desc_lower, re.I):
                 effects.adds_random_attack = 1
+
+    # "Deals X additional damage for each other Attack you've played this turn."
+    m = re.search(
+        r"deals\s+(\d+)\s+additional\s+damage\s+for\s+each\s+other\s+attack\s+you've\s+played\s+this\s+turn",
+        desc_lower,
+        re.I,
+    )
+    if m:
+        effects.bonus_per_attack_this_turn = int(m.group(1))
 
     # "Next X you play costs 0 [energy:1]" / "costs 0" – cost reduction for next card of type
     if re.search(r"next\s+skill\s+you\s+play\s+costs\s+0", desc_lower, re.I):

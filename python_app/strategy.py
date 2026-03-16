@@ -198,6 +198,8 @@ def compute_strategy(state: GameState) -> StrategySuggestion:
 
     weak_applied = False
     vuln_applied = False
+    # Heuristic counter: how many attacks we've already planned to play this turn
+    attacks_played = 0
 
     # "Next Skill/Attack/Power costs 0" and "Skills cost 0" – updated as we simulate playing cards
     cost_buffs: dict[str, bool] = {
@@ -296,8 +298,12 @@ def compute_strategy(state: GameState) -> StrategySuggestion:
                 continue
             eff_cost = _effective_energy_cost(card, cost_buffs)
             if eff_cost <= energy_left and _play_card(idx, card, "aoe", aoe_val * num_enemies, eff_cost):
-                total_aoe_dmg += aoe_val * num_enemies
                 eff = parse_card_effects(card.name, card.card_type, card.description)
+                extra = 0
+                if eff.bonus_per_attack_this_turn > 0:
+                    extra = eff.bonus_per_attack_this_turn * attacks_played
+                total_aoe_dmg += (aoe_val + extra) * num_enemies
+                attacks_played += 1
                 if eff.applies_poison > 0:
                     total_poison += eff.applies_poison * num_enemies
 
@@ -306,8 +312,12 @@ def compute_strategy(state: GameState) -> StrategySuggestion:
                 continue
             eff_cost = _effective_energy_cost(card, cost_buffs)
             if eff_cost <= energy_left and _play_card(idx, card, "attack", dmg, eff_cost):
-                total_single_dmg += dmg
                 eff = parse_card_effects(card.name, card.card_type, card.description)
+                extra = 0
+                if eff.bonus_per_attack_this_turn > 0:
+                    extra = eff.bonus_per_attack_this_turn * attacks_played
+                total_single_dmg += dmg + extra
+                attacks_played += 1
                 if eff.applies_poison > 0:
                     total_poison += eff.applies_poison * num_enemies
 
@@ -363,8 +373,12 @@ def compute_strategy(state: GameState) -> StrategySuggestion:
                 continue
             eff_cost = _effective_energy_cost(card, cost_buffs)
             if eff_cost <= energy_left and _play_card(idx, card, "aoe", aoe_val * num_enemies, eff_cost):
-                total_aoe_dmg += aoe_val * num_enemies
                 eff = parse_card_effects(card.name, card.card_type, card.description)
+                extra = 0
+                if eff.bonus_per_attack_this_turn > 0:
+                    extra = eff.bonus_per_attack_this_turn * attacks_played
+                total_aoe_dmg += (aoe_val + extra) * num_enemies
+                attacks_played += 1
                 if eff.applies_poison > 0:
                     total_poison += eff.applies_poison * num_enemies
 
@@ -373,8 +387,12 @@ def compute_strategy(state: GameState) -> StrategySuggestion:
                 continue
             eff_cost = _effective_energy_cost(card, cost_buffs)
             if eff_cost <= energy_left and _play_card(idx, card, "attack", dmg, eff_cost):
-                total_single_dmg += dmg
                 eff = parse_card_effects(card.name, card.card_type, card.description)
+                extra = 0
+                if eff.bonus_per_attack_this_turn > 0:
+                    extra = eff.bonus_per_attack_this_turn * attacks_played
+                total_single_dmg += dmg + extra
+                attacks_played += 1
                 if eff.applies_poison > 0:
                     total_poison += eff.applies_poison * num_enemies
 
