@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .utils import strip_bbcode
+from .utils import fuzzy_codex_lookup, normalize_codex_key, strip_bbcode
 
 _DB: dict[str, dict[str, Any]] = {}
 
@@ -25,7 +25,7 @@ def load_card_db(path: Path | None = None) -> dict[str, dict[str, Any]]:
         raw = json.load(f)
 
     for entry in raw:
-        name_lower = entry["name"].lower().strip()
+        name_lower = normalize_codex_key(entry["name"])
         _DB[name_lower] = {
             "id": entry.get("id", ""),
             "name": entry["name"],
@@ -40,15 +40,7 @@ def load_card_db(path: Path | None = None) -> dict[str, dict[str, Any]]:
 
 
 def lookup_card(name: str) -> dict[str, Any] | None:
-    db = load_card_db()
-    result = db.get(name.lower().strip())
-    if result:
-        return result
-
-    for key, val in db.items():
-        if name.lower().strip() in key or key in name.lower().strip():
-            return val
-    return None
+    return fuzzy_codex_lookup(load_card_db(), name)
 
 
 def enrich_card_description(name: str) -> str:

@@ -9,14 +9,17 @@ import math
 from dataclasses import dataclass, field
 
 from .card_effects import parse_card_effects
-from .combat_engine import calculate_incoming_damage, compute_card_block
+from .combat_engine import (
+    MIN_ENERGY_FOR_SORT,
+    VULNERABLE_MULTIPLIER,
+    WEAK_DAMAGE_MULTIPLIER,
+    calculate_incoming_damage,
+    compute_card_block,
+)
 from .models import Card, GameState
 
 
-VULNERABLE_MULTIPLIER = 1.5
-WEAK_DAMAGE_MULTIPLIER = 0.75
 WEAK_BLOCK_REDUCTION = 0.75
-MIN_ENERGY_FOR_SORT = 0.5
 RANDOM_ATTACK_DAMAGE_ESTIMATE = 12
 
 

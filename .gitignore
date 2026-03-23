@@ -17,6 +17,9 @@ STS2Mods/sts2_example_mod/local.props
 *.pck
 *.user
 
+# ── Local DLL / decompile dumps (not tracked) ──
+data/dll dump/
+
 # ── Python ──
 __pycache__/
 *.pyc

@@ -4,7 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from python_app.data_parser import load_game_state, parse_game_state, ParseError
+from python_app.data_parser import (
+    load_game_state,
+    load_reward_state,
+    parse_game_state,
+    parse_reward_state,
+    ParseError,
+)
 from python_app.models import Card, Enemy, PlayerState
 
 
@@ -118,6 +124,14 @@ class TestParseGameState:
         assert gs.player.energy == 3
         assert gs.hand == []
         assert gs.enemies == []
+        assert gs.deck == []
+        assert gs.character == "Unknown"
+
+    def test_deck_and_character_parsed(self):
+        state_dict = {**MINIMAL_STATE, "deck": ["Strike", "Defend"], "character": "Ironclad"}
+        gs = parse_game_state(state_dict)
+        assert gs.deck == ["Strike", "Defend"]
+        assert gs.character == "Ironclad"
 
 
 class TestLoadGameState:
@@ -173,3 +187,43 @@ class TestParseErrors:
         bad = {"player": {}, "hand": "not a list", "enemies": []}
         with pytest.raises(ParseError):
             parse_game_state(bad)
+
+
+class TestParseRewardState:
+    def test_parses_full_reward_state(self):
+        data = {
+            "type": "card_reward",
+            "character": "Ironclad",
+            "deck": ["Strike", "Defend", "Inflame"],
+            "relics": ["Brimstone"],
+            "options": ["Whirlwind", "Spite", "Perfected Strike"],
+        }
+        parsed = parse_reward_state(data)
+        assert parsed["character"] == "Ironclad"
+        assert parsed["deck"] == ["Strike", "Defend", "Inflame"]
+        assert parsed["relics"] == ["Brimstone"]
+        assert parsed["options"] == ["Whirlwind", "Spite", "Perfected Strike"]
+
+    def test_empty_dict_returns_defaults(self):
+        parsed = parse_reward_state({})
+        assert parsed["character"] == "Unknown"
+        assert parsed["deck"] == []
+        assert parsed["options"] == []
+
+
+class TestLoadRewardState:
+    def test_load_from_file(self):
+        data = {"character": "Silent", "options": ["Accuracy", "Cloak and Dagger"]}
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".json", delete=False, encoding="utf-8"
+        ) as f:
+            json.dump(data, f)
+            f.flush()
+            parsed = load_reward_state(f.name)
+        assert parsed["character"] == "Silent"
+        assert parsed["options"] == ["Accuracy", "Cloak and Dagger"]
+        Path(f.name).unlink()
+
+    def test_missing_file_returns_empty(self):
+        parsed = load_reward_state("nonexistent_reward_xyz.json")
+        assert parsed == {}

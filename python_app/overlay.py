@@ -5,6 +5,8 @@ import platform
 import tkinter as tk
 from tkinter import font as tkfont
 from typing import Callable
+from pathlib import Path
+import time
 
 from .utils import strip_bbcode
 
@@ -19,6 +21,8 @@ from .combat_engine import (
 )
 from .strategy import compute_strategy
 from .models import GameState, MerchantRelic, Relic
+from .data_parser import load_reward_state
+from .reward_advisor import recommend
 from .relic_db import (
     get_short_description_only,
     rarity_color,
@@ -58,11 +62,46 @@ GWL_EXSTYLE = -20
 WS_EX_LAYERED = 0x00080000
 WS_EX_TRANSPARENT = 0x00000020
 GHOST_ALPHA = 0.55
+# Force the shell to apply GWL_EXSTYLE changes (otherwise click-through often "sticks")
+SWP_NOSIZE = 0x0001
+SWP_NOMOVE = 0x0002
+SWP_NOZORDER = 0x0004
+SWP_FRAMECHANGED = 0x0020
+GHOST_TOGGLE_DEBOUNCE_S = 0.22
+
+
+def _win32_refresh_window_frame(hwnd: int) -> None:
+    """Notify Windows that non-client / extended style changed."""
+    if platform.system() != "Windows" or not hwnd:
+        return
+    ctypes.windll.user32.SetWindowPos(
+        hwnd,
+        None,
+        0,
+        0,
+        0,
+        0,
+        SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED,
+    )
+
+
+def _overlay_win32_hwnds(root: tk.Tk) -> list[int]:
+    """Tk may use a child HWND + parent toplevel; both may need EXSTYLE updates."""
+    if platform.system() != "Windows":
+        return []
+    root.update_idletasks()
+    cid = int(root.winfo_id())
+    user32 = ctypes.windll.user32
+    out: list[int] = [cid]
+    parent = user32.GetParent(cid)
+    if parent:
+        out.append(int(parent))
+    return out
 
 
 def _set_click_through(hwnd: int, enable: bool):
     """Toggle click-through on a Win32 window handle."""
-    if platform.system() != "Windows":
+    if platform.system() != "Windows" or not hwnd:
         return
     user32 = ctypes.windll.user32
     style = user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
@@ -71,12 +110,13 @@ def _set_click_through(hwnd: int, enable: bool):
     else:
         style &= ~WS_EX_TRANSPARENT
     user32.SetWindowLongW(hwnd, GWL_EXSTYLE, style)
+    _win32_refresh_window_frame(hwnd)
 
 
 class CombatOverlay:
     """Semi-transparent always-on-top overlay showing combat calculations."""
 
-    def __init__(self, on_close: Callable[[], None] | None = None):
+    def __init__(self, on_close: Callable[[], None] | None = None, debug: bool = False):
         self.root = tk.Tk()
         self.root.title("BoberInSpire")
         self.root.overrideredirect(True)
@@ -86,9 +126,15 @@ class CombatOverlay:
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+50+50")
 
         self._ghost_mode = False
+        self._last_ghost_toggle_ts = 0.0
         self._drag_data: dict = {"x": 0, "y": 0}
         self._resize_data: dict | None = None
         self._on_close = on_close
+        self._debug = debug
+        self._last_state: GameState | None = None
+        self._last_reward_data: dict | None = None
+        self._reward_file_path: str = ""
+        self._reward_poll_timer: str | None = None
 
         self._build_fonts()
         self._build_widgets()
@@ -132,8 +178,6 @@ class CombatOverlay:
         self._ghost_btn.pack(side="right")
         self._ghost_btn.bind("<Button-1>", lambda e: self._toggle_ghost())
 
-        self.root.bind("<F9>", lambda e: self._toggle_ghost())
-
         self._hotkey_remove: Callable[[], None] | None = None
         if kb:
             try:
@@ -144,6 +188,9 @@ class CombatOverlay:
                 )
             except Exception:
                 self._hotkey_remove = None
+        # Avoid double-toggle: global hook + Tk both bound to F9 would flip twice per keypress.
+        if self._hotkey_remove is None:
+            self.root.bind("<F9>", lambda e: self._toggle_ghost())
 
         self.info_frame = tk.Frame(content, bg=BG_COLOR)
         self.info_frame.pack(fill="x", padx=8)
@@ -253,24 +300,27 @@ class CombatOverlay:
             pass
 
     def _toggle_ghost(self):
-        self._ghost_mode = not self._ghost_mode
-        hwnd = int(self.root.winfo_id())
+        now = time.monotonic()
+        if now - self._last_ghost_toggle_ts < GHOST_TOGGLE_DEBOUNCE_S:
+            return
+        self._last_ghost_toggle_ts = now
 
-        if platform.system() == "Windows":
-            parent = ctypes.windll.user32.GetParent(hwnd)
-            if parent:
-                hwnd = parent
+        self._ghost_mode = not self._ghost_mode
+        hwnds = _overlay_win32_hwnds(self.root) if platform.system() == "Windows" else []
 
         if self._ghost_mode:
             self.root.attributes("-alpha", GHOST_ALPHA)
-            _set_click_through(hwnd, True)
+            for h in hwnds:
+                _set_click_through(h, True)
             self._ghost_btn.configure(fg=SAFE_COLOR)
             self.status_label.configure(
                 text="GHOST MODE (click-through) \u2022 F9 = back to normal (global)"
             )
         else:
+            # Clear click-through before restoring alpha so hit-testing updates reliably.
+            for h in hwnds:
+                _set_click_through(h, False)
             self.root.attributes("-alpha", OVERLAY_ALPHA)
-            _set_click_through(hwnd, False)
             self._ghost_btn.configure(fg="#aaa")
             self.status_label.configure(
                 text="Interactive \u2022 F9 = ghost (works even when overlay is click-through)"
@@ -307,20 +357,146 @@ class CombatOverlay:
             self._scrollbar.pack_forget()
             self._scrollbar_visible = False
 
+    def set_reward_file_path(self, path: str):
+        """Set path for reward state JSON (used when checking reward on combat update)."""
+        self._reward_file_path = path
+
+    def start_continuous_reward_polling(self):
+        """Start polling reward file every 2 seconds (call when in watch mode)."""
+        if self._reward_poll_timer or not self._reward_file_path:
+            return
+        self._poll_reward_file_continuous()
+
+    def _poll_reward_file_continuous(self):
+        """Poll reward file every 2 seconds regardless of combat state."""
+        if not self._reward_file_path:
+            return
+        try:
+            from pathlib import Path
+            p = Path(self._reward_file_path)
+            if p.exists():
+                data = load_reward_state(p)
+                if data and data.get("options"):
+                    self._last_reward_data = data
+                else:
+                    self._last_reward_data = None
+            else:
+                self._last_reward_data = None
+            self._render_all()
+        except Exception:
+            pass
+        self._reward_poll_timer = self.root.after(2000, self._poll_reward_file_continuous)
+
+    def _stop_reward_polling(self):
+        """Cancel reward file polling."""
+        if self._reward_poll_timer:
+            try:
+                self.root.after_cancel(self._reward_poll_timer)
+            except tk.TclError:
+                pass
+            self._reward_poll_timer = None
+
     def update_state(self, state: GameState):
         """Refresh the overlay with a new GameState."""
+        self._last_state = state
+        if state.enemies:
+            self._last_reward_data = None
+        else:
+            self._refresh_reward_if_needed()
+        self._render_all()
+
+    def update_reward_state(self, reward_data: dict):
+        """Update overlay with reward screen data (from RewardStateWatcher)."""
+        if reward_data and reward_data.get("options"):
+            self._last_reward_data = reward_data
+        else:
+            self._last_reward_data = None
+        self._render_all()
+
+    def _refresh_reward_if_needed(self):
+        """When combat state updates, also check reward file (mod may write both)."""
+        if not self._reward_file_path:
+            return
+        try:
+            from pathlib import Path
+            if Path(self._reward_file_path).exists():
+                data = load_reward_state(self._reward_file_path)
+                if data and data.get("options"):
+                    self._last_reward_data = data
+        except Exception:
+            pass
+
+    def _should_show_card_reward(self) -> bool:
+        """Only on post-combat card pick: have options, and not in active combat."""
+        if not self._last_reward_data or not self._last_reward_data.get("options"):
+            return False
+        if self._last_state and self._last_state.enemies:
+            return False
+        return True
+
+    def _render_all(self):
+        """Re-render overlay from stored state and reward data."""
         self._clear_scroll_frame()
+        state = self._last_state
+        show_pick = self._should_show_card_reward()
 
-        self._render_player_info(state)
-        self._render_enemies(state)
-        self._render_strategy(state)
-        self._render_relics(state)
+        if show_pick:
+            self._render_card_reward()
 
-        if state.merchant_relics:
-            self._render_merchant_relics(state.merchant_relics)
+        if state:
+            self._render_player_info(state)
+            if not show_pick:
+                self._render_enemies(state)
+                self._render_strategy(state)
+            self._render_relics(state)
+            if state.merchant_relics and not show_pick:
+                self._render_merchant_relics(state.merchant_relics)
 
-        self.status_label.config(text=f"Turn {state.turn}  |  Updated")
+        if self._debug:
+            self._render_debug()
+
+        if show_pick:
+            self.status_label.config(text="Choose a Card  |  Reward advisor")
+        elif state:
+            self.status_label.config(text=f"Turn {state.turn}  |  Updated")
+        else:
+            self.status_label.config(text="Waiting for game state... (F9 = ghost mode)")
         self.root.after(50, self._update_scrollbar_visibility)
+
+    def _render_debug(self):
+        p = Path(self._reward_file_path) if self._reward_file_path else None
+        exists = bool(p and p.exists())
+        mtime = ""
+        size = ""
+        if exists and p:
+            try:
+                stat = p.stat()
+                mtime = time.strftime("%H:%M:%S", time.localtime(stat.st_mtime))
+                size = f"{stat.st_size}B"
+            except Exception:
+                pass
+
+        opts = (self._last_reward_data or {}).get("options") or []
+        opts_preview = ", ".join(str(x) for x in opts[:3])
+        if len(opts) > 3:
+            opts_preview += f", …(+{len(opts)-3})"
+
+        lines = [
+            f"Reward file: {self._reward_file_path or '(not set)'}",
+            f"Exists: {exists}  MTime: {mtime or '-'}  Size: {size or '-'}",
+            f"Parsed options: {len(opts)}  [{opts_preview}]",
+        ]
+
+        panel = tk.Frame(self.info_frame, bg="#0d0d1a")
+        panel.pack(fill="x", pady=(6, 0))
+        tk.Label(
+            panel, text="DEBUG", font=self.font_header,
+            fg=WARN_COLOR, bg="#0d0d1a", anchor="w", padx=6, pady=2,
+        ).pack(fill="x")
+        tk.Label(
+            panel, text="\n".join(lines), font=self.font_small,
+            fg=FG_COLOR, bg="#0d0d1a", anchor="w", justify="left", padx=6, pady=4,
+        ).pack(fill="x")
 
     # ── Player info + NET damage banner ─────────────────────────
 
@@ -526,6 +702,68 @@ class CombatOverlay:
             self.scroll_frame, text=summary, font=self.font_body,
             fg=ENERGY_COLOR, bg=BG_COLOR, anchor="w", padx=10, pady=2,
         ).pack(fill="x")
+
+    # ── Card Reward (post-combat pick) ────────────────────────────
+
+    def _render_card_reward(self):
+        """Show card reward recommendations when on the Choose a Card screen."""
+        data = self._last_reward_data
+        if not data or not data.get("options"):
+            return
+
+        tk.Label(
+            self.scroll_frame, text="CHOOSE A CARD",
+            font=self.font_header, fg=LETHAL_COLOR, bg="#1a2a4a", anchor="w", padx=8, pady=4,
+        ).pack(fill="x", pady=(0, 2))
+
+        rec = recommend(
+            character=data.get("character", "Unknown"),
+            deck=data.get("deck", []),
+            relics=data.get("relics", []),
+            options=data.get("options", []),
+        )
+
+        tk.Label(
+            self.scroll_frame, text="CARD REWARD",
+            font=self.font_header, fg="#fff", bg="#1a2a4a", anchor="w", padx=8, pady=3,
+        ).pack(fill="x", pady=(4, 1))
+
+        best = rec.best_card
+        for r in rec.recommendations:
+            is_best = r.name == best
+            tier_color = (
+                SAFE_COLOR
+                if r.tier == "S"
+                else WARN_COLOR
+                if r.tier == "A"
+                else "#a8c4e8"
+                if r.tier == "B"
+                else "#c9a86c"
+                if r.tier == "C"
+                else "#b08080"
+                if r.tier == "D"
+                else "#888"
+            )
+            prefix = "  \u2714 BEST  " if is_best else f"  {r.tier}  "
+            line = f"{prefix} {r.name}  ({r.score})"
+            tk.Label(
+                self.scroll_frame, text=line, font=self.font_body,
+                fg=tier_color if is_best else "#aaa", bg=CARD_COLOR,
+                anchor="w", padx=10, pady=1,
+            ).pack(fill="x", padx=4, pady=1)
+            tk.Label(
+                self.scroll_frame, text=f"      \u2022 {r.reason}",
+                font=self.font_small, fg="#888", bg=BG_COLOR,
+                anchor="w", padx=10, pady=0, wraplength=WINDOW_WIDTH - 30, justify="left",
+            ).pack(fill="x", padx=4)
+
+        if rec.warnings:
+            for w in rec.warnings:
+                tk.Label(
+                    self.scroll_frame, text=f"  \u26A0 {w}",
+                    font=self.font_small, fg=WARN_COLOR, bg=BG_COLOR,
+                    anchor="w", padx=10, pady=1, wraplength=WINDOW_WIDTH - 30, justify="left",
+                ).pack(fill="x")
 
     # ── Relics ───────────────────────────────────────────────────
 

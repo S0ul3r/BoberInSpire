@@ -69,8 +69,9 @@ def parse_card_effects(card_name: str, card_type: str = "", description: str = "
     desc = strip_bbcode(description).replace("\n", " ")
     desc_lower = desc.lower()
 
+    is_power_card = (card_type or "").lower() == "power"
     effects = CardEffects()
-    effects.is_power = (card_type or "").lower() == "power"
+    effects.is_power = is_power_card
 
     # Draw: "Draw 3 cards" or "draw 2 cards"
     m = re.search(r"draw\s+(\d+)\s+cards?", desc_lower, re.I)
@@ -201,8 +202,7 @@ def parse_card_effects(card_name: str, card_type: str = "", description: str = "
 
     # Add random Attack(s) into your Hand when you play this card (Infernal Blade, Splash).
     # Excludes: Powers (e.g. "Whenever you play an Attack, add..."), and "Add N into Draw Pile" (Metamorphosis).
-    is_power = (card_type or "").lower() == "power"
-    if not is_power:
+    if not is_power_card:
         if re.search(r"add\s+a\s+random\s+attack\s+into\s+your\s+hand", desc_lower, re.I):
             effects.adds_random_attack = 1
         else:

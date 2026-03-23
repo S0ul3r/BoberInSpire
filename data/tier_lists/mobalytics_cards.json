@@ -1,0 +1,42 @@
+{
+  "source": "https://mobalytics.gg/slay-the-spire-2/tier-lists/cards",
+  "snapshot_date": "2026-03-19",
+  "note": "Preliminary Mobalytics STS2 tier list; update when site changes.",
+  "characters": {
+    "Ironclad": {
+      "S": ["Expect a Fight", "Offering", "Battle Trance", "Bloodletting", "Headbutt", "Unmovable", "Feed"],
+      "A": ["Pommel Strike", "Burning Pact", "Colossus", "Inferno", "Rupture", "Brand", "Taunt", "Impervious", "Flame Barrier", "Feel No Pain", "Dark Embrace", "Pyre", "Barricade", "Thrash", "Stoke", "Spite", "Pillage", "Evil Eye", "Second Wind", "Crimson Mantle", "Vicious", "Aggression", "Primal Force"],
+      "B": ["Breakthrough", "Hemokinesis", "Shrug It Off", "Whirlwind", "Dismantle", "Blood Wall", "Molten Fist", "True Grit", "Stomp", "Bludgeon", "Perfected Strike", "Infernal Blade", "Juggling"],
+      "C": ["Body Slam", "Dominate", "Forgotten Ritual", "Howl from Beyond", "Pact's End", "Uppercut", "Twin Strike", "Setup Strike", "Thunderclap", "Sword Boomerang", "Bully", "Inflame", "Hellraiser", "Tear Asunder", "Fiend Fire", "Ashen Strike", "Drum of Battle", "Stampede", "Cruelty", "One-Two Punch", "Juggernaut", "Demon Form", "Fight Me!", "Conflagration", "Unrelenting", "Anger", "Armaments", "Cinder", "Rampage", "Grapple"],
+      "D": ["Cascade", "Mangle", "Rage", "Iron Wave", "Stone Armor", "Tremble", "Havoc"]
+    },
+    "Silent": {
+      "S": ["Adrenaline", "Well-Laid Plans", "Calculated Gamble", "Acrobatics", "Prepared", "Reflex", "Tactician", "Untouchable", "Piercing Wail", "Tools of the Trade", "The Hunt"],
+      "A": ["Afterimage", "Tracking", "Expose", "Shadowmeld", "Blur", "Pinpoint", "Abrasive", "Footwork", "Corrosive Wave", "Malaise", "Assassinate", "Escape Plan"],
+      "B": ["Backflip", "Dagger Throw", "Leg Sweep", "Predator", "Backstab", "Haze", "Flick-Flack", "Ricochet", "Blade Dance", "Leading Strike", "Follow Through", "Flechettes", "Precise Cut", "Dash", "Noxious Fumes"],
+      "C": ["Knife Trap", "Murder", "Master Planner", "Fan of Knives", "Up My Sleeve", "Speedster", "Burst", "Memento Mori", "Echoing Slash", "Dagger Spray", "Sucker Punch", "Poisoned Stab", "Slice", "Outbreak", "Hidden Daggers", "Infinite Blades", "Accuracy", "Serpent Form", "Accelerant", "Finisher", "Strangle", "Expertise", "Hand Trick", "Cloak and Dagger", "Deadly Poison", "Pounce", "Skewer"],
+      "D": ["Grand Finale", "Bullet Time", "Nightmare", "Shadow Step", "Storm of Steel", "Blade of Ink", "Phantom Blades", "Mirage", "Bubble Bubble", "Bouncing Flask", "Envenom", "Anticipate", "Deflect", "Dodge and Roll", "Snakebite"]
+    },
+    "Regent": {
+      "S": ["Void Form", "Big Bang", "Genesis", "Child of the Stars", "Convergence", "Glow", "Reflect", "Particle Wall", "GUARDS!!!", "Foregone Conclusion"],
+      "A": ["Comet", "Gamma Blast", "Shining Strike", "Dying Star", "Seven Stars", "CHARGE!!", "Glimmer", "Neutron Aegis", "Bombardment", "Royalties"],
+      "B": ["Hidden Cache", "Gather Light", "Solar Strike", "Cloak of Stars", "Cosmic Indifference", "Bulwark", "Summon Forth", "Guiding Star", "Photon Cut", "Glitterstream", "Astral Pulse", "Crush Under"],
+      "C": ["Royal Gamble", "Alignment", "Radiate", "Decisions, Decisions", "Beat into Shape", "The Smith", "Seeking Edge", "Conqueror", "Make It So", "I Am Invincible", "Tyranny", "Knockout Blow", "Devastate", "Wrought in War", "Crescent Spear", "Hegemony", "Lunar Blast", "Collision Course", "BEGONE!", "Patter", "Manifest Authority", "Black Hole", "Orbit", "Furnace", "Pale Blue Dot", "Resonance", "Supermassive", "Pillar of Creation", "Spectrum Shift", "Sword Sage"],
+      "D": ["Heirloom Hammer", "Crash Landing", "Heavenly Drill", "Monarch's Gaze", "Arsenal", "Bundle of Joy", "Know Thy Place", "Quasar", "Kingly Kick", "Kingly Punch", "Celestial Might", "Stardust", "Parry", "Prophesize", "Refine Blade", "Spoils of Battle", "Terraforming", "Monologue"]
+    },
+    "Necrobinder": {
+      "S": ["Capture Spirit", "Undeath", "Borrowed Time", "Dredge", "Graveblast", "Friendship", "Neurosurge", "Seance", "Cleanse", "Demesne"],
+      "A": ["Lethality", "Death's Door", "High Five", "Fetch", "Sic 'Em", "Rattle", "Sacrifice", "Necro Mastery", "Reanimate", "Debilitate", "Putrefy", "Devour Life", "Shared Fate", "Transfigure", "Call of the Void", "Parse"],
+      "B": ["Spur", "Pull Aggro", "Flatten", "Delay", "Severance", "Snap", "Grave Warden", "Enfeebling Touch", "Death March", "Scourge", "Negative Pulse", "Defile", "Reave", "Drain Power", "Poke", "Melancholy", "Bone Shards"],
+      "C": ["Haunt", "Shroud", "Hang", "Oblivion", "Pagestorm", "End of Days", "Deathbringer", "No Escape", "Soul Storm", "Time's Up", "Sow", "Blight Strike", "Sculpting Strike", "Defy", "Fear", "Invoke", "Afterlife", "Right Hand Hand", "Veilpiercer", "Wisp", "Calcify", "Countdown", "Spirit of Ash", "Banshee's Cry", "Sentry Mode", "Squeeze", "Pull from Below", "The Scythe", "Misery", "Dirge", "Eradicate"],
+      "D": ["Sleight of Flesh", "Eidolon", "Reaper Form", "Reap", "Bury", "Danse Macabre"]
+    },
+    "Defect": {
+      "S": ["Echo Form", "Spinner", "Defragment", "Glacier", "Skim", "Hologram", "Fusion", "Modded", "Genetic Algorithm", "Supercritical", "Double Energy"],
+      "A": ["Machine Learning", "Shatter", "Glasswork", "Rainbow", "Multi-Cast", "Compact", "TURBO", "Chill", "Buffer", "Coolant", "Reboot"],
+      "B": ["Coolheaded", "Chaos", "Shadow Shield", "Darkness", "Boot Sequence", "Compile Driver", "Charge Battery", "Leap", "Ball Lightning", "Lightning Rod", "Tesla Coil", "Go for the Eyes", "FTL", "Null", "Sunder", "White Noise", "Rip and Tear"],
+      "C": ["Voltaic", "Capacitor", "Thunder", "Signal Boost", "Hailstorm", "Consuming Shadow", "Iteration", "Trash to Treasure", "Creative AI", "Meteor Strike", "Adaptive Strike", "All for One", "Feral", "Fight Through", "Sweeping Beam", "Cold Snap", "Momentum Strike", "Focused Strike", "Barrage", "Beam Cell", "Gunk Up", "Scrape", "Rocket Punch", "Overclock", "Scavenge", "Synthesis", "Refract", "Ice Lance", "Flak Cannon", "Bulk Up", "Smokestack"],
+      "D": ["Hyperbeam", "Claw", "Subroutine", "Loop", "Helix Drill", "Tempest", "Uproar", "Boost Away", "Hotfix", "Synchronize", "Storm"]
+    }
+  }
+}

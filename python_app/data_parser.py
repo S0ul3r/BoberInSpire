@@ -10,7 +10,7 @@ from .relic_db import enrich_relic_description
 
 
 class ParseError(Exception):
-    pass
+    """Raised when combat / snapshot JSON cannot be mapped to ``GameState``."""
 
 
 def _parse_card(raw: dict[str, Any]) -> Card:
@@ -112,6 +112,8 @@ def parse_game_state(data: dict[str, Any]) -> GameState:
         turn=data.get("turn", 1),
         draw_pile_count=data.get("draw_pile_count", 0),
         discard_pile_count=data.get("discard_pile_count", 0),
+        deck=data.get("deck") or [],
+        character=data.get("character", "Unknown"),
     )
 
 
@@ -125,3 +127,31 @@ def load_game_state(path: str | Path) -> GameState:
         data = json.load(f)
 
     return parse_game_state(data)
+
+
+def parse_reward_state(data: dict[str, Any]) -> dict[str, Any]:
+    """Parse card reward screen JSON from the mod. Returns dict with character, deck, relics, options."""
+    if not isinstance(data, dict):
+        return {}
+    return {
+        "type": data.get("type", "card_reward"),
+        "character": data.get("character", "Unknown"),
+        "deck": data.get("deck") or [],
+        "relics": data.get("relics") or [],
+        "options": data.get("options") or [],
+    }
+
+
+def load_reward_state(path: str | Path) -> dict[str, Any]:
+    """Load and parse reward state JSON file."""
+    path = Path(path)
+    if not path.exists():
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        if not data or not isinstance(data, dict):
+            return {}
+        return parse_reward_state(data)
+    except (json.JSONDecodeError, OSError):
+        return {}

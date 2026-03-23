@@ -126,6 +126,9 @@ public static class CombatExporter
             if (player == null) return;
 
             var snapshot = BuildSnapshot(_combat, player);
+            var relicNames = snapshot.relics?.Select(r => r.name).ToList() ?? new List<string>();
+            RewardExporter.CacheFromCombat(snapshot.deck, snapshot.character, relicNames);
+
             var json = JsonSerializer.Serialize(snapshot, JsonOpts);
 
             if (json == _lastJson) return;
@@ -179,6 +182,9 @@ public static class CombatExporter
             }
         }
 
+        var deck = BuildDeckInternal(pcs, combat, player);
+        var character = GetCharacterNameInternal(player);
+
         return new Snapshot
         {
             player = BuildPlayer(player),
@@ -189,6 +195,8 @@ public static class CombatExporter
             turn = combat.RoundNumber,
             draw_pile_count = pcs?.DrawPile?.Cards?.Count ?? 0,
             discard_pile_count = pcs?.DiscardPile?.Cards?.Count ?? 0,
+            deck = deck,
+            character = character,
         };
     }
 
@@ -405,6 +413,55 @@ public static class CombatExporter
         };
     }
 
+    internal static List<string> BuildDeckInternal(PlayerCombatState? pcs, CombatState? combat, Player? player)
+    {
+        var names = new List<string>();
+        if (pcs == null || combat == null || player == null) return names;
+
+        foreach (var pile in new[] { pcs.Hand?.Cards, pcs.DrawPile?.Cards, pcs.DiscardPile?.Cards })
+        {
+            if (pile == null) continue;
+            foreach (var item in pile)
+            {
+                try
+                {
+                    var model = GetCardModel(item);
+                    if (model != null)
+                    {
+                        var title = model.Title ?? model.GetType().Name;
+                        if (!string.IsNullOrEmpty(title)) names.Add(title);
+                    }
+                }
+                catch { }
+            }
+        }
+        return names;
+    }
+
+    internal static string GetCharacterNameInternal(Player? player)
+    {
+        if (player == null) return "Unknown";
+        try
+        {
+            var t = player.GetType();
+            var prop = t.GetProperty("CharacterType", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+                ?? t.GetProperty("Character", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (prop?.GetValue(player) is { } val && val != null)
+            {
+                var s = val.ToString();
+                if (!string.IsNullOrEmpty(s)) return s;
+            }
+            var baseType = t.BaseType?.Name ?? "";
+            if (baseType.Contains("Ironclad")) return "Ironclad";
+            if (baseType.Contains("Silent")) return "Silent";
+            if (baseType.Contains("Defect")) return "Defect";
+            if (baseType.Contains("Necrobinder")) return "Necrobinder";
+            if (baseType.Contains("Regent")) return "Regent";
+        }
+        catch { }
+        return "Unknown";
+    }
+
     private static SnapshotRelic BuildRelic(RelicModel relic)
     {
         return new SnapshotRelic
@@ -454,6 +511,8 @@ public static class CombatExporter
         public required int turn { get; init; }
         public required int draw_pile_count { get; init; }
         public required int discard_pile_count { get; init; }
+        public List<string> deck { get; init; } = new();
+        public string character { get; init; } = "Unknown";
     }
 
     internal sealed class SnapshotPlayer

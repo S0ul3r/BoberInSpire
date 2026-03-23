@@ -1,0 +1,11 @@
+﻿{
+  "id": "BoberInSpire",
+  "name": "BoberInSpire",
+  "author": "BoberInSpire",
+  "description": "Combat and reward overlay data exporter for BoberInSpire.",
+  "version": "1.0.0",
+  "has_pck": true,
+  "has_dll": true,
+  "dependencies": [],
+  "affects_gameplay": true
+}

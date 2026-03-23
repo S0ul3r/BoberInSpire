@@ -22,7 +22,7 @@
 		<GodotExePath Condition="'$(GodotExePath)' == ''">godot</GodotExePath>
 		
 		<!-- Derived paths -->
-		<ModsOutputDir>$(STS2GamePath)\mods\$(ModName)</ModsOutputDir>
+		<ModsOutputDir>$(STS2GamePath)\mods</ModsOutputDir>
 		<GameDataDir>$(STS2GamePath)\data_sts2_windows_x86_64</GameDataDir>
 		<PackProject>$(ProjectDir)pack</PackProject>
 	</PropertyGroup>
@@ -58,7 +58,7 @@ project/assembly_name="$(ModName)"
 		<Message Text="Generated project.godot" Importance="high" />
 	</Target>
 	
-	<!-- Generate mod_manifest.json before build -->
+	<!-- Generate Godot mod manifest (packed into .pck) -->
 	<Target Name="GenerateModManifest" BeforeTargets="BeforeBuild">
 		<PropertyGroup>
 			<ModManifestPath>$(PackProject)\mod_manifest.json</ModManifestPath>
@@ -73,10 +73,32 @@ project/assembly_name="$(ModName)"
 		<WriteLinesToFile File="$(ModManifestPath)" Lines="$(ModManifestContent)" Overwrite="true" Encoding="UTF-8" />
 		<Message Text="Generated mod_manifest.json" Importance="high" />
 	</Target>
+
+	<!-- Generate STS2 v0.99+ loader manifest (json next to dll/pck in /mods) -->
+	<Target Name="GenerateLoaderManifest" BeforeTargets="BeforeBuild">
+		<PropertyGroup>
+			<LoaderManifestPath>$(ProjectDir)$(ModName).json</LoaderManifestPath>
+			<LoaderManifestContent>{
+  "id": "$(ModName)",
+  "name": "$(ModDisplayName)",
+  "author": "$(ModAuthor)",
+  "description": "Combat and reward overlay data exporter for BoberInSpire.",
+  "version": "$(ModVersion)",
+  "has_pck": true,
+  "has_dll": true,
+  "dependencies": [],
+  "affects_gameplay": true
+}</LoaderManifestContent>
+		</PropertyGroup>
+
+		<WriteLinesToFile File="$(LoaderManifestPath)" Lines="$(LoaderManifestContent)" Overwrite="true" Encoding="UTF-8" />
+		<Message Text="Generated loader manifest: $(LoaderManifestPath)" Importance="high" />
+	</Target>
 	
 	<Target Name="PostBuild" AfterTargets="Build">
 		<MakeDir Directories="$(ModsOutputDir)" />
 		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsOutputDir)" />
+		<Copy SourceFiles="$(ProjectDir)$(ModName).json" DestinationFolder="$(ModsOutputDir)" />
 		<Exec Command="&quot;$(GodotExePath)&quot; --headless --path &quot;$(PackProject)&quot; --export-pack &quot;Windows Desktop&quot; &quot;$(ModsOutputDir)\$(ModName).pck&quot;" />
 	</Target>
 </Project>

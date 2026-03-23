@@ -1,4 +1,4 @@
-﻿## BoberInSpire – Slay the Spire 2 Combat Assistant
+## BoberInSpire – Slay the Spire 2 Combat Assistant
 
 ![Combat Assistant overlay](data/media/overlay_UI.png)
 
@@ -11,6 +11,13 @@ A custom C# mod exports the current combat / merchant state to JSON, and a Pytho
 - **Damage and block summary** – overlay shows net damage and per-enemy incoming damage.
 - **Relic summaries** – combat-relevant relic effects shown in a compact list.
 - **Semi-transparent overlay** – always-on-top window with ghost (click-through) mode (F9).
+- **Card reward advisor** – on the post-combat **Choose a Card** screen, ranks the three offered cards using **[Mobalytics](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards) S/A/B/C/D tier lists** (per character) **combined** with deck/archetype heuristics from local build guides. The overlay shows **BEST**, tier letter, blended score, and a short reason (e.g. `Mobalytics B-tier; …`).
+
+#### Card pick advisor (screenshot)
+
+![Card reward advisor with Mobalytics tiers](data/media/cardpick_UI.png)
+
+The mod writes reward options to `%APPDATA%\SlayTheSpire2\bober_reward_state.json`; the overlay reads them and updates the **CHOOSE A CARD / CARD REWARD** section. Tier data lives in `data/tier_lists/mobalytics_cards.json` (see `data/tier_lists/README.md` to refresh from Mobalytics).
 
 ---
 
@@ -20,6 +27,8 @@ Card and relic data used by the overlay comes from **[Spire Codex](https://spire
 
 - **Website:** [https://spire-codex.com/](https://spire-codex.com/)
 - **Repository:** [https://github.com/ptrlrd/spire-codex](https://github.com/ptrlrd/spire-codex)
+
+**Card reward tiers** are based on Mobalytics’ [Slay the Spire 2 card tier list](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards) (Early Access / preliminary list — update the JSON when their rankings change).
 
 ## Requirements
 
@@ -71,7 +80,7 @@ The installer is created as **`dist\BoberInSpire_Setup_1.0.0.exe`**.
    py -3.11 -m python_app.main
    ```
 
-4. Start STS2 via GUMM, enable **BoberInSpire** in the mod list, and enter combat. The overlay will watch `%APPDATA%\SlayTheSpire2\bober_combat_state.json` and update in real time.
+4. Start STS2 via GUMM, enable **BoberInSpire** in the mod list, and enter combat. The overlay watches `%APPDATA%\SlayTheSpire2\bober_combat_state.json` (combat) and **`bober_reward_state.json`** (card rewards) and updates in real time.
 
 > If the mod build fails with "file is being used by another process", **close STS2** and run the build again.
 

@@ -4,8 +4,7 @@ import math
 from dataclasses import dataclass, field
 from typing import Sequence
 
-from .card_effects import parse_card_effects
-from .models import Card, Enemy, GameState, PlayerState, Relic
+from .models import Card, Enemy, GameState
 
 
 VULNERABLE_MULTIPLIER = 1.5

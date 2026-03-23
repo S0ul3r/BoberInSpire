@@ -1,7 +1,19 @@
+"""
+Domain types for exported game snapshots (player, hand, enemies, relics).
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+
+__all__ = [
+    "Card",
+    "Enemy",
+    "Relic",
+    "PlayerState",
+    "MerchantRelic",
+    "GameState",
+]
 
 
 @dataclass
@@ -103,3 +115,5 @@ class GameState:
     turn: int = 1
     draw_pile_count: int = 0
     discard_pile_count: int = 0
+    deck: list[str] = field(default_factory=list)
+    character: str = "Unknown"

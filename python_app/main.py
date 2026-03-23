@@ -1,32 +1,62 @@
 from __future__ import annotations
 
 import argparse
+import json
+import os
 from pathlib import Path
 
-from .data_parser import load_game_state
-from .file_watcher import GameStateWatcher
+from .data_parser import load_game_state, load_reward_state
+from .file_watcher import GameStateWatcher, RewardStateWatcher
 from .models import GameState
 from .overlay import CombatOverlay
 
-
-import os
-
 _APPDATA = os.getenv("APPDATA", "")
 DEFAULT_STATE_FILE = os.path.join(_APPDATA, "SlayTheSpire2", "bober_combat_state.json")
+DEFAULT_REWARD_FILE = os.path.join(_APPDATA, "SlayTheSpire2", "bober_reward_state.json")
 
 
-def run_overlay(state_file: str, watch: bool):
-    """Launch the overlay, optionally watching a file for live updates."""
+def create_test_reward_file(reward_path: Path) -> None:
+    """Create a test reward JSON so you can verify the CARD REWARD section appears in overlay."""
+    reward_path.parent.mkdir(parents=True, exist_ok=True)
+    test_data = {
+        "type": "card_reward",
+        "character": "Ironclad",
+        "deck": ["Strike", "Strike", "Strike", "Defend", "Defend"],
+        "relics": ["Burning Blood"],
+        "options": ["Bash", "Iron Wave", "Pommel Strike"],
+    }
+    with open(reward_path, "w", encoding="utf-8") as f:
+        json.dump(test_data, f, indent=2)
+    print(f"[BoberInSpire] Test reward file created: {reward_path}")
+    print("[BoberInSpire] If overlay shows CARD REWARD section, Python side works. If not, mod may not write the file.")
+
+
+def run_overlay(
+    state_file: str,
+    watch: bool,
+    reward_file: str | None = None,
+    test_reward: bool = False,
+    debug: bool = False,
+):
+    """Launch the overlay, optionally watching combat and reward files for live updates."""
     path = Path(state_file).resolve()
+    reward_path = Path(reward_file or DEFAULT_REWARD_FILE).resolve()
+    if test_reward:
+        create_test_reward_file(reward_path)
     print(f"[BoberInSpire] Starting overlay, watching: {path}")
 
     watcher: GameStateWatcher | None = None
+    reward_watcher: RewardStateWatcher | None = None
 
     def cleanup():
+        overlay._stop_reward_polling()
         if watcher:
             watcher.stop()
+        if reward_watcher:
+            reward_watcher.stop()
 
-    overlay = CombatOverlay(on_close=cleanup)
+    overlay = CombatOverlay(on_close=cleanup, debug=debug)
+    overlay.set_reward_file_path(str(reward_path))
 
     overlay.root.update_idletasks()
     overlay.root.lift()
@@ -38,6 +68,13 @@ def run_overlay(state_file: str, watch: bool):
             overlay.update_state(initial_state)
         except Exception as exc:
             overlay.status_label.config(text=f"Error: {exc}")
+    elif reward_path.exists():
+        try:
+            reward_data = load_reward_state(reward_path)
+            if reward_data and reward_data.get("options"):
+                overlay.update_reward_state(reward_data)
+        except Exception:
+            pass
 
     if watch:
         def on_update(state: GameState):
@@ -48,8 +85,14 @@ def run_overlay(state_file: str, watch: bool):
                 0, lambda: overlay.status_label.config(text=f"Error: {msg}")
             )
 
+        def on_reward_update(data: dict):
+            overlay.root.after(0, overlay.update_reward_state, data)
+
         watcher = GameStateWatcher(path, on_update=on_update, on_error=on_error)
         watcher.start()
+        reward_watcher = RewardStateWatcher(reward_path, on_update=on_reward_update)
+        reward_watcher.start()
+        overlay.start_continuous_reward_polling()
         overlay.status_label.config(text=f"Watching {path.name}...")
 
     print("[BoberInSpire] Overlay ready. Look for the dark window at top-left (or press Alt+Tab).")
@@ -124,13 +167,28 @@ def main():
         action="store_true",
         help="Don't watch the file for changes (overlay mode)",
     )
+    parser.add_argument(
+        "--test-reward",
+        action="store_true",
+        help="Create test reward file before starting overlay (to verify CARD REWARD section)",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Show debug panel in overlay (reward file status, parsed options)",
+    )
 
     args = parser.parse_args()
 
     if args.cli:
         run_cli(args.file)
     else:
-        run_overlay(args.file, watch=not args.no_watch)
+        run_overlay(
+            args.file,
+            watch=not args.no_watch,
+            test_reward=args.test_reward,
+            debug=args.debug,
+        )
 
 
 if __name__ == "__main__":
