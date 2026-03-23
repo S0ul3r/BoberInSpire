@@ -54,7 +54,7 @@ All commands are from the **project root** (`BoberInSpire`).
 | **Build release package** (fills `dist\BoberInSpire\`) | `.\build.bat` |
 | **Create installer** (needs Inno Setup; run after `.\build.bat`) | `iscc installer.iss` |
 
-The installer is created as **`dist\BoberInSpire_Setup_1.0.0.exe`**.
+The installer is created as **`dist\BoberInSpire_Setup_1.1.0.exe`** (version matches `#define MyAppVersion` in `installer.iss`).
 
 ---
 
@@ -66,7 +66,7 @@ The installer is created as **`dist\BoberInSpire_Setup_1.0.0.exe`**.
    dotnet build STS2Mods\sts2_example_mod\ExampleMod.csproj -c Debug
    ```
 
-   This builds **BoberInSpire.dll** (and the `.pck`) and copies them to your STS2 `mods\BoberInSpire\` folder. The project file is still `ExampleMod.csproj`; the mod name and output DLL are **BoberInSpire**.
+   This builds **BoberInSpire.dll**, **BoberInSpire.pck**, and **BoberInSpire.json** into your STS2 **`mods\`** folder (flat layout next to other mods — not a subfolder). The project file is still `ExampleMod.csproj`; the mod name and output DLL are **BoberInSpire**.
 
 2. **Install Python deps** (once):
 
@@ -115,7 +115,7 @@ To produce a single installer that deploys both the overlay and the mod:
      & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
      ```
 
-   Output: **`dist\BoberInSpire_Setup_1.0.0.exe`**.
+   Output: **`dist\BoberInSpire_Setup_1.1.0.exe`**.
 
 3. **Run the installer** – choose install path, optional desktop shortcut, and optionally copy mod to STS2. After install, run **BoberInSpire Overlay** from the Start Menu (or desktop). Python 3.11 must be on `PATH` for the overlay to run.
 

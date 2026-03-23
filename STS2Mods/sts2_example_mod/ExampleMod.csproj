@@ -12,7 +12,7 @@
 		<ModName>BoberInSpire</ModName>
 		<ModDisplayName>BoberInSpire</ModDisplayName>
 		<ModAuthor>BoberInSpire</ModAuthor>
-		<ModVersion>1.0.0</ModVersion>
+		<ModVersion>1.1.0</ModVersion>
 		
 		<AssemblyName>$(ModName)</AssemblyName>
 		<Version>$(ModVersion)</Version>

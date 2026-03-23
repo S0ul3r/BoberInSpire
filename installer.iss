@@ -2,7 +2,7 @@
 ; Prerequisite: run build.bat first so dist\BoberInSpire exists.
 
 #define MyAppName "BoberInSpire"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "BoberInSpire"
 #define MyAppURL "https://github.com/your-repo/BoberInSpire"
 #define MyAppExeName "run_overlay.bat"
@@ -70,8 +70,9 @@ end;
 
 procedure CurPageChanged(CurPageID: Integer);
 begin
+  // STS2 v0.99+: mod files live directly in <game>\mods\ (BoberInSpire.dll / .pck / .json)
   if CurPageID = STS2PathPage.ID then
-    STS2ModPath := AddBackslash(STS2PathPage.Values[0]) + 'mods\BoberInSpire\';
+    STS2ModPath := AddBackslash(STS2PathPage.Values[0]) + 'mods\';
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
@@ -87,6 +88,8 @@ begin
         ForceDirectories(STS2ModPath);
         CopyFile(AppMod + 'BoberInSpire.dll', STS2ModPath + 'BoberInSpire.dll', False);
         CopyFile(AppMod + 'BoberInSpire.pck', STS2ModPath + 'BoberInSpire.pck', False);
+        if FileExists(AppMod + 'BoberInSpire.json') then
+          CopyFile(AppMod + 'BoberInSpire.json', STS2ModPath + 'BoberInSpire.json', False);
       end;
     end;
 end;

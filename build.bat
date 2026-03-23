@@ -14,12 +14,22 @@ if errorlevel 1 (
 )
 
 echo [2/5] Preparing dist folder...
-if not exist "%DIST%\Mod" mkdir "%DIST%\Mod"
-if not exist "%DIST%\python_app" mkdir "%DIST%\python_app"
-if not exist "%DIST%\data" mkdir "%DIST%\data"
+if exist "%DIST%" rmdir /s /q "%DIST%"
+mkdir "%DIST%\Mod"
+mkdir "%DIST%\python_app"
+mkdir "%DIST%\data"
 
-echo [3/5] Copying mod DLL...
+echo [3/5] Copying mod files (DLL + loader JSON from build output)...
 copy /Y "%MOD_BUILD%\BoberInSpire.dll" "%DIST%\Mod\"
+copy /Y "STS2Mods\sts2_example_mod\BoberInSpire.json" "%DIST%\Mod\"
+rem PostBuild writes DLL, JSON, and PCK directly to the game's mods folder (flat layout — NOT mods\BoberInSpire\)
+set "GAME_MODS=%ProgramFiles(x86)%\Steam\steamapps\common\Slay the Spire 2\mods"
+if exist "%GAME_MODS%\BoberInSpire.pck" (
+    copy /Y "%GAME_MODS%\BoberInSpire.pck" "%DIST%\Mod\"
+) else (
+    echo WARNING: BoberInSpire.pck not found at "%GAME_MODS%\BoberInSpire.pck"
+    echo          Build the mod once with STS2 closed so PostBuild can run Godot, OR set GODOT_EXE and re-run build.bat step 4.
+)
 
 echo [4/5] Exporting mod .pck (Godot)...
 set "GODOT=godot"
@@ -31,8 +41,10 @@ if exist "%GODOT%" (
 )
 
 echo [5/5] Copying overlay app and data...
-xcopy /E /I /Y python_app "%DIST%\python_app\"
-xcopy /E /I /Y data "%DIST%\data\"
+robocopy python_app "%DIST%\python_app" /E /XD __pycache__ /NFL /NDL /NJH /NJS /NC /NS
+if errorlevel 8 exit /b 1
+robocopy data "%DIST%\data" /E /XD "dll dump" /NFL /NDL /NJH /NJS /NC /NS
+if errorlevel 8 exit /b 1
 copy /Y requirements.txt "%DIST%\"
 
 echo.
