@@ -19,6 +19,55 @@ A custom C# mod exports the current combat / merchant state to JSON, and a Pytho
 
 The mod writes reward options to `%APPDATA%\SlayTheSpire2\bober_reward_state.json`; the overlay reads them and updates the **CHOOSE A CARD / CARD REWARD** section. Tier data lives in `data/tier_lists/mobalytics_cards.json` (see `data/tier_lists/README.md` to refresh from Mobalytics).
 
+### Installing using installer
+
+If you only want to **play** with the mod and overlay, you do **not** need to clone the repo or run `dotnet`. The easiest path is the **Windows installer** (`BoberInSpire_Setup_<version>.exe`), built from this project with `build.bat` + Inno Setup (see [Release package (installer)](#release-package-installer) for maintainers).
+
+#### One-time prerequisites
+
+1. **Slay the Spire 2** installed (e.g. Steam).
+2. **Mods folder** — the game reads mods from **`<Slay the Spire 2>\mods\`** (same folder as the game executable). You **do not** need **GUMM** or any extra launcher: the installer can copy the mod files there for you, or you copy them manually (see below). After a game update, if `mods` is missing, create it yourself.
+3. **Python 3.11** — install from [python.org](https://www.python.org/downloads/) (Windows installer). During setup, enable **“Add python.exe to PATH”** so the `py` launcher can find Python. The overlay launcher runs `py -3.11`; if `py -3.11 --version` works in Command Prompt, you are set.
+
+> **Optional:** Some players use **GUMM** (Godot Universal Mod Manager) to manage many mods. It is **not** required for BoberInSpire — Steam (or the game exe) is enough once the files sit in `mods\`.
+
+#### Run the installer
+
+1. Download **`BoberInSpire_Setup_<version>.exe`** from the project **Releases** page (when published), or use a build shared by someone else.
+2. **Close Slay the Spire 2** before installing or updating mod files.
+3. Run the setup wizard and choose an install folder (the wizard suggests a default location).
+4. On the **tasks** screen:
+   - Optionally enable **Create a desktop shortcut**.
+   - **Recommended:** enable **Copy mod to Slay the Spire 2**, then on the next page select your game folder (typical Steam path: `C:\Program Files (x86)\Steam\steamapps\common\Slay the Spire 2`).
+5. Finish the installation.
+
+#### Turn the mod on in-game (once)
+
+1. Start **Slay the Spire 2** the normal way (e.g. **Steam**).
+2. Open **Settings** and find the **Modding** / **Mods** section (exact labels can change slightly with patches).
+3. Make sure modding is allowed and **BoberInSpire** is **enabled**. If you do not see it, confirm the three files are in `mods\` and restart the game.
+
+#### Start the overlay
+
+- Launch **BoberInSpire Overlay** from the Start Menu (or the desktop shortcut). The first run may take a short while: the launcher runs `pip install` for `watchdog` and `keyboard` (**internet required once**).
+- Leave the overlay running while you play. Start the game from **Steam** (or your usual shortcut); the mod loads automatically from `mods\` when enabled in settings.
+
+#### If you did not use “copy mod”
+
+Manually copy from the install directory’s **`Mod`** folder into **`<Slay the Spire 2>\mods\`** (flat layout next to other mods):
+
+- `BoberInSpire.dll`
+- `BoberInSpire.pck`
+- `BoberInSpire.json`
+
+#### Quick troubleshooting
+
+| Issue | Try this |
+|--------|-----------|
+| Overlay does not start | Open Command Prompt and run `py -3.11 --version`. Install Python 3.11 with PATH enabled, then run the shortcut again. |
+| Errors about `pip` / packages | Ensure you are online; from the install folder, run: `py -3.11 -m pip install -r requirements.txt` |
+| Mod missing in game | Put the three files in `...\Slay the Spire 2\mods\` (flat, not a subfolder). In **Settings → Modding**, enable BoberInSpire and restart the game. |
+
 ---
 
 ### Data source & acknowledgments
@@ -29,34 +78,6 @@ Card and relic data used by the overlay comes from **[Spire Codex](https://spire
 - **Repository:** [https://github.com/ptrlrd/spire-codex](https://github.com/ptrlrd/spire-codex)
 
 **Card reward tiers** are based on Mobalytics’ [Slay the Spire 2 card tier list](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards) (Early Access / preliminary list — update the JSON when their rankings change).
-
-## Requirements
-
-- **Slay the Spire 2** (Steam, default path used in the mod):
-  - `C:\Program Files (x86)\Steam\steamapps\common\Slay the Spire 2`
-- **.NET 9 SDK** (for building the C# mod).
-- **Godot 4.x Mono** (only needed for the automatic `.pck` build step; if you don’t have it, you can still copy the built DLL manually).
-- **Python 3.11** (recommended; the repo uses `py -3.11` in commands).
-- **Pip packages**: `watchdog`, `keyboard` (see `requirements.txt`).
-
-The mod loader (GUMM) must already be installed in your STS2 directory, and **modding must be enabled**.
-
----
-
-## Quick reference (BoberInSpire)
-
-All commands are from the **project root** (`BoberInSpire`).
-
-| What you want | Command |
-|---------------|---------|
-| **Build the C# mod** (local dev; close STS2 first) | `dotnet build STS2Mods\sts2_example_mod\ExampleMod.csproj -c Debug` |
-| **Run the overlay** (after `pip install -r requirements.txt`) | `py -3.11 -m python_app.main` |
-| **Build release package** (fills `dist\BoberInSpire\`) | `.\build.bat` |
-| **Create installer** (needs Inno Setup; run after `.\build.bat`) | `iscc installer.iss` |
-
-The installer is created as **`dist\BoberInSpire_Setup_1.1.0.exe`** (version matches `#define MyAppVersion` in `installer.iss`).
-
----
 
 ## Run locally (development)
 
@@ -80,44 +101,9 @@ The installer is created as **`dist\BoberInSpire_Setup_1.1.0.exe`** (version mat
    py -3.11 -m python_app.main
    ```
 
-4. Start STS2 via GUMM, enable **BoberInSpire** in the mod list, and enter combat. The overlay watches `%APPDATA%\SlayTheSpire2\bober_combat_state.json` (combat) and **`bober_reward_state.json`** (card rewards) and updates in real time.
+4. Start STS2 (e.g. from **Steam**). In **Settings → Modding**, enable **BoberInSpire** if it is not on by default, then enter combat. The overlay watches `%APPDATA%\SlayTheSpire2\bober_combat_state.json` (combat) and **`bober_reward_state.json`** (card rewards) and updates in real time.
 
 > If the mod build fails with "file is being used by another process", **close STS2** and run the build again.
-
----
-
-## Release package (installer)
-
-To produce a single installer that deploys both the overlay and the mod:
-
-1. **Build the distribution** (with STS2 closed):
-
-   ```bat
-   .\build.bat
-   ```
-
-   (In PowerShell use `.\build.bat`; in cmd you can use `build.bat`.)
-
-   This builds the C# mod in **Release**, exports the `.pck` (if Godot is on `PATH` or set via `GODOT_EXE`), and fills **`dist\BoberInSpire\`** with the overlay app, data, and mod files.
-
-2. **Compile the installer** (requires [Inno Setup](https://jrsoftware.org/isinfo.php)):
-
-   - **Option A – Inno Setup on PATH:**  
-     Add `C:\Program Files (x86)\Inno Setup 6` to your **Path** (Environment Variables), then in a new terminal:
-
-     ```bat
-     iscc installer.iss
-     ```
-
-   - **Option B – Without PATH** (PowerShell, from project root):
-
-     ```powershell
-     & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
-     ```
-
-   Output: **`dist\BoberInSpire_Setup_1.1.0.exe`**.
-
-3. **Run the installer** – choose install path, optional desktop shortcut, and optionally copy mod to STS2. After install, run **BoberInSpire Overlay** from the Start Menu (or desktop). Python 3.11 must be on `PATH` for the overlay to run.
 
 ---
 
