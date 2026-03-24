@@ -124,9 +124,29 @@ public static class CombatExporter
         _debounceTimer?.Dispose();
         _debounceTimer = new System.Threading.Timer(_ =>
         {
-            _pending = false;
-            DoExport();
+            // Do not touch game / localization objects from the thread-pool — can deadlock or freeze.
+            try
+            {
+                if (Engine.GetMainLoop() is SceneTree)
+                    Callable.From(RunDebouncedExport).CallDeferred();
+                else
+                {
+                    _pending = false;
+                    DoExport();
+                }
+            }
+            catch
+            {
+                _pending = false;
+                DoExport();
+            }
         }, null, ThrottleMs, System.Threading.Timeout.Infinite);
+    }
+
+    private static void RunDebouncedExport()
+    {
+        _pending = false;
+        DoExport();
     }
 
     private static void DoExport()
@@ -428,7 +448,7 @@ public static class CombatExporter
         }
 
         var vars = model.DynamicVars;
-        var description = TryGetCardDescription(model);
+        var description = TryGetCardDescription(model, vars);
         var energyCost = GetCurrentEnergyCost(handItem, model, combat, player);
         return new SnapshotCard
         {
@@ -443,14 +463,15 @@ public static class CombatExporter
         };
     }
 
-    private static string? TryGetCardDescription(CardModel card)
+    private static string? TryGetCardDescription(CardModel card, DynamicVarSet vars)
     {
         try
         {
             var desc = card.GetType().GetProperty("Description")?.GetValue(card)
                 ?? card.GetType().GetProperty("Body")?.GetValue(card)
                 ?? card.GetType().GetProperty("BodyText")?.GetValue(card);
-            return desc != null ? LocStr(desc) : null;
+            // GetFormattedText() with no args leaves template variables empty → parse errors on {Damage:diff()} etc.
+            return desc != null ? LocStr(desc, vars) : null;
         }
         catch { return null; }
     }
@@ -576,32 +597,77 @@ public static class CombatExporter
 
     private static SnapshotRelic BuildRelic(RelicModel relic)
     {
+        var relicVars = TryRelicDynamicVars(relic);
         return new SnapshotRelic
         {
             name = LocStr(relic.Title) ?? relic.GetType().Name,
             id = relic.GetType().Name,
-            description = LocStr(relic.Description) ?? "",
+            description = LocStr(relic.Description, relicVars) ?? "",
             rarity = relic.Rarity.ToString().ToLowerInvariant(),
         };
     }
 
-    private static string? LocStr(object? loc)
+    private static DynamicVarSet? TryRelicDynamicVars(RelicModel relic)
     {
-        if (loc == null) return null;
         try
         {
-            var m = loc.GetType().GetMethod("GetFormattedText", BindingFlags.Instance | BindingFlags.Public);
-            if (m != null)
+            var p = relic.GetType().GetProperty("DynamicVars", BindingFlags.Public | BindingFlags.Instance);
+            return p?.GetValue(relic) as DynamicVarSet;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Resolve localized strings. Card/relic bodies need <see cref="DynamicVarSet"/> so templates like
+    /// <c>{Damage:diff()}</c> format; parameterless <c>GetFormattedText()</c> triggers game errors and heavy log spam.
+    /// </summary>
+    private static string? LocStr(object? loc, DynamicVarSet? vars = null)
+    {
+        if (loc == null) return null;
+        var type = loc.GetType();
+        var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+            .Where(m => m.Name == "GetFormattedText" && m.ReturnType == typeof(string))
+            .ToArray();
+
+        if (vars != null)
+        {
+            foreach (var m in methods)
             {
-                var s = m.Invoke(loc, null) as string;
-                if (!string.IsNullOrEmpty(s) && !s.Contains("LocString")) return s;
+                var ps = m.GetParameters();
+                if (ps.Length != 1 || !ps[0].ParameterType.IsInstanceOfType(vars)) continue;
+                try
+                {
+                    if (m.Invoke(loc, new object[] { vars }) is string s
+                        && !string.IsNullOrEmpty(s)
+                        && !s.Contains("LocString"))
+                        return s;
+                }
+                catch
+                {
+                    // Wrong overload or game version mismatch — try others / fall back.
+                }
             }
         }
-        catch (Exception ex)
+
+        foreach (var m in methods)
         {
-            if (ex is System.Reflection.TargetInvocationException tie && tie.InnerException != null)
-                Log.Error($"[BoberInSpire] LocStr: {tie.InnerException.Message}");
+            if (m.GetParameters().Length != 0) continue;
+            try
+            {
+                if (m.Invoke(loc, null) is string s
+                    && !string.IsNullOrEmpty(s)
+                    && !s.Contains("LocString"))
+                    return s;
+            }
+            catch
+            {
+                // Avoid per-call Log.Error: thousands of lines can stall the game.
+            }
         }
+
         return null;
     }
 
