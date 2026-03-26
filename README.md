@@ -10,7 +10,7 @@ A custom C# mod exports the current combat / merchant state to JSON, and a Pytho
 - **Real-time combat state** – mod exports hand, energy, block, and enemy data to JSON.
 - **Damage and block summary** – overlay shows net damage and per-enemy incoming damage.
 - **Relic summaries** – combat-relevant relic effects shown in a compact list.
-- **Semi-transparent overlay** – always-on-top window with ghost (click-through) mode (F9).
+- **Semi-transparent overlay** – always-on-top window; **Settings (⚙)** toggles which panels are shown and sets transparency (saved to `%APPDATA%\SlayTheSpire2\bober_overlay_settings.json`).
 - **Card reward advisor** – on the post-combat **Choose a Card** screen, ranks the three offered cards using **[Mobalytics](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards) S/A/B/C/D tier lists** (per character) **combined** with deck/archetype heuristics from local build guides. The overlay shows **BEST**, tier letter, blended score, and a short reason (e.g. `Mobalytics B-tier; …`).
 
 #### Card pick advisor (screenshot)
@@ -49,7 +49,7 @@ If you only want to **play** with the mod and overlay, you do **not** need to cl
 
 #### Start the overlay
 
-- Launch **BoberInSpire Overlay** from the Start Menu (or the desktop shortcut). The first run may take a short while: the launcher runs `pip install` for `watchdog` and `keyboard` (**internet required once**).
+- Launch **BoberInSpire Overlay** from the Start Menu (or the desktop shortcut). The first run may take a short while: the launcher runs `pip install` for `watchdog` (**internet required once**).
 - Leave the overlay running while you play. Start the game from **Steam** (or your usual shortcut); the mod loads automatically from `mods\` when enabled in settings.
 
 #### If you did not use “copy mod”
@@ -127,4 +127,4 @@ If STS2 is not in the default location, create **`STS2Mods\sts2_example_mod\loca
 - **Drag window** – click and drag the custom title bar.
 - **Resize** – drag the small grip in the bottom-right corner.
 - **Close** – click the **X** in the title bar.
-- **Ghost mode (click-through)** – click the **eye** icon or press **F9**; clicks pass through to the game. Press F9 again to return to interactive mode.
+- **Settings** – click the **⚙** icon to choose which sections appear (combat summary, enemies, strategy, relics, merchant relics, card advisor) and to adjust **transparency**. Settings are saved for the next session.

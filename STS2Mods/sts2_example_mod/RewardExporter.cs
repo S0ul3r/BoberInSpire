@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Diagnostics;
 using Godot;
 using MegaCrit.Sts2.Core.Logging;
 
@@ -11,11 +12,20 @@ namespace FirstMod;
 public static class RewardExporter
 {
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = false };
+    private const int PerfLogIntervalMs = 5000;
 
     private static List<string> _cachedDeck = new();
     private static List<string> _cachedRelicNames = new();
     private static string _cachedCharacter = "Unknown";
     private static string? _rewardOutputPath;
+    private static string? _lastRewardJson;
+    private static readonly object _writeQueueLock = new();
+    private static string? _pendingWriteJson;
+    private static int _writerActive;
+    private static long _perfExports;
+    private static long _perfSkippedSameJson;
+    private static long _perfWriteMsTotal;
+    private static long _perfNextLogTicks;
 
     /// <summary>
     /// Call from CombatExporter when we have valid combat state - cache deck/relics/character for reward export.
@@ -47,13 +57,17 @@ public static class RewardExporter
             };
 
             var json = JsonSerializer.Serialize(snapshot, JsonOpts);
-            _rewardOutputPath ??= ProjectSettings.GlobalizePath("user://bober_reward_state.json");
-
-            Task.Run(() =>
+            if (json == _lastRewardJson)
             {
-                try { File.WriteAllText(_rewardOutputPath, json); }
-                catch (Exception ex) { Log.Error($"[BoberInSpire] Reward export write failed: {ex.Message}"); }
-            });
+                Interlocked.Increment(ref _perfSkippedSameJson);
+                MaybeLogPerf();
+                return;
+            }
+            _lastRewardJson = json;
+            _rewardOutputPath ??= ProjectSettings.GlobalizePath("user://bober_reward_state.json");
+            Interlocked.Increment(ref _perfExports);
+            EnqueueWrite(json);
+            MaybeLogPerf();
 
             Log.Info($"[BoberInSpire] Reward state exported: {rewardOptions.Count} options");
         }
@@ -74,9 +88,65 @@ public static class RewardExporter
             if (File.Exists(_rewardOutputPath))
             {
                 File.WriteAllText(_rewardOutputPath, "{}");
+                _lastRewardJson = "{}";
             }
         }
         catch { }
+    }
+
+    private static void EnqueueWrite(string json)
+    {
+        lock (_writeQueueLock)
+        {
+            _pendingWriteJson = json;
+        }
+        StartWriteWorkerIfNeeded();
+    }
+
+    private static void StartWriteWorkerIfNeeded()
+    {
+        if (Interlocked.CompareExchange(ref _writerActive, 1, 0) != 0) return;
+        Task.Run(() =>
+        {
+            try
+            {
+                while (true)
+                {
+                    string? next;
+                    lock (_writeQueueLock)
+                    {
+                        next = _pendingWriteJson;
+                        _pendingWriteJson = null;
+                    }
+                    if (string.IsNullOrEmpty(next)) break;
+                    var sw = Stopwatch.StartNew();
+                    try { File.WriteAllText(_rewardOutputPath!, next); }
+                    catch (Exception ex) { Log.Error($"[BoberInSpire] Reward export write failed: {ex.Message}"); }
+                    sw.Stop();
+                    Interlocked.Add(ref _perfWriteMsTotal, sw.ElapsedMilliseconds);
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _writerActive, 0);
+                if (_pendingWriteJson != null)
+                    StartWriteWorkerIfNeeded();
+            }
+        });
+    }
+
+    private static void MaybeLogPerf()
+    {
+        var now = System.Environment.TickCount64;
+        var next = Interlocked.Read(ref _perfNextLogTicks);
+        if (now < next) return;
+        if (Interlocked.CompareExchange(ref _perfNextLogTicks, now + PerfLogIntervalMs, next) != next) return;
+
+        var exports = Interlocked.Read(ref _perfExports);
+        var same = Interlocked.Read(ref _perfSkippedSameJson);
+        var writeMs = Interlocked.Read(ref _perfWriteMsTotal);
+        var avgWrite = exports > 0 ? (double)writeMs / exports : 0;
+        Log.Info($"[BoberInSpire][Perf] rewards exports={exports} same_json={same} avg_write_ms={avgWrite:F1}");
     }
 
     internal sealed class RewardSnapshot

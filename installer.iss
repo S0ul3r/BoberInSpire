@@ -39,6 +39,7 @@ Name: "installmod"; Description: "Copy mod to Slay the Spire 2 (requires game pa
 Source: "dist\BoberInSpire\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Launcher
 Source: "run_overlay.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "run_overlay_debug.bat"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\BoberInSpire Overlay"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"

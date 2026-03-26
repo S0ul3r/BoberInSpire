@@ -1,5 +1,8 @@
+using System.Collections.Concurrent;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Diagnostics;
 using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -14,7 +17,8 @@ namespace FirstMod;
 
 public static class CombatExporter
 {
-    private const int ThrottleMs = 300;
+    private const int ThrottleMs = 450;
+    private const int PerfLogIntervalMs = 5000;
 
     private static readonly JsonSerializerOptions JsonOpts = new() { WriteIndented = false };
 
@@ -24,6 +28,17 @@ public static class CombatExporter
     private static bool _pending;
     private static System.Threading.Timer? _debounceTimer;
     private static string? _outputPath;
+    private static readonly object _writeQueueLock = new();
+    private static string? _pendingWriteJson;
+    private static int _writerActive;
+    private static int _exportInProgress;
+    private static long _perfNextLogTicks;
+    private static long _perfExports;
+    private static long _perfSkippedSameJson;
+    private static long _perfDroppedBusy;
+    private static long _perfBuildMsTotal;
+    private static long _perfSerializeMsTotal;
+    private static long _perfWriteMsTotal;
 
     private static List<SnapshotRelic>? _cachedRelics;
     private static int _cachedRelicCount = -1;
@@ -32,6 +47,17 @@ public static class CombatExporter
 
     /// <summary>Player used for map-mode shop JSON when there is no active combat state; refreshed when the shop closes.</summary>
     private static Player? _playerForLastMerchantMapExport;
+
+    // Reflection caches — BuildSnapshot hot path (see [BoberInSpire][Perf] avg build_ms).
+    private static readonly ConcurrentDictionary<Type, MethodInfo[]> _locFormattedTextMethods = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo?[]> _cardModelBridgeProps = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo?> _cardDescSourceProp = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo?> _relicDynamicVarsProp = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo?[]> _handEnergyCostProps = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo?[]> _nestedCostIntProps = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo?[]> _energyCostStructIntProps = new();
+    private static readonly ConcurrentDictionary<Type, MethodInfo?[]> _modelCostInvokeListByType = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo?[]> _playerCharacterProps = new();
 
     public static void SetCombatState(CombatState? cs)
     {
@@ -152,18 +178,30 @@ public static class CombatExporter
     private static void DoExport()
     {
         if (_combat == null) return;
+        if (Interlocked.Exchange(ref _exportInProgress, 1) == 1)
+        {
+            Interlocked.Increment(ref _perfDroppedBusy);
+            return;
+        }
 
         try
         {
             var player = _combat.Players.FirstOrDefault();
             if (player == null) return;
 
+            var swBuild = Stopwatch.StartNew();
             var snapshot = BuildSnapshot(_combat, player);
+            swBuild.Stop();
+            Interlocked.Add(ref _perfBuildMsTotal, swBuild.ElapsedMilliseconds);
             WriteCombatSnapshot(snapshot);
         }
         catch (Exception ex)
         {
             Log.Error($"[BoberInSpire] Export failed: {ex.Message}");
+        }
+        finally
+        {
+            Interlocked.Exchange(ref _exportInProgress, 0);
         }
     }
 
@@ -172,19 +210,90 @@ public static class CombatExporter
         var relicNames = snapshot.relics?.Select(r => r.name).ToList() ?? new List<string>();
         RewardExporter.CacheFromCombat(snapshot.deck, snapshot.character, relicNames);
 
+        var swSerialize = Stopwatch.StartNew();
         var json = JsonSerializer.Serialize(snapshot, JsonOpts);
+        swSerialize.Stop();
+        Interlocked.Add(ref _perfSerializeMsTotal, swSerialize.ElapsedMilliseconds);
 
-        if (json == _lastJson) return;
+        if (json == _lastJson)
+        {
+            Interlocked.Increment(ref _perfSkippedSameJson);
+            MaybeLogPerf();
+            return;
+        }
         _lastJson = json;
         _lastWriteTicks = System.Environment.TickCount64;
+        Interlocked.Increment(ref _perfExports);
 
         _outputPath ??= ProjectSettings.GlobalizePath("user://bober_combat_state.json");
+        EnqueueWrite(json);
+        MaybeLogPerf();
+    }
 
+    private static void EnqueueWrite(string json)
+    {
+        lock (_writeQueueLock)
+        {
+            _pendingWriteJson = json;
+        }
+
+        StartWriteWorkerIfNeeded();
+    }
+
+    private static void StartWriteWorkerIfNeeded()
+    {
+        if (Interlocked.CompareExchange(ref _writerActive, 1, 0) != 0) return;
         Task.Run(() =>
         {
-            try { File.WriteAllText(_outputPath, json); }
-            catch { }
+            try
+            {
+                while (true)
+                {
+                    string? next;
+                    lock (_writeQueueLock)
+                    {
+                        next = _pendingWriteJson;
+                        _pendingWriteJson = null;
+                    }
+
+                    if (string.IsNullOrEmpty(next)) break;
+                    var swWrite = Stopwatch.StartNew();
+                    try { File.WriteAllText(_outputPath!, next); }
+                    catch { }
+                    swWrite.Stop();
+                    Interlocked.Add(ref _perfWriteMsTotal, swWrite.ElapsedMilliseconds);
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _writerActive, 0);
+                // If a new payload arrived after we drained the queue and before _writerActive flipped to 0,
+                // start the writer loop again.
+                if (_pendingWriteJson != null)
+                {
+                    StartWriteWorkerIfNeeded();
+                }
+            }
         });
+    }
+
+    private static void MaybeLogPerf()
+    {
+        var now = System.Environment.TickCount64;
+        var next = Interlocked.Read(ref _perfNextLogTicks);
+        if (now < next) return;
+        if (Interlocked.CompareExchange(ref _perfNextLogTicks, now + PerfLogIntervalMs, next) != next) return;
+
+        var exports = Interlocked.Read(ref _perfExports);
+        var same = Interlocked.Read(ref _perfSkippedSameJson);
+        var busy = Interlocked.Read(ref _perfDroppedBusy);
+        var buildMs = Interlocked.Read(ref _perfBuildMsTotal);
+        var serMs = Interlocked.Read(ref _perfSerializeMsTotal);
+        var writeMs = Interlocked.Read(ref _perfWriteMsTotal);
+        var avgBuild = exports > 0 ? (double)buildMs / exports : 0;
+        var avgSer = exports > 0 ? (double)serMs / exports : 0;
+        var avgWrite = exports > 0 ? (double)writeMs / exports : 0;
+        Log.Info($"[BoberInSpire][Perf] combat exports={exports} same_json={same} dropped_busy={busy} avg_ms(build/serialize/write)={avgBuild:F1}/{avgSer:F1}/{avgWrite:F1}");
     }
 
     /// <summary>Shop on the map: no active <see cref="CombatState"/>, but overlay still needs player + master deck + merchant relics.</summary>
@@ -343,6 +452,18 @@ public static class CombatExporter
     /// <summary>
     /// Get the card model from a hand item. Hand may contain CardModel directly or a wrapper (e.g. CardInHand) with Model/CardModel property.
     /// </summary>
+    private static PropertyInfo?[] CardModelBridgeProps(Type t) =>
+        _cardModelBridgeProps.GetOrAdd(t, static type =>
+        {
+            var list = new List<PropertyInfo?>();
+            foreach (var propName in new[] { "Model", "CardModel", "Card" })
+            {
+                var p = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
+                if (p != null) list.Add(p);
+            }
+            return list.Count > 0 ? list.ToArray() : Array.Empty<PropertyInfo?>();
+        });
+
     private static CardModel? GetCardModel(object handItem)
     {
         if (handItem is CardModel cm)
@@ -350,9 +471,8 @@ public static class CombatExporter
         try
         {
             var t = handItem.GetType();
-            foreach (var propName in new[] { "Model", "CardModel", "Card" })
+            foreach (var p in CardModelBridgeProps(t))
             {
-                var p = t.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
                 if (p?.GetValue(handItem) is CardModel m)
                     return m;
             }
@@ -368,14 +488,65 @@ public static class CombatExporter
     /// Get current energy cost: first from the hand item (card instance often has Cost/CurrentCost), then from CardModel.
     /// So we respect Tezcatara's Ember and other in-combat cost modifiers.
     /// </summary>
+    private static PropertyInfo?[] HandEnergyCostProps(Type t) =>
+        _handEnergyCostProps.GetOrAdd(t, static type =>
+        {
+            var list = new List<PropertyInfo?>();
+            foreach (var propName in new[] { "Cost", "CurrentCost", "EnergyCost" })
+            {
+                var p = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
+                if (p != null) list.Add(p);
+            }
+            return list.Count > 0 ? list.ToArray() : Array.Empty<PropertyInfo?>();
+        });
+
+    private static PropertyInfo?[] NestedIntProps(Type vt) =>
+        _nestedCostIntProps.GetOrAdd(vt, static type =>
+        {
+            var list = new List<PropertyInfo?>();
+            foreach (var name in new[] { "Value", "Current", "Canonical" })
+            {
+                var p = type.GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
+                if (p != null) list.Add(p);
+            }
+            return list.Count > 0 ? list.ToArray() : Array.Empty<PropertyInfo?>();
+        });
+
+    private static PropertyInfo?[] EnergyCostStructIntProps(Type et) =>
+        _energyCostStructIntProps.GetOrAdd(et, static type =>
+        {
+            var list = new List<PropertyInfo?>();
+            foreach (var prop in new[] { "Value", "Current", "Effective", "IntValue" })
+            {
+                var ep = type.GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
+                if (ep != null && ep.PropertyType == typeof(int))
+                    list.Add(ep);
+            }
+            return list.Count > 0 ? list.ToArray() : Array.Empty<PropertyInfo?>();
+        });
+
+    /// <summary>Per model type: GetEnergyCost(CS), GetEnergyCost(P), GetCost(CS), GetCost(P), GetCurrentCost(CS), GetCurrentCost(P).</summary>
+    private static MethodInfo?[] ModelCostInvokeList(Type modelType) =>
+        _modelCostInvokeListByType.GetOrAdd(modelType, static t =>
+        {
+            var list = new List<MethodInfo?>();
+            foreach (var methodName in new[] { "GetEnergyCost", "GetCost", "GetCurrentCost" })
+            {
+                list.Add(t.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance,
+                    null, new[] { typeof(CombatState) }, null));
+                list.Add(t.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance,
+                    null, new[] { typeof(Player) }, null));
+            }
+            return list.ToArray();
+        });
+
     private static int GetCurrentEnergyCost(object handItem, CardModel? model, CombatState? combat, Player? player)
     {
         try
         {
             var t = handItem.GetType();
-            foreach (var propName in new[] { "Cost", "CurrentCost", "EnergyCost" })
+            foreach (var p in HandEnergyCostProps(t))
             {
-                var p = t.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
                 if (p == null) continue;
                 var val = p.GetValue(handItem);
                 if (val is int i)
@@ -383,11 +554,11 @@ public static class CombatExporter
                 if (val != null)
                 {
                     var vt = val.GetType();
-                    var vp = vt.GetProperty("Value", BindingFlags.Public | BindingFlags.Instance)
-                        ?? vt.GetProperty("Current", BindingFlags.Public | BindingFlags.Instance)
-                        ?? vt.GetProperty("Canonical", BindingFlags.Public | BindingFlags.Instance);
-                    if (vp?.GetValue(val) is int j)
-                        return j;
+                    foreach (var vp in NestedIntProps(vt))
+                    {
+                        if (vp?.GetValue(val) is int j)
+                            return j;
+                    }
                 }
             }
         }
@@ -405,23 +576,27 @@ public static class CombatExporter
                 if (ec != null)
                 {
                     var et = ec.GetType();
-                    foreach (var prop in new[] { "Value", "Current", "Effective", "IntValue" })
+                    foreach (var ep in EnergyCostStructIntProps(et))
                     {
-                        var ep = et.GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
-                        if (ep != null && ep.PropertyType == typeof(int) && ep.GetValue(ec) is int k)
+                        if (ep?.GetValue(ec) is int k)
                             return k;
                     }
                 }
-                foreach (var methodName in new[] { "GetEnergyCost", "GetCost", "GetCurrentCost" })
+                var methods = ModelCostInvokeList(model.GetType());
+                for (var i = 0; i < methods.Length; i++)
                 {
-                    var m = model.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance,
-                        null, new[] { typeof(CombatState) }, null);
-                    if (m != null && combat != null && m.Invoke(model, new object[] { combat }) is int k)
-                        return k;
-                    m = model.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance,
-                        null, new[] { typeof(Player) }, null);
-                    if (m != null && player != null && m.Invoke(model, new object[] { player }) is int costPlayer)
-                        return costPlayer;
+                    var m = methods[i];
+                    if (m == null) continue;
+                    if (i % 2 == 0)
+                    {
+                        if (combat != null && m.Invoke(model, new object[] { combat }) is int k)
+                            return k;
+                    }
+                    else
+                    {
+                        if (player != null && m.Invoke(model, new object[] { player }) is int costPlayer)
+                            return costPlayer;
+                    }
                 }
             }
             catch (Exception ex)
@@ -463,13 +638,22 @@ public static class CombatExporter
         };
     }
 
+    private static PropertyInfo? CardDescSourceProp(Type cardType) =>
+        _cardDescSourceProp.GetOrAdd(cardType, static t =>
+        {
+            foreach (var n in new[] { "Description", "Body", "BodyText" })
+            {
+                var p = t.GetProperty(n, BindingFlags.Public | BindingFlags.Instance);
+                if (p != null) return p;
+            }
+            return null;
+        });
+
     private static string? TryGetCardDescription(CardModel card, DynamicVarSet vars)
     {
         try
         {
-            var desc = card.GetType().GetProperty("Description")?.GetValue(card)
-                ?? card.GetType().GetProperty("Body")?.GetValue(card)
-                ?? card.GetType().GetProperty("BodyText")?.GetValue(card);
+            var desc = CardDescSourceProp(card.GetType())?.GetValue(card);
             // GetFormattedText() with no args leaves template variables empty → parse errors on {Damage:diff()} etc.
             return desc != null ? LocStr(desc, vars) : null;
         }
@@ -571,18 +755,27 @@ public static class CombatExporter
         return BuildDeckInternal(pcs, combat, player);
     }
 
+    private static PropertyInfo?[] PlayerCharacterProps(Type t) =>
+        _playerCharacterProps.GetOrAdd(t, static type =>
+        {
+            var a = type.GetProperty("CharacterType", BindingFlags.Public | BindingFlags.Instance);
+            var b = type.GetProperty("Character", BindingFlags.Public | BindingFlags.Instance);
+            return new[] { a, b };
+        });
+
     internal static string GetCharacterNameInternal(Player? player)
     {
         if (player == null) return "Unknown";
         try
         {
             var t = player.GetType();
-            var prop = t.GetProperty("CharacterType", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                ?? t.GetProperty("Character", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-            if (prop?.GetValue(player) is { } val && val != null)
+            foreach (var prop in PlayerCharacterProps(t))
             {
-                var s = val.ToString();
-                if (!string.IsNullOrEmpty(s)) return s;
+                if (prop?.GetValue(player) is { } val && val != null)
+                {
+                    var s = val.ToString();
+                    if (!string.IsNullOrEmpty(s)) return s;
+                }
             }
             var baseType = t.BaseType?.Name ?? "";
             if (baseType.Contains("Ironclad")) return "Ironclad";
@@ -611,7 +804,8 @@ public static class CombatExporter
     {
         try
         {
-            var p = relic.GetType().GetProperty("DynamicVars", BindingFlags.Public | BindingFlags.Instance);
+            var p = _relicDynamicVarsProp.GetOrAdd(relic.GetType(), static t =>
+                t.GetProperty("DynamicVars", BindingFlags.Public | BindingFlags.Instance));
             return p?.GetValue(relic) as DynamicVarSet;
         }
         catch
@@ -624,13 +818,17 @@ public static class CombatExporter
     /// Resolve localized strings. Card/relic bodies need <see cref="DynamicVarSet"/> so templates like
     /// <c>{Damage:diff()}</c> format; parameterless <c>GetFormattedText()</c> triggers game errors and heavy log spam.
     /// </summary>
+    private static MethodInfo[] LocFormattedTextMethods(Type type) =>
+        _locFormattedTextMethods.GetOrAdd(type, static t =>
+            t.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                .Where(m => m.Name == "GetFormattedText" && m.ReturnType == typeof(string))
+                .ToArray());
+
     private static string? LocStr(object? loc, DynamicVarSet? vars = null)
     {
         if (loc == null) return null;
         var type = loc.GetType();
-        var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
-            .Where(m => m.Name == "GetFormattedText" && m.ReturnType == typeof(string))
-            .ToArray();
+        var methods = LocFormattedTextMethods(type);
 
         if (vars != null)
         {
