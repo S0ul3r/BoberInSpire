@@ -2,17 +2,13 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
 
 from .data_parser import load_game_state, load_reward_state
 from .file_watcher import GameStateWatcher, RewardStateWatcher
 from .models import GameState
 from .overlay import CombatOverlay
-
-_APPDATA = os.getenv("APPDATA", "")
-DEFAULT_STATE_FILE = os.path.join(_APPDATA, "SlayTheSpire2", "bober_combat_state.json")
-DEFAULT_REWARD_FILE = os.path.join(_APPDATA, "SlayTheSpire2", "bober_reward_state.json")
+from .paths import DEFAULT_STATE_FILE, DEFAULT_REWARD_FILE
 
 
 def create_test_reward_file(reward_path: Path) -> None:

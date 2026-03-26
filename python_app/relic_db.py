@@ -5,10 +5,10 @@ from pathlib import Path
 from typing import Any
 
 from .utils import fuzzy_codex_lookup, normalize_codex_key, strip_bbcode
+from .paths import DATA_DIR
 
 _DB: dict[str, dict[str, Any]] = {}
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 RELIC_FILE = DATA_DIR / "spire_codex_relics.json"
 
 RARITY_ORDER = {

@@ -12,9 +12,9 @@ from __future__ import annotations
 import json
 import re
 from functools import lru_cache
-from pathlib import Path
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+from .paths import DATA_DIR
+
 TRANSLATION_MAP_PATH = DATA_DIR / "game_localization" / "translation_map.json"
 
 

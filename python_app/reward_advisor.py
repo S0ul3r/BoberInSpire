@@ -16,10 +16,9 @@ import os
 import re
 from dataclasses import dataclass, field
 from functools import lru_cache
-from pathlib import Path
 from .card_db import lookup_card
+from .paths import DATA_DIR
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 BUILD_GUIDES_DIR = DATA_DIR / "build_guides"
 MOBALYTICS_TIERS_PATH = DATA_DIR / "tier_lists" / "mobalytics_cards.json"
 STS2_WIKI_TIERS_PATH = DATA_DIR / "tier_lists" / "slaythespire2_com_cards.json"

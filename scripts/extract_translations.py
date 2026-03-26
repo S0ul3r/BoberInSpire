@@ -15,44 +15,23 @@ from __future__ import annotations
 import argparse
 import json
 import mmap
-import os
 import re
 import struct
 import sys
 from pathlib import Path
 
-_GAME_FOLDER = "Slay the Spire 2"
-_PCK_NAME = "SlayTheSpire2.pck"
+# Allow running as a standalone script: add parent dir to sys.path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from python_app.paths import DATA_DIR, find_game_dir  # noqa: E402
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 OUT_DIR = DATA_DIR / "game_localization"
 
-
-def _steam_library_folders() -> list[Path]:
-    """Parse Steam libraryfolders.vdf to find all Steam library paths."""
-    steam_root = Path(os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)")) / "Steam"
-    vdf = steam_root / "steamapps" / "libraryfolders.vdf"
-    if not vdf.exists():
-        return [steam_root]
-    folders = [steam_root]
-    try:
-        text = vdf.read_text(encoding="utf-8", errors="replace")
-        for m in re.finditer(r'"path"\s+"([^"]+)"', text):
-            p = Path(m.group(1))
-            if p not in folders:
-                folders.append(p)
-    except OSError:
-        pass
-    return folders
-
-
-def find_game_dir() -> Path | None:
-    """Auto-detect the Slay the Spire 2 install directory via Steam libraries."""
-    for lib in _steam_library_folders():
-        candidate = lib / "steamapps" / "common" / _GAME_FOLDER
-        if (candidate / _PCK_NAME).exists():
-            return candidate
-    return None
+# ── PCK parsing constants ────────────────────────────────────────────
+_GAME_PCK = "SlayTheSpire2.pck"
+# The Godot PCK file index lives near the end; search this many bytes back.
+_PCK_INDEX_SEARCH_WINDOW = 10_000_000
+# Extra bytes to read past the recorded file size to handle alignment padding.
+_PCK_BOUNDARY_BUFFER = 4096
 
 
 def _find_pck_entry(mm: mmap.mmap, path_str: str, search_start: int) -> tuple[int, int, int] | None:
@@ -131,7 +110,7 @@ def _discover_languages(mm: mmap.mmap, search_start: int) -> list[str]:
 
 
 def extract(game_dir: Path) -> dict:
-    pck_path = game_dir / "SlayTheSpire2.pck"
+    pck_path = game_dir / _GAME_PCK
     if not pck_path.exists():
         print(f"ERROR: {pck_path} not found", file=sys.stderr)
         sys.exit(1)
@@ -140,8 +119,7 @@ def extract(game_dir: Path) -> dict:
         mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         fsize = mm.size()
 
-        # The file index is near the end of the PCK
-        search_start = max(0, fsize - 10_000_000)
+        search_start = max(0, fsize - _PCK_INDEX_SEARCH_WINDOW)
 
         # Discover available languages
         languages = _discover_languages(mm, search_start)
@@ -166,7 +144,7 @@ def extract(game_dir: Path) -> dict:
                     continue
 
                 mm.seek(offset)
-                data = mm.read(size + 4096)  # read extra for boundary alignment
+                data = mm.read(size + _PCK_BOUNDARY_BUFFER)
                 parsed = _extract_json_objects(data)
                 lang_data[lang] = parsed
                 titles = {k: v for k, v in parsed.items() if k.endswith(".title")}
