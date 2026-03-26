@@ -15,27 +15,43 @@ from __future__ import annotations
 import argparse
 import json
 import mmap
+import os
 import re
 import struct
 import sys
 from pathlib import Path
 
-# Common Steam install locations (Windows)
-_STEAM_COMMON = [
-    Path(r"C:\Program Files (x86)\Steam\steamapps\common\Slay the Spire 2"),
-    Path(r"C:\Program Files\Steam\steamapps\common\Slay the Spire 2"),
-    Path(r"D:\SteamLibrary\steamapps\common\Slay the Spire 2"),
-    Path(r"D:\Steam\steamapps\common\Slay the Spire 2"),
-]
+_GAME_FOLDER = "Slay the Spire 2"
+_PCK_NAME = "SlayTheSpire2.pck"
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 OUT_DIR = DATA_DIR / "game_localization"
 
 
+def _steam_library_folders() -> list[Path]:
+    """Parse Steam libraryfolders.vdf to find all Steam library paths."""
+    steam_root = Path(os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)")) / "Steam"
+    vdf = steam_root / "steamapps" / "libraryfolders.vdf"
+    if not vdf.exists():
+        return [steam_root]
+    folders = [steam_root]
+    try:
+        text = vdf.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r'"path"\s+"([^"]+)"', text):
+            p = Path(m.group(1))
+            if p not in folders:
+                folders.append(p)
+    except OSError:
+        pass
+    return folders
+
+
 def find_game_dir() -> Path | None:
-    for p in _STEAM_COMMON:
-        if (p / "SlayTheSpire2.pck").exists():
-            return p
+    """Auto-detect the Slay the Spire 2 install directory via Steam libraries."""
+    for lib in _steam_library_folders():
+        candidate = lib / "steamapps" / "common" / _GAME_FOLDER
+        if (candidate / _PCK_NAME).exists():
+            return candidate
     return None
 
 
