@@ -7,6 +7,7 @@ from typing import Any
 from .models import Card, Enemy, GameState, MerchantRelic, PlayerState, Relic
 from .card_db import enrich_card_description
 from .relic_db import enrich_relic_description
+from .translator import to_english, to_english_list
 
 
 class ParseError(Exception):
@@ -16,7 +17,7 @@ class ParseError(Exception):
 def _parse_card(raw: dict[str, Any]) -> Card:
     """Parse a card from the mod JSON. damage/block/energy_cost/hits come from the game
     (DynamicVars and current cost) and should reflect upgrades, Strength, relics like Tezcatara's Ember."""
-    name = raw["name"]
+    name = to_english(raw["name"])
     desc = raw.get("description", "")
     if not desc:
         desc = enrich_card_description(name)
@@ -50,7 +51,7 @@ def _parse_enemy(raw: dict[str, Any]) -> Enemy:
 
 
 def _parse_relic(raw: dict[str, Any]) -> Relic:
-    name = raw["name"]
+    name = to_english(raw["name"])
     desc = raw.get("description", "")
     if not desc:
         desc = enrich_relic_description(name)
@@ -82,7 +83,7 @@ def _parse_player(raw: dict[str, Any]) -> PlayerState:
 
 def _parse_merchant_relic(raw: dict[str, Any]) -> MerchantRelic:
     return MerchantRelic(
-        name=raw.get("name", "?"),
+        name=to_english(raw.get("name", "?")),
         id=raw.get("id", ""),
         rarity=raw.get("rarity", "common"),
         cost=raw.get("cost", 0),
@@ -112,7 +113,7 @@ def parse_game_state(data: dict[str, Any]) -> GameState:
         turn=data.get("turn", 1),
         draw_pile_count=data.get("draw_pile_count", 0),
         discard_pile_count=data.get("discard_pile_count", 0),
-        deck=data.get("deck") or [],
+        deck=to_english_list(data.get("deck") or []),
         character=data.get("character", "Unknown"),
     )
 
@@ -136,9 +137,9 @@ def parse_reward_state(data: dict[str, Any]) -> dict[str, Any]:
     return {
         "type": data.get("type", "card_reward"),
         "character": data.get("character", "Unknown"),
-        "deck": data.get("deck") or [],
-        "relics": data.get("relics") or [],
-        "options": data.get("options") or [],
+        "deck": to_english_list(data.get("deck") or []),
+        "relics": to_english_list(data.get("relics") or []),
+        "options": to_english_list(data.get("options") or []),
     }
 
 
