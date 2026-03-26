@@ -45,5 +45,8 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
+# ── Generated localization data (user-specific, extracted from local game) ──
+data/game_localization/
+
 # ── Promptfoo cache ──
 .promptfoo/
