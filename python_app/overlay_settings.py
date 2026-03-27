@@ -19,6 +19,7 @@ class OverlaySettings:
     show_merchant_relics: bool = True
     show_card_reward: bool = True
     alpha: float = 0.9  # 0.35 .. 1.0
+    click_through: bool = False  # mouse passes to desktop / game (Tauri overlay)
 
 
 def default_settings_path() -> Path:
@@ -40,6 +41,7 @@ def load_settings(path: Path | None = None) -> OverlaySettings:
             show_merchant_relics=bool(raw.get("show_merchant_relics", True)),
             show_card_reward=bool(raw.get("show_card_reward", True)),
             alpha=float(raw.get("alpha", 0.9)),
+            click_through=bool(raw.get("click_through", False)),
         )
     except (TypeError, ValueError):
         return OverlaySettings()

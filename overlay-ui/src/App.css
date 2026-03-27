@@ -1,0 +1,465 @@
+:root {
+  --bg: #12121f;
+  --bg-title: #0d0d1a;
+  --fg: #e0e0e0;
+  --accent: #e94560;
+  --muted: #888;
+  --energy: #f5a623;
+  --safe: #00e676;
+  --danger: #ff4444;
+  --warn: #ffaa00;
+  --block: #4da6ff;
+  --relic-bg: #181828;
+  --enemy-head: #280a0a;
+  --reward-banner: #142a55;
+  --reward-sub: #1a3366;
+  --reward-row: #262a3d;
+  --reward-reason-bg: #1c2233;
+  --wiki-hint-bg: #15221a;
+  --wiki-hint-fg: #b8f2c0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: var(--fg);
+}
+
+#root {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-title);
+  padding: 4px 4px 4px 8px;
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+.title-text {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.title-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+}
+
+.icon-btn:hover {
+  color: #fff;
+}
+
+.icon-btn.close {
+  color: #ff5555;
+}
+
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 8px 8px;
+}
+
+.panel {
+  margin-bottom: 8px;
+}
+
+.section-head {
+  font-weight: 700;
+  font-size: 10px;
+  padding: 6px 8px;
+  margin-top: 4px;
+}
+
+.combat-summary .stats-line {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 10px;
+  color: var(--energy);
+  padding: 4px 6px;
+}
+
+.net-banner {
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 10px;
+  margin-top: 4px;
+  border-radius: 2px;
+}
+
+.net-safe {
+  background: #0a2e18;
+  color: var(--safe);
+}
+
+.net-warn {
+  background: #2e1a00;
+  color: var(--warn);
+}
+
+.net-danger,
+.net-lethal {
+  background: #2e0808;
+  color: var(--danger);
+}
+
+.net-muted {
+  background: #1a1a2e;
+  color: var(--muted);
+}
+
+.enemies-head {
+  background: var(--enemy-head);
+}
+
+.enemy-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  padding: 4px 6px;
+}
+
+.enemy-intent {
+  color: var(--muted);
+  min-width: 7rem;
+}
+
+.enemy-intent.is-atk {
+  color: var(--danger);
+}
+
+.enemy-name {
+  font-weight: 600;
+}
+
+.block-line {
+  font-size: 9px;
+  color: var(--block);
+  padding: 2px 8px;
+}
+
+.strategy-head {
+  background: #142810;
+  color: #fff;
+}
+
+.strat-line {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  padding: 2px 10px;
+}
+
+.strat-divider {
+  height: 1px;
+  background: #333;
+  margin: 6px 10px;
+}
+
+.strat-safety {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+}
+
+.strat-safe {
+  color: var(--safe);
+}
+
+.strat-lethal {
+  color: #00ff88;
+}
+
+.strat-danger {
+  color: var(--danger);
+}
+
+.strat-warn {
+  color: var(--warn);
+}
+
+.strat-lethal-line {
+  color: #00ff88;
+  font-size: 10px;
+  padding: 2px 10px;
+}
+
+.strat-hint {
+  color: #ccc;
+  font-size: 10px;
+  padding: 2px 10px;
+}
+
+.sug-card {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  margin: 2px 4px;
+  border-radius: 2px;
+}
+
+.sug-atk {
+  background: #1c1c30;
+  color: var(--accent);
+}
+
+.sug-block {
+  background: #1c1c30;
+  color: var(--block);
+}
+
+.sug-lethal {
+  background: #1c1c30;
+  color: #00ff88;
+}
+
+.strat-total {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  color: var(--energy);
+  padding: 4px 10px;
+}
+
+.relics-head {
+  background: #2a1a3e;
+}
+
+.relic-line,
+.relic-other {
+  font-size: 9px;
+  background: var(--relic-bg);
+  padding: 2px 6px;
+}
+
+.relic-other {
+  color: var(--muted);
+}
+
+.merchant-head {
+  background: #2a2a1e;
+  color: #ffcc00;
+}
+
+.merchant-line {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  padding: 6px 8px;
+  background: #1e1e2e;
+  margin: 2px 0;
+  word-break: break-word;
+}
+
+.reward-banner {
+  background: var(--reward-banner);
+  color: #ff6b8a;
+  font-weight: 700;
+  font-size: 10px;
+  padding: 8px;
+}
+
+.reward-sub {
+  background: var(--reward-sub);
+  color: #fff;
+  font-weight: 700;
+  padding: 6px 8px;
+  margin-top: 4px;
+}
+
+.wiki-hint {
+  background: var(--wiki-hint-bg);
+  color: var(--wiki-hint-fg);
+  font-size: 9px;
+  padding: 8px 10px;
+  margin: 4px 2px;
+}
+
+.rec-block {
+  margin-bottom: 4px;
+}
+
+.rec-line {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 6px 10px;
+  background: var(--reward-row);
+  margin: 2px 4px 0;
+}
+
+.rec-line.is-best {
+  font-weight: 700;
+}
+
+.tier-s {
+  color: #4dff9e;
+}
+.tier-a {
+  color: #ffcc4d;
+}
+.tier-b {
+  color: #7ec8ff;
+}
+.tier-c {
+  color: #f4d080;
+}
+.tier-d {
+  color: #ff9aab;
+}
+.tier-low {
+  color: #aab8ce;
+}
+
+.rec-reason {
+  font-size: 9px;
+  color: #dde6f2;
+  background: var(--reward-reason-bg);
+  padding: 6px 12px;
+  margin: 0 6px 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.rec-spacer {
+  height: 4px;
+}
+
+.rec-warn {
+  font-size: 9px;
+  color: var(--warn);
+  padding: 2px 10px;
+}
+
+.debug-head {
+  background: #0d0d1a;
+  color: var(--warn);
+}
+
+.debug-pre {
+  margin: 0;
+  padding: 8px;
+  background: #0d0d1a;
+  font-size: 9px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.status-bar {
+  flex-shrink: 0;
+  font-family: Consolas, monospace;
+  font-size: 9px;
+  color: var(--muted);
+  padding: 6px 12px;
+  background: var(--bg);
+  border-top: 1px solid #1a1a2e;
+}
+
+/* Settings modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 320px;
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.modal-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--fg);
+}
+
+.modal-section {
+  margin: 12px 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #aaa;
+}
+
+.set-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.modal input[type="range"] {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn {
+  border: none;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #2a4a6a;
+  color: var(--fg);
+}
+
+.btn.ghost {
+  background: #333;
+  color: #ccc;
+}

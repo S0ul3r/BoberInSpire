@@ -3,12 +3,22 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
+import sys
+import threading
+import time
 from pathlib import Path
 
 from .data_parser import load_game_state, load_reward_state
 from .file_watcher import GameStateWatcher, RewardStateWatcher
 from .models import GameState
-from .overlay import CombatOverlay
+from .overlay_host import (
+    DEFAULT_WS_HOST,
+    DEFAULT_WS_PORT,
+    OverlayHost,
+    resolve_overlay_exe,
+)
+
 
 _APPDATA = os.getenv("APPDATA", "")
 DEFAULT_STATE_FILE = os.path.join(_APPDATA, "SlayTheSpire2", "bober_combat_state.json")
@@ -38,66 +48,114 @@ def run_overlay(
     test_reward: bool = False,
     debug: bool = False,
 ):
-    """Launch the overlay, optionally watching combat and reward files for live updates."""
+    """Start WebSocket bridge and Tauri overlay; optionally watch combat and reward JSON files."""
     path = Path(state_file).resolve()
     reward_path = Path(reward_file or DEFAULT_REWARD_FILE).resolve()
     if test_reward:
         create_test_reward_file(reward_path)
-    print(f"[BoberInSpire] Starting overlay, watching: {path}")
+
+    ws_port = int(os.environ.get("BOBER_OVERLAY_WS_PORT", str(DEFAULT_WS_PORT)))
+    ws_host = os.environ.get("BOBER_OVERLAY_WS_HOST", DEFAULT_WS_HOST)
+    ws_url = f"ws://{ws_host}:{ws_port}"
+
+    host = OverlayHost(host=ws_host, port=ws_port, debug=debug)
+    host.start()
+    host.set_reward_file_path(str(reward_path))
 
     watcher: GameStateWatcher | None = None
     reward_watcher: RewardStateWatcher | None = None
+    overlay_proc: subprocess.Popen | None = None
 
-    def cleanup():
-        overlay._stop_reward_polling()
+    def cleanup_watchers() -> None:
         if watcher:
             watcher.stop()
         if reward_watcher:
             reward_watcher.stop()
 
-    overlay = CombatOverlay(on_close=cleanup, debug=debug)
-    overlay.set_reward_file_path(str(reward_path))
+    def shutdown_and_exit() -> None:
+        cleanup_watchers()
+        if overlay_proc and overlay_proc.poll() is None:
+            overlay_proc.terminate()
+        time.sleep(0.1)
+        os._exit(0)
 
-    overlay.root.update_idletasks()
-    overlay.root.lift()
-    overlay.root.attributes("-topmost", True)
+    host.set_on_shutdown(shutdown_and_exit)
 
+    exe = resolve_overlay_exe()
+    forced = os.environ.get("BOBER_OVERLAY_EXE", "").strip()
+    if forced and not exe:
+        print(
+            f"[BoberInSpire] BOBER_OVERLAY_EXE is set but file not found: {forced!r}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if exe:
+        env = {**os.environ, "BOBER_OVERLAY_WS_URL": ws_url}
+        try:
+            overlay_proc = subprocess.Popen(
+                [str(exe)],
+                env=env,
+                cwd=str(exe.parent),
+            )
+        except OSError as exc:
+            print(f"[BoberInSpire] Failed to start overlay UI: {exc}", file=sys.stderr)
+            sys.exit(1)
+        print(f"[BoberInSpire] Overlay UI: {exe}")
+    else:
+        print(
+            "[BoberInSpire] No Tauri overlay binary found. "
+            "Build with: cd overlay-ui && npm install && npm run tauri build\n"
+            f"           Or set BOBER_OVERLAY_EXE. WebSocket bridge: {ws_url}"
+        )
+
+    def watch_child() -> None:
+        if overlay_proc is None:
+            return
+        code = overlay_proc.wait()
+        cleanup_watchers()
+        print(f"[BoberInSpire] Overlay UI exited ({code}). Shutting down bridge.")
+        os._exit(0)
+
+    if overlay_proc is not None:
+        threading.Thread(target=watch_child, name="OverlayChildWatch", daemon=True).start()
+
+    print(f"[BoberInSpire] Watching: {path}")
     if path.exists():
         try:
             initial_state = load_game_state(path)
-            overlay.update_state(initial_state)
+            host.update_state(initial_state)
         except Exception as exc:
-            overlay.status_label.config(text=f"Error: {exc}")
+            print(f"[BoberInSpire] Initial load error: {exc}")
+            host.notify_update()
     elif reward_path.exists():
         try:
             reward_data = load_reward_state(reward_path)
             if reward_data and reward_data.get("options"):
-                overlay.update_reward_state(reward_data)
+                host.update_reward_state(reward_data)
         except Exception:
             pass
 
     if watch:
         def on_update(state: GameState):
-            overlay.root.after(0, overlay.update_state, state)
+            host.update_state(state)
 
         def on_error(msg: str):
-            overlay.root.after(
-                0, lambda: overlay.status_label.config(text=f"Error: {msg}")
-            )
+            print(f"[BoberInSpire] Watch error: {msg}")
 
         def on_reward_update(data: dict):
-            overlay.root.after(0, overlay.update_reward_state, data)
+            host.update_reward_state(data)
 
         watcher = GameStateWatcher(path, on_update=on_update, on_error=on_error)
         watcher.start()
         reward_watcher = RewardStateWatcher(reward_path, on_update=on_reward_update)
         reward_watcher.start()
-        overlay.start_continuous_reward_polling()
-        overlay.status_label.config(text=f"Watching {path.name}...")
+        host.start_continuous_reward_polling()
 
-    print("[BoberInSpire] Overlay ready. Look for the dark window at top-left (or press Alt+Tab).")
-    overlay.root.after(100, lambda: (overlay.root.lift(), overlay.root.attributes("-topmost", True)))
-    overlay.run()
+    print("[BoberInSpire] Overlay bridge ready.")
+    try:
+        threading.Event().wait()
+    except KeyboardInterrupt:
+        shutdown_and_exit()
 
 
 def run_cli(state_file: str):

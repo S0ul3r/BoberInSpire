@@ -47,6 +47,28 @@ robocopy data "%DIST%\data" /E /XD "dll dump" /NFL /NDL /NJH /NJS /NC /NS
 if errorlevel 8 exit /b 1
 copy /Y requirements.txt "%DIST%\"
 
+echo [6/6] Optional: Tauri overlay shell (Rust + Node required)...
+where cargo >nul 2>&1
+if errorlevel 1 (
+  echo Skipping overlay EXE: cargo not in PATH. Install Rust from https://rustup.rs then re-run build.bat
+) else (
+  pushd overlay-ui
+  call npm install
+  if errorlevel 1 (
+    echo npm install failed in overlay-ui.
+    popd
+    exit /b 1
+  )
+  call npm run tauri build
+  popd
+  if exist "overlay-ui\src-tauri\target\release\bober-inspire-overlay.exe" (
+    copy /Y "overlay-ui\src-tauri\target\release\bober-inspire-overlay.exe" "%DIST%\BoberInSpireOverlay.exe"
+    echo Copied BoberInSpireOverlay.exe to dist.
+  ) else (
+    echo Tauri build did not produce bober-inspire-overlay.exe - check overlay-ui build log above.
+  )
+)
+
 echo.
 echo Build complete: %DIST%
 echo Next: run "iscc installer.iss" to compile the installer (requires Inno Setup).

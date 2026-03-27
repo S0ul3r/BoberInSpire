@@ -40,6 +40,7 @@ Source: "dist\BoberInSpire\*"; DestDir: "{app}"; Flags: ignoreversion recursesub
 ; Launcher
 Source: "run_overlay.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "run_overlay_debug.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\BoberInSpire\BoberInSpireOverlay.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 
 [Icons]
 Name: "{group}\BoberInSpire Overlay"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"

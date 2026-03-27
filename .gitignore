@@ -47,3 +47,19 @@ Desktop.ini
 
 # ── Promptfoo cache ──
 .promptfoo/
+
+# ── overlay-ui (Vite + Tauri / Cargo) ──
+overlay-ui/node_modules/
+overlay-ui/dist/
+overlay-ui/dist-ssr/
+overlay-ui/.vite/
+overlay-ui/src-tauri/target/
+overlay-ui/src-tauri/gen/
+overlay-ui/.env
+overlay-ui/.env.local
+overlay-ui/.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*

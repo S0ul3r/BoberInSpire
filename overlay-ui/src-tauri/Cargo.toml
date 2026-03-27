@@ -1,0 +1,18 @@
+[package]
+name = "bober-inspire-overlay"
+version = "0.1.0"
+description = "BoberInSpire overlay shell (React + Tauri)"
+authors = ["BoberInSpire"]
+edition = "2021"
+
+[lib]
+name = "bober_inspire_overlay_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
