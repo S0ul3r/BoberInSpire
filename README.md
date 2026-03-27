@@ -158,7 +158,7 @@ Alternatively you could zip **`dist\BoberInSpire`** and ask users to run `run_ov
 
 ### Maintainer steps (publish a release)
 
-1. **Version** — Set **`#define MyAppVersion`** in **`installer.iss`** to match the release (e.g. `1.2.0`).
+1. **Version** — Set **`#define MyAppVersion`** in **`installer.iss`** to match the release (e.g. `1.3.0`).
 2. **Build payload** — From repo root, run **`build.bat`**.  
    - Produces **`dist\BoberInSpire\`** with `python_app\`, `data\`, `Mod\`, `requirements.txt`, and **`BoberInSpireOverlay.exe`** if Rust/`cargo` was on `PATH` (otherwise build the overlay separately and copy it in as above).
 3. **Compile installer** — With [Inno Setup](https://jrsoftware.org/isinfo.php) installed, run:
