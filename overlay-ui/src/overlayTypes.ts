@@ -8,7 +8,6 @@ export type OverlaySettingsPayload = {
   show_merchant_relics: boolean;
   show_card_reward: boolean;
   alpha: number;
-  click_through: boolean;
 };
 
 export type OverlayMeta = {

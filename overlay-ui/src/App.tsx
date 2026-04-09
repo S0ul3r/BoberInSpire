@@ -67,7 +67,6 @@ function sendSettings(ws: WebSocket | null, s: OverlaySettingsPayload) {
       show_merchant_relics: s.show_merchant_relics,
       show_card_reward: s.show_card_reward,
       alpha: s.alpha,
-      click_through: s.click_through,
     }),
   );
 }
@@ -245,15 +244,6 @@ function SettingsModal({
           value={draft.alpha}
           onChange={(e) => onChange({ ...draft, alpha: Number(e.target.value) })}
         />
-        <p className="modal-section">Overlay</p>
-        <label className="set-row">
-          <input
-            type="checkbox"
-            checked={draft.click_through}
-            onChange={(e) => onChange({ ...draft, click_through: e.target.checked })}
-          />
-          <span>Click-through (mouse passes to the game)</span>
-        </label>
         <div className="modal-actions">
           <button type="button" className="btn ghost" onClick={onCancel}>
             Cancel
@@ -276,7 +266,6 @@ function defaultPayload(): OverlayPayload {
     show_merchant_relics: true,
     show_card_reward: true,
     alpha: 0.9,
-    click_through: false,
   };
   return {
     v: 1,
@@ -302,14 +291,6 @@ function App() {
   const [draft, setDraft] = useState<OverlaySettingsPayload | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectRef = useRef(0);
-
-  const applyClickThrough = useCallback(async (enabled: boolean) => {
-    try {
-      await invoke("set_click_through", { enabled });
-    } catch {
-      /* dev without Tauri */
-    }
-  }, []);
 
   const connectWs = useCallback(() => {
     void (async () => {
@@ -348,10 +329,6 @@ function App() {
     };
   }, [connectWs]);
 
-  useEffect(() => {
-    void applyClickThrough(payload.meta.settings.click_through);
-  }, [payload.meta.settings.click_through, applyClickThrough]);
-
   const openSettings = () => {
     setDraft({ ...payload.meta.settings });
     setSettingsOpen(true);
@@ -360,6 +337,10 @@ function App() {
   const saveSettings = () => {
     if (draft) {
       sendSettings(wsRef.current, draft);
+      setPayload((prev) => ({
+        ...prev,
+        meta: { ...prev.meta, settings: { ...draft } },
+      }));
       setSettingsOpen(false);
       setDraft(null);
     }

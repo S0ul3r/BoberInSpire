@@ -193,4 +193,4 @@ If STS2 is not in the default location, create **`STS2Mods\sts2_example_mod\loca
 - **Drag window** – click and drag the custom title bar.
 - **Resize** – drag the small grip in the bottom-right corner.
 - **Close** – click the **X** in the title bar.
-- **Settings** – click the **⚙** icon to choose which sections appear (combat summary, enemies, strategy, relics, merchant relics, card advisor), **transparency**, and **click-through** (mouse goes to the game). Settings are saved for the next session.
+- **Settings** – click the **⚙** icon to choose which sections appear (combat summary, enemies, strategy, relics, merchant relics, card advisor) and **transparency**. Settings are saved for the next session.

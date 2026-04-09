@@ -205,7 +205,6 @@ class OverlayHost:
                 "show_relics",
                 "show_merchant_relics",
                 "show_card_reward",
-                "click_through",
             ):
                 if key in msg:
                     setattr(s, key, bool(msg[key]))

@@ -50,7 +50,6 @@ def _settings_public(s: OverlaySettings) -> dict[str, Any]:
         "show_merchant_relics": s.show_merchant_relics,
         "show_card_reward": s.show_card_reward,
         "alpha": round(max(0.35, min(1.0, s.alpha)), 4),
-        "click_through": s.click_through,
     }
 
 

@@ -4,7 +4,7 @@
 
 ### Added
 - **React + Tauri overlay** – replaces the old Tkinter window with a semi-transparent WebView shell (`BoberInSpireOverlay.exe`), driven by a local **WebSocket** bridge (`websockets` on Python, port **18765** by default).
-- **Overlay settings** – **click-through** (mouse passes to the game) and existing panel / transparency toggles persist via `bober_overlay_settings.json`.
+- **Overlay settings** – panel and transparency toggles persist via `bober_overlay_settings.json`.
 - **Release documentation** – README sections for overlay build/run, installer output paths, and what to upload for GitHub Releases.
 
 ### Changed
