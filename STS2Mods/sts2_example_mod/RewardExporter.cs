@@ -47,6 +47,8 @@ public static class RewardExporter
 
         try
         {
+            CombatExporter.RefreshRewardAdvisorCacheFromCombat();
+
             var snapshot = new RewardSnapshot
             {
                 type = screenType,

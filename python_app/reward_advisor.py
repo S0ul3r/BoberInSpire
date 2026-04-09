@@ -462,6 +462,8 @@ def _load_sts2_wiki_indexes() -> tuple[dict[str, dict[str, str]], dict[str, dict
 def _mobalytics_character_key(character: str) -> str | None:
     """Map exported game character string to JSON key (Ironclad, Silent, ...)."""
     cl = character.lower().replace("_", " ").replace(".", " ")
+    if "(" in cl:
+        cl = cl.split("(", 1)[0].strip()
     if "ironclad" in cl:
         return "Ironclad"
     if "silent" in cl:

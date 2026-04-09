@@ -48,6 +48,13 @@ public static class CombatExporter
     /// <summary>Player used for map-mode shop JSON when there is no active combat state; refreshed when the shop closes.</summary>
     private static Player? _playerForLastMerchantMapExport;
 
+    /// <summary>
+    /// Last <see cref="Player"/> that triggered an export (energy, populate combat, etc.).
+    /// In co-op, <see cref="CombatState.Players"/> order is not guaranteed to be the local player first;
+    /// using this avoids caching the partner's deck/character for card recommendations (which yields generic 50 scores).
+    /// </summary>
+    private static Player? _preferredSnapshotPlayer;
+
     // Reflection caches — BuildSnapshot hot path (see [BoberInSpire][Perf] avg build_ms).
     private static readonly ConcurrentDictionary<Type, MethodInfo[]> _locFormattedTextMethods = new();
     private static readonly ConcurrentDictionary<Type, PropertyInfo?[]> _cardModelBridgeProps = new();
@@ -62,6 +69,8 @@ public static class CombatExporter
     public static void SetCombatState(CombatState? cs)
     {
         _combat = cs;
+        if (cs == null)
+            _preferredSnapshotPlayer = null;
     }
 
     public static void SetMerchantRelics(MerchantInventory? inventory)
@@ -133,6 +142,7 @@ public static class CombatExporter
                       ?? player.PlayerCombatState?.DrawPile?.Cards?.FirstOrDefault()?.CombatState;
         }
 
+        _preferredSnapshotPlayer = player;
         RequestExport();
     }
 
@@ -140,6 +150,96 @@ public static class CombatExporter
     {
         _cachedRelics = null;
         _cachedRelicCount = -1;
+    }
+
+    /// <summary>
+    /// Rebuild reward-advisor cache (deck / character / relics) from the same player we use for combat export.
+    /// Call before exporting card choices so co-op clients are not stuck with a stale partner snapshot.
+    /// </summary>
+    internal static void RefreshRewardAdvisorCacheFromCombat()
+    {
+        if (_combat == null) return;
+        var player = ResolveSnapshotPlayer(_combat);
+        if (player == null) return;
+        try
+        {
+            var pcs = player.PlayerCombatState;
+            var deck = BuildAdvisorDeckList(pcs, _combat, player);
+            var character = GetCharacterNameInternal(player);
+            var relicNames = new List<string>();
+            foreach (var r in player.Relics)
+            {
+                try
+                {
+                    relicNames.Add(LocStr(r.Title) ?? r.GetType().Name);
+                }
+                catch
+                {
+                    relicNames.Add(r.GetType().Name);
+                }
+            }
+
+            RewardExporter.CacheFromCombat(deck, character, relicNames);
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"[BoberInSpire] RefreshRewardAdvisorCacheFromCombat: {ex.Message}");
+        }
+    }
+
+    private static Player? ResolveSnapshotPlayer(CombatState combat)
+    {
+        try
+        {
+            var players = combat.Players?.ToList();
+            if (players == null || players.Count == 0)
+                return null;
+
+            if (_preferredSnapshotPlayer != null)
+            {
+                var hit = players.FirstOrDefault(p => ReferenceEquals(p, _preferredSnapshotPlayer));
+                if (hit != null)
+                    return hit;
+                _preferredSnapshotPlayer = null;
+            }
+
+            var local = TryGetReflectLocalPlayer(players);
+            if (local != null)
+                return local;
+
+            return players.FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"[BoberInSpire] ResolveSnapshotPlayer: {ex.Message}");
+            return combat.Players.FirstOrDefault();
+        }
+    }
+
+    /// <summary>Prefer the human-controlled local player when the game exposes a bool flag (co-op).</summary>
+    private static Player? TryGetReflectLocalPlayer(List<Player> players)
+    {
+        foreach (var p in players)
+        {
+            try
+            {
+                var t = p.GetType();
+                foreach (var propName in new[] { "IsLocalPlayer", "IsLocal", "IsControlledByLocalUser" })
+                {
+                    var prop = t.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (prop == null || prop.PropertyType != typeof(bool))
+                        continue;
+                    if (prop.GetValue(p) is true)
+                        return p;
+                }
+            }
+            catch
+            {
+                // Try next player
+            }
+        }
+
+        return null;
     }
 
     private static void ScheduleDebouncedExport()
@@ -186,7 +286,7 @@ public static class CombatExporter
 
         try
         {
-            var player = _combat.Players.FirstOrDefault();
+            var player = ResolveSnapshotPlayer(_combat);
             if (player == null) return;
 
             var swBuild = Stopwatch.StartNew();

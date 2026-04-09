@@ -6,6 +6,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import sys
 import threading
 import time
 from pathlib import Path
@@ -151,12 +152,15 @@ class OverlayHost:
 
     def notify_update(self) -> None:
         loop = self._loop
-        if not loop:
+        if not loop or loop.is_closed():
             return
-        loop.call_soon_threadsafe(self._schedule_broadcast)
+        try:
+            loop.call_soon_threadsafe(self._schedule_broadcast)
+        except RuntimeError:
+            pass
 
     def _schedule_broadcast(self) -> None:
-        if not self._loop:
+        if not self._loop or self._loop.is_closed():
             return
         if self._debounce_handle:
             self._debounce_handle.cancel()
@@ -181,7 +185,17 @@ class OverlayHost:
                 finally:
                     self._clients.discard(websocket)
 
-            server = await serve(handler, self.host, self.port)
+            try:
+                server = await serve(handler, self.host, self.port)
+            except OSError as exc:
+                print(
+                    f"[BoberInSpire] WebSocket bind failed on {self.host}:{self.port}: {exc}\n"
+                    "  Usually another BoberInSpire / overlay is still running, or the port is taken.\n"
+                    "  Close the other process, or set BOBER_OVERLAY_WS_PORT to a free port (e.g. 18766).",
+                    file=sys.stderr,
+                )
+                await asyncio.Future()
+
             self._poll_task = asyncio.create_task(self._poll_reward_loop())
             await server.serve_forever()
 
