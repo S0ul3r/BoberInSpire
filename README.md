@@ -19,6 +19,22 @@ A custom C# mod exports the current combat / merchant state to JSON, and a Pytho
 
 The mod writes reward options to `%APPDATA%\SlayTheSpire2\bober_reward_state.json`; the overlay reads them and updates the **CHOOSE A CARD / CARD REWARD** section. Tier data lives in `data/tier_lists/mobalytics_cards.json` (see `data/tier_lists/README.md` to refresh from Mobalytics).
 
+### Refresh build/tier datasets for advisor
+
+From repo root run:
+
+```bat
+python scripts\update_build_and_tier_data.py
+```
+
+This command refreshes:
+- `data/tier_lists/slaythespire2_com_cards.json` from [slaythespire-2.com](https://slaythespire-2.com/)
+- `data/build_guides/*/wiki_builds.json` from [slaythespire-2.com/builds](https://slaythespire-2.com/builds)
+- `data/build_guides/ironclad/mobalytics_builds.json` from [Mobalytics Ironclad guide](https://mobalytics.gg/slay-the-spire-2/characters/ironclad-guide#buildsdecks-1)
+- `data/build_guides/*/guide_archetypes.json` generated from local `guide.md` files
+
+`python_app/reward_advisor.py` consumes these files directly, so data refreshes affect live card-pick scoring without code changes.
+
 ### Installing using installer
 
 If you only want to **play** with the mod and overlay, you do **not** need to clone the repo or run `dotnet`. The easiest path is the **Windows installer** (`BoberInSpire_Setup_<version>.exe`), built from this project with `build.bat` + Inno Setup (see [Release package (installer)](#release-package-installer) for maintainers).

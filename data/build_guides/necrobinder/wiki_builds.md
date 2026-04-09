@@ -1,7 +1,7 @@
 # Necrobinder builds — slaythespire-2.com
 
 > Source: https://slaythespire-2.com/builds
-> Generated: 2026-03-24T11:52:12Z
+> Generated: 2026-04-09T17:18:26Z
 
 Structured copy for the reward advisor; refresh with `python scripts/scrape_sts2_wiki_builds.py`.
 
@@ -55,7 +55,7 @@ Turn Osty into an unstoppable force. Stack Summon effects to build Osty's HP, th
 
 **Avoid**
 
-- **Philosopher Stone** — Enemies gain +1 Strength. Necrobinder's low HP (66) can't afford enemies hitting harder.
+- **Philosopher's Stone** — Enemies gain +1 Strength. Necrobinder's low HP (66) can't afford enemies hitting harder.
 - **Ectoplasm** — Gold is crucial for purchasing Rare Summon cards and relics from shops.
 - **Runic Dome** — Knowing enemy intent matters — you need to decide when Osty blocks vs when to Reanimate.
 
@@ -114,7 +114,7 @@ A card-draw powerhouse that generates Souls (free 0-cost draw-2 Exhaust cards) a
 
 **Good**
 
-- **Dolly S Mirror** — Copy any card. Duplicating Haunt or Capture Spirit dramatically increases the deck's power.
+- **Dolly's Mirror** — Copy any card. Duplicating Haunt or Capture Spirit dramatically increases the deck's power.
 - **Chemical X** — X-cost cards like Dirge gain +2 effect. 2 extra Souls and Summon per Dirge play.
 - **Razor Tooth** — Upgrade every Attack and Skill played in combat. Souls count as Skills, and payoff cards upgrade to deal more damage.
 
@@ -181,8 +181,8 @@ Apply Doom to enemies until it exceeds their HP, causing instant death. Bypasses
 
 **Avoid**
 
-- **Philosopher Stone** — Enemies gain +1 Strength. At 66 HP, you can't afford enemies hitting harder while waiting for Doom.
-- **Mark Of Pain** — Wounds in draw pile dilute the deck. Harder to find Doom applicators and Soul generators.
+- **Philosopher's Stone** — Enemies gain +1 Strength. At 66 HP, you can't afford enemies hitting harder while waiting for Doom.
+- **Mark of Pain** — Wounds in draw pile dilute the deck. Harder to find Doom applicators and Soul generators.
 - **Cursed Key** — Curses dilute the deck just like Wounds. Doom build needs consistency above all.
 
 ### Key relics (sidebar)
@@ -241,7 +241,7 @@ Transform into the Reaper and harvest enemies with devastating attack scaling. R
 
 **Avoid**
 
-- **Philosopher Stone** — +1 Strength to enemies while you spend turns setting up Reaper Form. Too dangerous.
+- **Philosopher's Stone** — +1 Strength to enemies while you spend turns setting up Reaper Form. Too dangerous.
 - **Velvet Choker** — Attack-heavy turns with Souls for draw may exceed 6 plays.
 - **Runic Dome** — Need to know when to set up vs when to block. Reaper Form setup turns are vulnerable.
 

@@ -277,6 +277,51 @@ SILENT_ARCHETYPES = {
     },
 }
 
+FALLBACK_ARCHETYPES_BY_CHARACTER: dict[str, dict] = {
+    "Ironclad": IRONCLAD_ARCHETYPES,
+    "Silent": SILENT_ARCHETYPES,
+    "Defect": DEFECT_ARCHETYPES,
+    "Regent": REGENT_ARCHETYPES,
+    "Necrobinder": NECROBINDER_ARCHETYPES,
+}
+
+
+@lru_cache(maxsize=1)
+def _load_generated_archetypes_catalog() -> dict[str, dict]:
+    """
+    Character key -> archetype dict from ``guide_archetypes.json``.
+    Falls back to hardcoded tables when generated files are missing.
+    """
+    out: dict[str, dict] = {}
+    if not BUILD_GUIDES_DIR.is_dir():
+        return out
+    for sub in sorted(BUILD_GUIDES_DIR.iterdir()):
+        if not sub.is_dir():
+            continue
+        path = sub / "guide_archetypes.json"
+        if not path.is_file():
+            continue
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        char = raw.get("character")
+        arch = raw.get("archetypes")
+        if isinstance(char, str) and isinstance(arch, dict):
+            out[char] = arch
+    return out
+
+
+def _archetypes_for_character(character: str) -> dict:
+    ck = _mobalytics_character_key(character)
+    if not ck:
+        return {}
+    generated = _load_generated_archetypes_catalog().get(ck)
+    if isinstance(generated, dict) and generated:
+        return generated
+    return FALLBACK_ARCHETYPES_BY_CHARACTER.get(ck, {})
+
+
 IRONCLAD_CROSSOVER = {
     CARD_TWIN_STRIKE: ["strength", "strike"],
     CARD_BODY_SLAM: ["block", "exhaust"],
@@ -460,7 +505,7 @@ def wiki_tier_for(character: str, card_name: str) -> str | None:
 @lru_cache(maxsize=1)
 def _load_wiki_build_catalog() -> dict[str, list[dict]]:
     """
-    Mobalytics character key (e.g. Ironclad) -> list of build dicts from wiki_builds.json
+    Character key (e.g. Ironclad) -> list of build dicts from any ``*_builds.json``
     in each ``build_guides/<folder>/`` directory.
     """
     out: dict[str, list[dict]] = {}
@@ -469,18 +514,17 @@ def _load_wiki_build_catalog() -> dict[str, list[dict]]:
     for sub in sorted(BUILD_GUIDES_DIR.iterdir()):
         if not sub.is_dir():
             continue
-        path = sub / "wiki_builds.json"
-        if not path.is_file():
-            continue
-        try:
-            raw = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            continue
-        char = raw.get("character")
-        builds = raw.get("builds")
-        if not isinstance(char, str) or not isinstance(builds, list):
-            continue
-        out[char] = [b for b in builds if isinstance(b, dict)]
+        for path in sorted(sub.glob("*_builds.json")):
+            try:
+                raw = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            char = raw.get("character")
+            builds = raw.get("builds")
+            if not isinstance(char, str) or not isinstance(builds, list):
+                continue
+            bucket = out.setdefault(char, [])
+            bucket.extend(b for b in builds if isinstance(b, dict))
     return out
 
 
@@ -549,6 +593,10 @@ def _wiki_best_build_for_deck(character: str, deck: list[str]) -> tuple[dict | N
     best_aff = 0.0
     for b in builds:
         aff = _wiki_build_deck_affinity(b, deck)
+        # Prefer richer slaythespire-2.com build entries when affinity is close.
+        url = str(b.get("url") or "")
+        if "slaythespire-2.com" in url:
+            aff += 0.25
         if aff > best_aff:
             best_aff = aff
             best = b
@@ -558,7 +606,7 @@ def _wiki_best_build_for_deck(character: str, deck: list[str]) -> tuple[dict | N
 
 
 def _wiki_offered_card_bonus(build: dict, offered_card: str) -> tuple[int, str]:
-    """Extra archetype points if the reward matches this wiki build's lists."""
+    """Extra archetype points if the reward matches this build's card lists."""
     candidates: list[tuple[int, str]] = []
     for entry in build.get("core_cards") or []:
         if not isinstance(entry, dict):
@@ -585,7 +633,13 @@ def _wiki_offered_card_bonus(build: dict, offered_card: str) -> tuple[int, str]:
         return 0, ""
     best_pts, best_lbl = max(candidates, key=lambda x: x[0])
     title = (build.get("title") or build.get("id") or "build").strip()
-    return best_pts, f"slaythespire-2.com «{title}» — {best_lbl}"
+    url = str(build.get("url") or "")
+    source = "build guide"
+    if "slaythespire-2.com" in url:
+        source = "slaythespire-2.com"
+    elif "mobalytics.gg" in url:
+        source = "mobalytics.gg"
+    return best_pts, f"{source} «{title}» — {best_lbl}"
 
 
 def _deck_contains(deck: list[str], card_name: str) -> bool:
@@ -604,39 +658,31 @@ def _count_strikes(deck: list[str]) -> int:
 
 def _detect_archetype(character: str, deck: list[str], relics: list[str]) -> str:
     """Detect dominant archetype for the given character."""
-    cl = character.lower()
-    if "ironclad" in cl:
-        return _detect_ironclad_archetype(deck, relics)
-    if "necrobinder" in cl:
-        return _detect_necrobinder_archetype(deck, relics)
-    if "defect" in cl:
-        return _detect_defect_archetype(deck, relics)
-    if "regent" in cl:
-        return _detect_regent_archetype(deck, relics)
-    if "silent" in cl:
-        return _detect_silent_archetype(deck, relics)
-    return "generic"
+    archetypes = _archetypes_for_character(character)
+    if not archetypes:
+        return "generic"
+    return _detect_from_archetypes(deck, relics, archetypes)
 
 
 def _detect_ironclad_archetype(deck: list[str], relics: list[str]) -> str:
     """Detect dominant Ironclad archetype from deck and relics."""
-    return _detect_from_archetypes(deck, relics, IRONCLAD_ARCHETYPES)
+    return _detect_from_archetypes(deck, relics, _archetypes_for_character("Ironclad"))
 
 
 def _detect_necrobinder_archetype(deck: list[str], relics: list[str]) -> str:
-    return _detect_from_archetypes(deck, relics, NECROBINDER_ARCHETYPES)
+    return _detect_from_archetypes(deck, relics, _archetypes_for_character("Necrobinder"))
 
 
 def _detect_defect_archetype(deck: list[str], relics: list[str]) -> str:
-    return _detect_from_archetypes(deck, relics, DEFECT_ARCHETYPES)
+    return _detect_from_archetypes(deck, relics, _archetypes_for_character("Defect"))
 
 
 def _detect_regent_archetype(deck: list[str], relics: list[str]) -> str:
-    return _detect_from_archetypes(deck, relics, REGENT_ARCHETYPES)
+    return _detect_from_archetypes(deck, relics, _archetypes_for_character("Regent"))
 
 
 def _detect_silent_archetype(deck: list[str], relics: list[str]) -> str:
-    return _detect_from_archetypes(deck, relics, SILENT_ARCHETYPES)
+    return _detect_from_archetypes(deck, relics, _archetypes_for_character("Silent"))
 
 
 def _archetype_match_score(arch: dict, deck_set: set[str], relic_set: set[str]) -> int:
@@ -658,6 +704,8 @@ def _detect_from_archetypes(
     deck: list[str], relics: list[str], archetypes: dict
 ) -> str:
     """Generic archetype detection from signals/cards/relics."""
+    if not archetypes:
+        return "generic"
     relic_set = {r.lower() for r in relics}
     deck_set = {c.lower() for c in deck}
     scores = {
@@ -844,7 +892,7 @@ def _score_ironclad_card(
     score = 50  # base
     reasons: list[str] = []
     norm = _normalize_name(card_name)
-    arch = IRONCLAD_ARCHETYPES.get(archetype, {})
+    arch = _archetypes_for_character("Ironclad").get(archetype, {})
 
     score = _ironclad_archetype_priority(arch, norm, score, reasons)
     score = _ironclad_crossover_bonus(norm, archetype, score, reasons)
@@ -876,17 +924,17 @@ def _score_character_card(
     relics: list[str],
 ) -> tuple[int, str]:
     """Route to character-specific scorer."""
-    cl = character.lower()
-    if "ironclad" in cl:
+    ck = _mobalytics_character_key(character)
+    if ck == "Ironclad":
         return _score_ironclad_card(card_name, archetype, deck, relics)
-    if "necrobinder" in cl:
-        return _score_from_archetypes(card_name, archetype, deck, relics, NECROBINDER_ARCHETYPES)
-    if "defect" in cl:
-        return _score_from_archetypes(card_name, archetype, deck, relics, DEFECT_ARCHETYPES)
-    if "regent" in cl:
-        return _score_from_archetypes(card_name, archetype, deck, relics, REGENT_ARCHETYPES)
-    if "silent" in cl:
-        return _score_from_archetypes(card_name, archetype, deck, relics, SILENT_ARCHETYPES)
+    if ck:
+        return _score_from_archetypes(
+            card_name,
+            archetype,
+            deck,
+            relics,
+            _archetypes_for_character(ck),
+        )
     return _score_generic_card(card_name, deck)
 
 

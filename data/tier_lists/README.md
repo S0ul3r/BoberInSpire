@@ -4,6 +4,9 @@
 
 - **Source:** [Mobalytics STS2 card tiers](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards)
 - Tiers **S** / **A** / **B** / **C** / **D** per character.
+- Refresh pipeline command from repo root:
+  - `python scripts/update_build_and_tier_data.py`
+  - (currently this updates STS2 wiki tiers + build guides + generated archetype indexes and best-effort Mobalytics Ironclad builds)
 
 ## slaythespire-2.com (`slaythespire2_com_cards.json`)
 

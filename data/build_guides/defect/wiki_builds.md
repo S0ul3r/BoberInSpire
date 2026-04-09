@@ -1,7 +1,7 @@
 # Defect builds — slaythespire-2.com
 
 > Source: https://slaythespire-2.com/builds
-> Generated: 2026-03-24T11:52:12Z
+> Generated: 2026-04-09T17:18:26Z
 
 Structured copy for the reward advisor; refresh with `python scripts/scrape_sts2_wiki_builds.py`.
 
@@ -13,10 +13,10 @@ Channel Lightning orbs and boost them with Focus for devastating passive damage 
 
 ### Core cards
 
-- Electrodynamics
 - Zap (`zap`)
 - Defragment (`defragment`)
 - Echo Form (`echo-form`)
+- Electrodynamics (`electrodynamics`)
 
 ### Card acquisition priority
 
@@ -56,7 +56,7 @@ Channel Lightning orbs and boost them with Focus for devastating passive damage 
 **Avoid**
 
 - **Velvet Choker** — Power-heavy builds need to play many cards in setup turns. 6-card limit is painful.
-- **Philosopher Stone** — +1 Strength to enemies is dangerous when you need time to set up orbs and Focus.
+- **Philosopher's Stone** — +1 Strength to enemies is dangerous when you need time to set up orbs and Focus.
 - **Cursed Key** — Curses dilute the deck, making it harder to draw Defragment and Echo Form.
 
 ### Key relics (sidebar)
@@ -181,7 +181,7 @@ Become an impenetrable wall of Frost orbs. Generate massive Block passively each
 
 **Avoid**
 
-- **Philosopher Stone** — Enemies gain +1 Strength. More damage to block in already defense-focused build. Unnecessary risk.
+- **Philosopher's Stone** — Enemies gain +1 Strength. More damage to block in already defense-focused build. Unnecessary risk.
 - **Ectoplasm** — Can't earn Gold. Need Gold for shop Defragments and Capacitors.
 - **Cursed Key** — Curses in deck dilute draws. Harder to find Defragment and setup cards when needed.
 
@@ -243,7 +243,7 @@ Channel Dark orbs that passively grow in damage every turn, then evoke them for 
 **Avoid**
 
 - **Velvet Choker** — Setup turns require many card plays. The 6-card limit prevents proper Multi-Cast burst turns.
-- **Philosopher Stone** — +1 Strength to enemies while you spend turns charging. Dangerous compounding damage.
+- **Philosopher's Stone** — +1 Strength to enemies while you spend turns charging. Dangerous compounding damage.
 - **Ectoplasm** — Gold is crucial for purchasing Defragment and Multi-Cast from shops.
 
 ### Key relics (sidebar)
@@ -293,7 +293,7 @@ Let an AI generate your deck for you. Creative AI adds a random Power to your ha
 
 - **Mummified Hand** — After playing a Power, a random card in hand costs 0. Since Creative AI gives you Powers each turn, this triggers constantly.
 - **Cracked Core** — Defect's starter. Free Lightning orb turn 1 provides early damage while building toward Creative AI.
-- **Bird Faced Urn** — Heal 2 HP whenever you play a Power. With 1-3 Powers per turn, this provides substantial healing.
+- **Bird-Faced Urn** — Heal 2 HP whenever you play a Power. With 1-3 Powers per turn, this provides substantial healing.
 
 **Good**
 
@@ -304,7 +304,7 @@ Let an AI generate your deck for you. Creative AI adds a random Power to your ha
 **Avoid**
 
 - **Velvet Choker** — Power turns often involve playing 5-7 cards (Creative AI's Power + Storm orb + other Powers). 6-card limit is restrictive.
-- **Philosopher Stone** — The 3-4 setup turns before Creative AI comes online are vulnerable. Extra enemy Strength is dangerous.
+- **Philosopher's Stone** — The 3-4 setup turns before Creative AI comes online are vulnerable. Extra enemy Strength is dangerous.
 - **Cursed Key** — Curses in deck dilute card draw. Harder to find Creative AI and setup pieces.
 
 ### Key relics (sidebar)

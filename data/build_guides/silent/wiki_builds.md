@@ -1,7 +1,7 @@
 # Silent builds — slaythespire-2.com
 
 > Source: https://slaythespire-2.com/builds
-> Generated: 2026-03-24T11:52:12Z
+> Generated: 2026-04-09T17:18:26Z
 
 Structured copy for the reward advisor; refresh with `python scripts/scrape_sts2_wiki_builds.py`.
 
@@ -36,6 +36,7 @@ Stack Poison on enemies and watch them melt. Noxious Fumes provides passive scal
 - Poisoned Stab (`poisoned-stab`)
 - Footwork (`footwork`)
 - Leg Sweep (`leg-sweep`)
+- Corpse Explosion (`corpse-explosion`)
 - Malaise (`malaise`)
 
 ### Relic priority
@@ -54,9 +55,9 @@ Stack Poison on enemies and watch them melt. Noxious Fumes provides passive scal
 
 **Avoid**
 
-- **Philosopher Stone** — +1 Energy is nice but +1 Strength to enemies means they hit harder while you wait for Poison.
+- **Philosopher's Stone** — +1 Energy is nice but +1 Strength to enemies means they hit harder while you wait for Poison.
 - **Ectoplasm** — Can't gain Gold. Gold is important for Silent to buy key cards and relics from shops.
-- **Mark Of Pain** — Wounds added to draw pile dilute your deck, making it harder to draw Catalyst and key pieces.
+- **Mark of Pain** — Wounds added to draw pile dilute your deck, making it harder to draw Catalyst and key pieces.
 
 ### Key relics (sidebar)
 
@@ -93,6 +94,7 @@ A fast-cycling deck that exploits the Silent's unique Sly keyword to play powerf
 
 ### Flex / alternative cards
 
+- Prepared (`prepared`)
 - Flick Flack (`flick-flack`)
 - Speedster (`speedster`)
 - Calculated Gamble (`calculated-gamble`)
@@ -159,6 +161,7 @@ An infinite combo build that cycles the entire deck to repeatedly play Grand Fin
 - Reflex (`reflex`)
 - Backflip (`backflip`)
 - Escape Plan (`escape-plan`)
+- Prepared (`prepared`)
 - Survivor (`survivor`)
 
 ### Relic priority
@@ -361,7 +364,7 @@ A defensive scaling powerhouse that chains Wraith Form + Nightmare for multiple 
 **Avoid**
 
 - **Velvet Choker** — Combo turns often require 6+ card plays (Burst + Nightmare + Footwork + Block cards).
-- **Philosopher Stone** — Enemies gain Strength. After Intangible wears off, Strength-boosted enemies hit extremely hard.
+- **Philosopher's Stone** — Enemies gain Strength. After Intangible wears off, Strength-boosted enemies hit extremely hard.
 - **Snecko Eye** — Randomized costs can make Wraith Form unplayable on key turns. The combo needs precise Energy management.
 
 ### Key relics (sidebar)

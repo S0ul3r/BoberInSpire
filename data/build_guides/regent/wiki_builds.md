@@ -1,7 +1,7 @@
 # Regent builds — slaythespire-2.com
 
 > Source: https://slaythespire-2.com/builds
-> Generated: 2026-03-24T11:52:12Z
+> Generated: 2026-04-09T17:18:26Z
 
 Structured copy for the reward advisor; refresh with `python scripts/scrape_sts2_wiki_builds.py`.
 
@@ -117,7 +117,7 @@ Stockpile massive amounts of Stars, then unleash them all at once through Stardu
 
 - **Velvet Choker** — Burst turns require playing many Star-spending cards. 6-card limit caps your explosive potential.
 - **Ectoplasm** — Gold is critical for purchasing key cards like Stardust and Seven Stars from shops.
-- **Philosopher Stone** — Enemies gain Strength while you spend 3-4 turns stockpiling. Extra damage compounds dangerously.
+- **Philosopher's Stone** — Enemies gain Strength while you spend 3-4 turns stockpiling. Extra damage compounds dangerously.
 
 ### Key relics (sidebar)
 
@@ -178,7 +178,7 @@ Bend the rules of resource management with Void Form — end your turn early, bu
 
 - **Velvet Choker** — Void Form makes 2 cards free but you still want to play more cards per turn. 6-card limit hurts.
 - **Ectoplasm** — Gold is essential for purchasing key expensive cards like Seven Stars and Decisions, Decisions.
-- **Philosopher Stone** — +1 enemy Strength while you spend turns setting up. Dangerous during the ramp phase.
+- **Philosopher's Stone** — +1 enemy Strength while you spend turns setting up. Dangerous during the ramp phase.
 
 ### Key relics (sidebar)
 
@@ -239,7 +239,7 @@ Rain cosmic destruction on all enemies. This AoE-focused build uses Bombardment,
 
 - **Velvet Choker** — Burst turns may require 6+ card plays for maximum AoE output.
 - **Snecko Eye** — Randomized costs can make your burst turns unpredictable. The build needs reliable Energy for big attacks.
-- **Philosopher Stone** — Enemies gain +1 Strength. Your aggressive build already takes hits — extra enemy damage is dangerous.
+- **Philosopher's Stone** — Enemies gain +1 Strength. Your aggressive build already takes hits — extra enemy damage is dangerous.
 
 ### Key relics (sidebar)
 

@@ -1,0 +1,409 @@
+{
+  "source": "https://mobalytics.gg/slay-the-spire-2/characters/ironclad-guide#buildsdecks-1",
+  "character": "Ironclad",
+  "generated_at": "2026-04-09T17:18:35Z",
+  "note": "Generated from Mobalytics Ironclad guide. Parsing is best-effort because page HTML can change.",
+  "builds": [
+    {
+      "id": "strength-build",
+      "url": "https://mobalytics.gg/slay-the-spire-2/characters/ironclad-guide#buildsdecks-1",
+      "title": "Strength Build",
+      "build_tier": "",
+      "description": "",
+      "core_cards": [
+        {
+          "name": "Twin Strike",
+          "slug": ""
+        },
+        {
+          "name": "Fight Me!",
+          "slug": ""
+        },
+        {
+          "name": "Inflame",
+          "slug": ""
+        },
+        {
+          "name": "Rupture",
+          "slug": ""
+        },
+        {
+          "name": "Whirlwind",
+          "slug": ""
+        },
+        {
+          "name": "Demon Form",
+          "slug": ""
+        },
+        {
+          "name": "Brand",
+          "slug": ""
+        },
+        {
+          "name": "Thrash",
+          "slug": ""
+        }
+      ],
+      "card_acquisition_priority": [],
+      "flex_cards": [],
+      "relic_priority": {
+        "best": [
+          {
+            "name": "Anchor, Horn Cleat, Permafrost",
+            "note": ""
+          },
+          {
+            "name": "Brimstone",
+            "note": ""
+          },
+          {
+            "name": "Ruined Helmet",
+            "note": ""
+          },
+          {
+            "name": "Sword",
+            "note": ""
+          }
+        ],
+        "good": [],
+        "avoid": []
+      },
+      "key_relics_sidebar": [],
+      "tips": [
+        "Vulnerable",
+        "Having"
+      ]
+    },
+    {
+      "id": "block-build",
+      "url": "https://mobalytics.gg/slay-the-spire-2/characters/ironclad-guide#buildsdecks-1",
+      "title": "Block Build",
+      "build_tier": "",
+      "description": "",
+      "core_cards": [
+        {
+          "name": "Body Slam",
+          "slug": ""
+        },
+        {
+          "name": "Shrug It Off",
+          "slug": ""
+        },
+        {
+          "name": "True Grit",
+          "slug": ""
+        },
+        {
+          "name": "Flame Barrier",
+          "slug": ""
+        },
+        {
+          "name": "Taunt",
+          "slug": ""
+        },
+        {
+          "name": "Stone Armor",
+          "slug": ""
+        },
+        {
+          "name": "Juggernaut",
+          "slug": ""
+        },
+        {
+          "name": "Barricade",
+          "slug": ""
+        },
+        {
+          "name": "Crimson Mantle",
+          "slug": ""
+        },
+        {
+          "name": "Impervious",
+          "slug": ""
+        }
+      ],
+      "card_acquisition_priority": [],
+      "flex_cards": [],
+      "relic_priority": {
+        "best": [
+          {
+            "name": "Cloak Clasp",
+            "note": ""
+          },
+          {
+            "name": "Fresnel Lens",
+            "note": ""
+          },
+          {
+            "name": "Vambrace",
+            "note": ""
+          },
+          {
+            "name": "Sai",
+            "note": ""
+          },
+          {
+            "name": "Parrying Shield",
+            "note": ""
+          },
+          {
+            "name": "Pael's Legion",
+            "note": ""
+          },
+          {
+            "name": "Bronze Scales is not strictly Block Relic but deals damage if you can tank it",
+            "note": ""
+          }
+        ],
+        "good": [],
+        "avoid": []
+      },
+      "key_relics_sidebar": [],
+      "tips": [
+        "Passive",
+        "Reducing"
+      ]
+    },
+    {
+      "id": "exhaust-build",
+      "url": "https://mobalytics.gg/slay-the-spire-2/characters/ironclad-guide#buildsdecks-1",
+      "title": "Exhaust Build",
+      "build_tier": "",
+      "description": "",
+      "core_cards": [
+        {
+          "name": "Corruption",
+          "slug": ""
+        },
+        {
+          "name": "True Grit",
+          "slug": ""
+        },
+        {
+          "name": "Body Slam",
+          "slug": ""
+        },
+        {
+          "name": "Ashen Strike",
+          "slug": ""
+        },
+        {
+          "name": "Burning Pact",
+          "slug": ""
+        },
+        {
+          "name": "Evil Eye",
+          "slug": ""
+        },
+        {
+          "name": "Feel No Pain",
+          "slug": ""
+        },
+        {
+          "name": "Forgotten Ritual",
+          "slug": ""
+        },
+        {
+          "name": "Dark Embrace",
+          "slug": ""
+        },
+        {
+          "name": "Brand",
+          "slug": ""
+        },
+        {
+          "name": "Offering",
+          "slug": ""
+        },
+        {
+          "name": "Pact's End",
+          "slug": ""
+        },
+        {
+          "name": "Thrash",
+          "slug": ""
+        }
+      ],
+      "card_acquisition_priority": [],
+      "flex_cards": [],
+      "relic_priority": {
+        "best": [
+          {
+            "name": "Charon's Ashes",
+            "note": ""
+          },
+          {
+            "name": "Forgotten Soul",
+            "note": ""
+          },
+          {
+            "name": "Burning Sticks",
+            "note": ""
+          },
+          {
+            "name": "Joss Paper",
+            "note": ""
+          }
+        ],
+        "good": [],
+        "avoid": []
+      },
+      "key_relics_sidebar": [],
+      "tips": [
+        "Finding"
+      ]
+    },
+    {
+      "id": "bloodletting-build",
+      "url": "https://mobalytics.gg/slay-the-spire-2/characters/ironclad-guide#buildsdecks-1",
+      "title": "Bloodletting Build",
+      "build_tier": "",
+      "description": "",
+      "core_cards": [
+        {
+          "name": "Breakthrough",
+          "slug": ""
+        },
+        {
+          "name": "Bloodletting",
+          "slug": ""
+        },
+        {
+          "name": "Rupture",
+          "slug": ""
+        },
+        {
+          "name": "Inferno",
+          "slug": ""
+        },
+        {
+          "name": "Hemokinesis",
+          "slug": ""
+        },
+        {
+          "name": "Crimson Mantle",
+          "slug": ""
+        },
+        {
+          "name": "Brand",
+          "slug": ""
+        },
+        {
+          "name": "Offering",
+          "slug": ""
+        },
+        {
+          "name": "Feed",
+          "slug": ""
+        },
+        {
+          "name": "Tear Asunder",
+          "slug": ""
+        }
+      ],
+      "card_acquisition_priority": [],
+      "flex_cards": [],
+      "relic_priority": {
+        "best": [
+          {
+            "name": "Centennial Puzzle",
+            "note": ""
+          },
+          {
+            "name": "Demon Tongue",
+            "note": ""
+          },
+          {
+            "name": "Self",
+            "note": ""
+          }
+        ],
+        "good": [],
+        "avoid": []
+      },
+      "key_relics_sidebar": [],
+      "tips": [
+        "The Pain"
+      ]
+    },
+    {
+      "id": "strike-deck",
+      "url": "https://mobalytics.gg/slay-the-spire-2/characters/ironclad-guide#buildsdecks-1",
+      "title": "Strike Deck",
+      "build_tier": "",
+      "description": "",
+      "core_cards": [
+        {
+          "name": "Perfected Strike",
+          "slug": ""
+        },
+        {
+          "name": "Twin Strike",
+          "slug": ""
+        },
+        {
+          "name": "Pommel Strike",
+          "slug": ""
+        },
+        {
+          "name": "Breakthrough",
+          "slug": ""
+        },
+        {
+          "name": "Tremble",
+          "slug": ""
+        },
+        {
+          "name": "Taunt",
+          "slug": ""
+        },
+        {
+          "name": "Expect a Fight",
+          "slug": ""
+        },
+        {
+          "name": "Pyre",
+          "slug": ""
+        },
+        {
+          "name": "Hellraiser",
+          "slug": ""
+        },
+        {
+          "name": "Colossus",
+          "slug": ""
+        },
+        {
+          "name": "Cruelty",
+          "slug": ""
+        }
+      ],
+      "card_acquisition_priority": [],
+      "flex_cards": [],
+      "relic_priority": {
+        "best": [
+          {
+            "name": "Strike Dummy",
+            "note": ""
+          },
+          {
+            "name": "Intimidating Helmet",
+            "note": ""
+          },
+          {
+            "name": "Any Ancient",
+            "note": ""
+          }
+        ],
+        "good": [],
+        "avoid": []
+      },
+      "key_relics_sidebar": [],
+      "tips": [
+        "This deck is simple to play but can fall off in later Acts without some other scaling. Don't fall in to the trap of adding every Strike type card into your deck to juice Perfected Strike",
+        "This",
+        "If"
+      ]
+    }
+  ]
+}

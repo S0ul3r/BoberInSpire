@@ -1,7 +1,7 @@
 # Ironclad builds — slaythespire-2.com
 
 > Source: https://slaythespire-2.com/builds
-> Generated: 2026-03-24T11:52:12Z
+> Generated: 2026-04-09T17:18:26Z
 
 Structured copy for the reward advisor; refresh with `python scripts/scrape_sts2_wiki_builds.py`.
 
@@ -13,7 +13,7 @@ The classic Strength scaling build. Stack Strength through Inflame and Demon For
 
 ### Core cards
 
-- Heavy Blade
+- Heavy Blade (`heavy-blade`)
 - Inflame (`inflame`)
 - Demon Form (`demon-form`)
 - Offering (`offering`)
@@ -57,7 +57,7 @@ The classic Strength scaling build. Stack Strength through Inflame and Demon For
 
 - **Velvet Choker** — Limits you to 6 cards per turn. Cripples turns where you need Offering + multiple attacks.
 - **Runic Dome** — Not seeing enemy intent makes it hard to time defensive vs offensive turns.
-- **Philosopher Stone** — +1 Energy is nice but +1 Strength to all enemies compounds with their existing damage.
+- **Philosopher's Stone** — +1 Energy is nice but +1 Strength to all enemies compounds with their existing damage.
 
 ### Key relics (sidebar)
 
@@ -110,7 +110,7 @@ A defensive powerhouse that converts Block into lethal damage. Barricade keeps y
 
 **Good**
 
-- **Thread And Needle** — Start combat with 4 Plated Armor. Passive Block every turn that Barricade preserves.
+- **Thread and Needle** — Start combat with 4 Plated Armor. Passive Block every turn that Barricade preserves.
 - **Meat on the Bone** — Heal 12 HP when ending combat below 50%. Helps in Act 1 before Barricade is found.
 - **Orichalcum** — Gain 6 Block if you didn't Block this turn. Useful when drawing all attacks.
 
@@ -171,7 +171,7 @@ Leverage Exhaust synergies to turn your entire deck into an unstoppable engine. 
 
 **Good**
 
-- **Charon Ashes** — Whenever you Exhaust a card, deal 3 damage to all enemies. Free AoE just for doing what the build already does.
+- **Charon's Ashes** — Whenever you Exhaust a card, deal 3 damage to all enemies. Free AoE just for doing what the build already does.
 - **Mummified Hand** — Powers cost 0 after playing a Power. Huge for setting up Corruption + Dark Embrace + Feel No Pain.
 - **Bag of Preparation** — Draw 2 extra cards turn 1. More cards means more fuel for the Exhaust engine.
 
@@ -180,6 +180,10 @@ Leverage Exhaust synergies to turn your entire deck into an unstoppable engine. 
 - **Velvet Choker** — This build wants to play 10+ cards per turn. A 6-card limit is catastrophic.
 - **Snecko Eye** — Randomized costs interfere with Corruption making Skills free. High-cost random assignments waste turns.
 - **Runic Pyramid** — Retaining hand between turns reduces new draws. This build wants fresh cards every turn to Exhaust.
+
+### Key relics (sidebar)
+
+- **Dead Branch** — Whenever you Exhaust a card, add a random card to your hand.
 
 ---
 
@@ -235,7 +239,7 @@ A high-risk, high-reward self-damage archetype that converts HP loss into Streng
 **Avoid**
 
 - **Runic Dome** — You need to see enemy intent to decide when it's safe to lose more HP.
-- **Philosopher Stone** — Enemies gaining +1 Strength compounds with the damage you're already taking from your own cards.
+- **Philosopher's Stone** — Enemies gaining +1 Strength compounds with the damage you're already taking from your own cards.
 - **Coffee Dripper** — Losing the ability to rest is dangerous when your build drains your own HP.
 
 ### Key relics (sidebar)
@@ -357,7 +361,7 @@ Turn self-inflicted damage into a devastating advantage. Rupture converts every 
 
 **Avoid**
 
-- **Philosopher Stone** — Enemies gain +1 Strength while you're already at low HP. Too dangerous.
+- **Philosopher's Stone** — Enemies gain +1 Strength while you're already at low HP. Too dangerous.
 - **Runic Dome** — You need to know when enemies hit hard because your HP is often low. Blind intent is suicidal.
 - **Cursed Key** — Opening chests costs 1 HP + adds Curses. Extra HP loss without Rupture benefit, and Curses bloat the deck.
 
