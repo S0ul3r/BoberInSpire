@@ -2,7 +2,7 @@
 ; Prerequisite: run build.bat first so dist\BoberInSpire exists.
 
 #define MyAppName "BoberInSpire"
-#define MyAppVersion "1.3.0"
+#define MyAppVersion "1.3.1"
 #define MyAppPublisher "BoberInSpire"
 #define MyAppURL "https://github.com/your-repo/BoberInSpire"
 #define MyAppExeName "run_overlay.bat"

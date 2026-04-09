@@ -1,6 +1,6 @@
 [package]
 name = "bober-inspire-overlay"
-version = "1.3.0"
+version = "1.3.1"
 description = "BoberInSpire overlay shell (React + Tauri)"
 authors = ["BoberInSpire"]
 edition = "2021"

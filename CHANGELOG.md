@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1] – 2026-04-04
+
+### Security
+- **Overlay build** – Vite updated to `^7.3.2` (fixes high-severity advisories affecting Vite 7.0.0–7.3.1 dev server / dependency pre-bundling).
+
+### Removed
+- **Click-through overlay** – removed from Settings, Python settings/payload, and the Tauri shell. The overlay window always receives mouse input (no “pass through to game” mode).
+
 ## [1.3.0] – 2026-03-27
 
 ### Added
