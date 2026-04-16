@@ -1,5 +1,4 @@
 """Tests for the card reward advisor."""
-import pytest
 
 from python_app.reward_advisor import (
     recommend,
@@ -100,6 +99,15 @@ class TestMobalyticsTiers:
         deck = ["Strike", "Defend", "Defend", "Defend"]
         r = recommend("Regent", deck, [], ["Monologue+", "Guiding Star"])
         assert r.best_card == "Guiding Star"
+
+
+class TestCoopCharacterCoercion:
+    def test_regent_export_ironclad_offers_use_ironclad_tiers(self):
+        deck = ["Strike", "Defend"]
+        options = ["Impervious", "Second Wind", "Uppercut"]
+        r = recommend("Regent", deck, [], options)
+        assert any(rec.mobalytics_tier is not None for rec in r.recommendations)
+        assert not all(rec.score == 50 for rec in r.recommendations)
 
 
 class TestWikiBuildGuides:

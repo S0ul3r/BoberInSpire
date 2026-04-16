@@ -48,12 +48,11 @@ public static class CombatExporter
     /// <summary>Player used for map-mode shop JSON when there is no active combat state; refreshed when the shop closes.</summary>
     private static Player? _playerForLastMerchantMapExport;
 
-    /// <summary>
-    /// Last <see cref="Player"/> that triggered an export (energy, populate combat, etc.).
-    /// In co-op, <see cref="CombatState.Players"/> order is not guaranteed to be the local player first;
-    /// using this avoids caching the partner's deck/character for card recommendations (which yields generic 50 scores).
-    /// </summary>
+    /// <summary>Local player only — co-op partner must not become the preferred snapshot.</summary>
     private static Player? _preferredSnapshotPlayer;
+
+    /// <summary>Local client for reward/shop JSON when combat resolution is ambiguous.</summary>
+    private static Player? _pinnedLocalPlayer;
 
     // Reflection caches — BuildSnapshot hot path (see [BoberInSpire][Perf] avg build_ms).
     private static readonly ConcurrentDictionary<Type, MethodInfo[]> _locFormattedTextMethods = new();
@@ -101,7 +100,7 @@ public static class CombatExporter
             if (_combat != null)
                 RequestExport();
             else if (inventory.Player != null)
-                TryExportMerchantMapSnapshot(inventory.Player);
+                TryExportMerchantMapSnapshot(_pinnedLocalPlayer ?? inventory.Player);
         }
         catch (Exception ex)
         {
@@ -142,7 +141,13 @@ public static class CombatExporter
                       ?? player.PlayerCombatState?.DrawPile?.Cards?.FirstOrDefault()?.CombatState;
         }
 
-        _preferredSnapshotPlayer = player;
+        // Co-op: never set preferred to the partner — their energy/turn events would steal the snapshot.
+        if (IsLocalPlayer(player))
+        {
+            _preferredSnapshotPlayer = player;
+            _pinnedLocalPlayer = player;
+        }
+
         RequestExport();
     }
 
@@ -153,14 +158,22 @@ public static class CombatExporter
     }
 
     /// <summary>
-    /// Rebuild reward-advisor cache (deck / character / relics) from the same player we use for combat export.
-    /// Call before exporting card choices so co-op clients are not stuck with a stale partner snapshot.
+    /// Before writing <c>bober_reward_state.json</c>: refresh from combat when possible, then apply pinned local (co-op).
     /// </summary>
-    internal static void RefreshRewardAdvisorCacheFromCombat()
+    internal static void RefreshRewardAdvisorCacheForExport()
     {
-        if (_combat == null) return;
-        var player = ResolveSnapshotPlayer(_combat);
-        if (player == null) return;
+        if (_combat != null)
+        {
+            var player = ResolveSnapshotPlayer(_combat);
+            if (player != null)
+                CacheRewardAdvisorFromPlayer(player);
+        }
+        if (_pinnedLocalPlayer != null)
+            CacheRewardAdvisorFromPlayer(_pinnedLocalPlayer);
+    }
+
+    internal static void CacheRewardAdvisorFromPlayer(Player player)
+    {
         try
         {
             var pcs = player.PlayerCombatState;
@@ -183,7 +196,7 @@ public static class CombatExporter
         }
         catch (Exception ex)
         {
-            Log.Error($"[BoberInSpire] RefreshRewardAdvisorCacheFromCombat: {ex.Message}");
+            Log.Error($"[BoberInSpire] CacheRewardAdvisorFromPlayer: {ex.Message}");
         }
     }
 
@@ -203,9 +216,21 @@ public static class CombatExporter
                 _preferredSnapshotPlayer = null;
             }
 
-            var local = TryGetReflectLocalPlayer(players);
-            if (local != null)
-                return local;
+            foreach (var p in players)
+            {
+                if (IsLocalPlayer(p))
+                {
+                    _pinnedLocalPlayer = p;
+                    return p;
+                }
+            }
+
+            if (_pinnedLocalPlayer != null)
+            {
+                var pinnedHit = players.FirstOrDefault(p => ReferenceEquals(p, _pinnedLocalPlayer));
+                if (pinnedHit != null)
+                    return pinnedHit;
+            }
 
             return players.FirstOrDefault();
         }
@@ -216,30 +241,47 @@ public static class CombatExporter
         }
     }
 
-    /// <summary>Prefer the human-controlled local player when the game exposes a bool flag (co-op).</summary>
-    private static Player? TryGetReflectLocalPlayer(List<Player> players)
+    /// <summary>True if this player is the local human client (co-op safe).</summary>
+    private static bool IsLocalPlayer(Player? player)
     {
-        foreach (var p in players)
+        if (player == null) return false;
+        try
         {
-            try
+            var t = player.GetType();
+            foreach (var propName in new[] { "IsLocalPlayer", "IsLocal", "IsControlledByLocalUser" })
             {
-                var t = p.GetType();
-                foreach (var propName in new[] { "IsLocalPlayer", "IsLocal", "IsControlledByLocalUser" })
+                var prop = t.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (prop == null || prop.PropertyType != typeof(bool))
+                    continue;
+                if (prop.GetValue(player) is true)
+                    return true;
+            }
+
+            foreach (var prop in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                if (prop.PropertyType != typeof(bool))
+                    continue;
+                var n = prop.Name;
+                if (n.IndexOf("Local", StringComparison.OrdinalIgnoreCase) < 0
+                    && n.IndexOf("Client", StringComparison.OrdinalIgnoreCase) < 0)
+                    continue;
+                try
                 {
-                    var prop = t.GetProperty(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (prop == null || prop.PropertyType != typeof(bool))
-                        continue;
-                    if (prop.GetValue(p) is true)
-                        return p;
+                    if (prop.GetValue(player) is true)
+                        return true;
+                }
+                catch
+                {
+                    // try next property
                 }
             }
-            catch
-            {
-                // Try next player
-            }
+        }
+        catch
+        {
+            return false;
         }
 
-        return null;
+        return false;
     }
 
     private static void ScheduleDebouncedExport()
@@ -875,6 +917,13 @@ public static class CombatExporter
                 {
                     var s = val.ToString();
                     if (!string.IsNullOrEmpty(s)) return s;
+                    // Enum / boxed value: ToString() can be empty in some runtimes; try enum name.
+                    var valType = val.GetType();
+                    if (valType.IsEnum)
+                    {
+                        var name = Enum.GetName(valType, val);
+                        if (!string.IsNullOrEmpty(name)) return name;
+                    }
                 }
             }
             var baseType = t.BaseType?.Name ?? "";
@@ -883,6 +932,13 @@ public static class CombatExporter
             if (baseType.Contains("Defect")) return "Defect";
             if (baseType.Contains("Necrobinder")) return "Necrobinder";
             if (baseType.Contains("Regent")) return "Regent";
+            // Fallback: concrete player type name often contains the class id (e.g. IroncladPlayer).
+            var typeName = t.Name ?? "";
+            if (typeName.Contains("Ironclad")) return "Ironclad";
+            if (typeName.Contains("Silent")) return "Silent";
+            if (typeName.Contains("Defect")) return "Defect";
+            if (typeName.Contains("Necrobinder")) return "Necrobinder";
+            if (typeName.Contains("Regent")) return "Regent";
         }
         catch { }
         return "Unknown";

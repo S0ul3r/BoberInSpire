@@ -32,8 +32,10 @@ public static class RewardExporter
     /// </summary>
     public static void CacheFromCombat(IReadOnlyList<string> deck, string character, IReadOnlyList<string> relicNames)
     {
-        if (deck != null) _cachedDeck = deck.ToList();
-        if (!string.IsNullOrEmpty(character)) _cachedCharacter = character;
+        if (deck != null && deck.Count > 0)
+            _cachedDeck = deck.ToList();
+        if (!string.IsNullOrEmpty(character) && character != "Unknown")
+            _cachedCharacter = character;
         if (relicNames != null) _cachedRelicNames = relicNames.ToList();
     }
 
@@ -47,7 +49,7 @@ public static class RewardExporter
 
         try
         {
-            CombatExporter.RefreshRewardAdvisorCacheFromCombat();
+            CombatExporter.RefreshRewardAdvisorCacheForExport();
 
             var snapshot = new RewardSnapshot
             {

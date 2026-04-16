@@ -477,6 +477,49 @@ def _mobalytics_character_key(character: str) -> str | None:
     return None
 
 
+def _infer_character_from_offer_tiers(options: list[str]) -> str | None:
+    """Co-op: infer class from offers when each card appears in exactly one Mobalytics pool (vote + majority)."""
+    idx = _load_mobalytics_index()
+    if not idx:
+        return None
+    votes: dict[str, int] = {}
+    decisive = 0
+    for name in options:
+        bn = _base_card_name(name).strip().lower()
+        if not bn:
+            continue
+        hits = [ck for ck, per_char in idx.items() if bn in per_char]
+        if len(hits) != 1:
+            continue
+        uq = hits[0]
+        decisive += 1
+        votes[uq] = votes.get(uq, 0) + 1
+    if not votes or decisive == 0:
+        return None
+    best_ck, best_n = max(votes.items(), key=lambda x: x[1])
+    second = max((n for ck, n in votes.items() if ck != best_ck), default=0)
+    if best_n <= second:
+        return None
+    if best_n < max(2, (decisive + 1) // 2):
+        return None
+    return best_ck
+
+
+def _coerce_character_for_coop_mismatch(character: str, options: list[str]) -> str:
+    """Prefer inferred class when export has no tier hits for offers but votes do (co-op wrong player JSON)."""
+    inferred = _infer_character_from_offer_tiers(options)
+    if not inferred:
+        return character
+    exported = _mobalytics_character_key(character)
+    if exported == inferred:
+        return character
+    if exported is not None and any(
+        mobalytics_tier_for(character, o) is not None for o in options
+    ):
+        return character
+    return inferred
+
+
 def mobalytics_tier_for(character: str, card_name: str) -> str | None:
     """Public helper: Mobalytics tier letter for this card, or None if unknown."""
     ck = _mobalytics_character_key(character)
@@ -1003,6 +1046,8 @@ def recommend(
             wiki_build_title=None,
             wiki_build_id=None,
         )
+
+    character = _coerce_character_for_coop_mismatch(character, options)
 
     archetype = _detect_archetype(character, deck, relics)
     wiki_build, _wiki_aff = _wiki_best_build_for_deck(character, deck)
