@@ -1,7 +1,7 @@
 # Defect builds — slaythespire-2.com
 
 > Source: https://slaythespire-2.com/builds
-> Generated: 2026-04-09T17:18:26Z
+> Generated: 2026-04-26T16:17:50Z
 
 Structured copy for the reward advisor; refresh with `python scripts/scrape_sts2_wiki_builds.py`.
 
