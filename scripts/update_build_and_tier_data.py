@@ -3,10 +3,11 @@
 Refresh all external build/tier data used by the overlay advisor.
 
 Runs scrapers + local transformers in order:
-  1) slaythespire-2.com card tiers
-  2) slaythespire-2.com build pages
-  3) Mobalytics Ironclad builds (best-effort)
-  4) guide.md -> guide_archetypes.json for all characters
+  1) Spire Codex cards/relics (GitHub)
+  2) slaythespire-2.com card tiers
+  3) slaythespire-2.com build pages
+  4) Mobalytics Ironclad builds (best-effort)
+  5) guide.md -> guide_archetypes.json for all characters
 
 Usage:
     python scripts/update_build_and_tier_data.py
@@ -23,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = ROOT / "scripts"
 
 PIPELINE: list[tuple[str, str, bool]] = [
+    ("fetch_spire_codex_data.py", "Refresh Spire Codex cards and relics", True),
     ("scrape_mobalytics_tiers.py", "Refresh Mobalytics card tier list", False),
     ("scrape_sts2_wiki_tiers.py", "Refresh STS2 wiki tier list", True),
     ("scrape_sts2_wiki_builds.py", "Refresh STS2 wiki builds", True),
@@ -76,6 +78,8 @@ def main() -> int:
     print("")
     print("Data update complete.")
     print("Updated folders:")
+    print("- data/spire_codex_cards.json")
+    print("- data/spire_codex_relics.json")
     print("- data/tier_lists")
     print("- data/build_guides")
     return 0

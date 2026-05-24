@@ -1,7 +1,7 @@
 # Regent builds — slaythespire-2.com
 
 > Source: https://slaythespire-2.com/builds
-> Generated: 2026-04-26T16:17:50Z
+> Generated: 2026-05-24T10:32:58Z
 
 Structured copy for the reward advisor; refresh with `python scripts/scrape_sts2_wiki_builds.py`.
 
